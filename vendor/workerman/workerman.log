@@ -1,0 +1,312 @@
+2018-05-07 11:10:41 pid:4577 Workerman[server.php] start in DEBUG mode
+2018-05-07 12:14:44 pid:24137 Workerman[server.php] start in DEBUG mode
+2018-05-07 12:14:54 pid:24137 Workerman[server.php] stopping ...
+2018-05-07 12:14:54 pid:24137 Workerman[server.php] has been stopped
+2018-05-07 12:23:50 pid:24593 Workerman[start.php] start in DEBUG mode
+2018-05-07 12:23:53 pid:24593 Workerman[start.php] stopping ...
+2018-05-07 12:23:53 pid:24593 Workerman[start.php] has been stopped
+2018-05-07 12:26:24 pid:24739 Workerman[start.php] start in DEBUG mode
+2018-05-07 12:26:31 pid:24739 Workerman[start.php] stopping ...
+2018-05-07 12:26:31 pid:24739 Workerman[start.php] has been stopped
+2018-05-09 15:10:24 pid:4356 Workerman[start.php] start in DEBUG mode
+2018-05-09 15:48:24 pid:4356 Workerman[start.php] stopping ...
+2018-05-09 15:48:24 pid:4356 Workerman[start.php] has been stopped
+2018-05-09 15:48:25 pid:9099 Workerman[start.php] start in DEBUG mode
+2018-05-09 15:48:37 pid:9099 Workerman[start.php] stopping ...
+2018-05-09 15:48:39 pid:9099 worker[PHPSocketIO:9100] exit with status 9
+2018-05-09 15:48:39 pid:9099 Workerman[start.php] has been stopped
+2018-05-09 15:49:25 pid:9225 Workerman[start.php] start in DEBUG mode
+2018-05-09 15:49:38 pid:9225 Workerman[start.php] stopping ...
+2018-05-09 15:49:40 pid:9225 worker[PHPSocketIO:9226] exit with status 9
+2018-05-09 15:49:40 pid:9225 Workerman[start.php] has been stopped
+2018-05-09 15:51:15 pid:9471 Workerman[start.php] start in DEBUG mode
+2018-05-09 15:52:07 pid:9471 Workerman[start.php] stopping ...
+2018-05-09 15:52:07 pid:9471 Workerman[start.php] has been stopped
+2018-05-09 15:52:08 pid:9595 Workerman[start.php] start in DEBUG mode
+2018-05-09 15:54:41 pid:9595 Workerman[start.php] stopping ...
+2018-05-09 15:54:41 pid:9595 Workerman[start.php] has been stopped
+2018-05-09 15:54:41 pid:9841 Workerman[start.php] start in DEBUG mode
+2018-05-09 17:59:25 pid:9841 Workerman[start.php] stopping ...
+2018-05-09 17:59:25 pid:9841 Workerman[start.php] has been stopped
+2018-05-09 18:02:17 pid:25683 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:02:21 pid:25683 Workerman[start.php] stopping ...
+2018-05-09 18:02:21 pid:25683 Workerman[start.php] has been stopped
+2018-05-09 18:02:37 pid:25685 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:05:02 pid:25685 Workerman[start.php] stopping ...
+2018-05-09 18:05:02 pid:25685 Workerman[start.php] has been stopped
+2018-05-09 18:05:03 pid:26053 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:15:26 pid:26053 Workerman[start.php] stopping ...
+2018-05-09 18:15:26 pid:26053 Workerman[start.php] has been stopped
+2018-05-09 18:15:27 pid:27318 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:16:10 pid:27318 Workerman[start.php] stopping ...
+2018-05-09 18:16:10 pid:27318 Workerman[start.php] has been stopped
+2018-05-09 18:16:11 pid:27443 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:17:14 pid:27443 Workerman[start.php] stopping ...
+2018-05-09 18:17:14 pid:27443 Workerman[start.php] has been stopped
+2018-05-09 18:17:14 pid:27570 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:19:35 pid:27570 Workerman[start.php] stopping ...
+2018-05-09 18:19:35 pid:27570 Workerman[start.php] has been stopped
+2018-05-09 18:19:37 pid:27816 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:20:10 pid:27816 Workerman[start.php] stopping ...
+2018-05-09 18:20:10 pid:27816 Workerman[start.php] has been stopped
+2018-05-09 18:20:10 pid:27942 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:20:58 pid:27942 Workerman[start.php] stopping ...
+2018-05-09 18:20:58 pid:27942 Workerman[start.php] has been stopped
+2018-05-09 18:20:59 pid:27944 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:21:25 pid:27944 Workerman[start.php] stopping ...
+2018-05-09 18:21:25 pid:27944 Workerman[start.php] has been stopped
+2018-05-09 18:21:26 pid:28068 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:21:29 pid:28068 Workerman[start.php] stopping ...
+2018-05-09 18:21:29 pid:28068 Workerman[start.php] has been stopped
+2018-05-09 18:21:52 pid:28072 Workerman[start.php] status 
+2018-05-09 18:21:52 pid:28072 Workerman[start.php] not run
+2018-05-09 18:22:03 pid:28196 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:22:23 pid:28196 Workerman[start.php] stopping ...
+2018-05-09 18:22:23 pid:28196 Workerman[start.php] has been stopped
+2018-05-09 18:22:50 pid:28201 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:22:55 pid:28201 Workerman[start.php] stopping ...
+2018-05-09 18:22:55 pid:28201 Workerman[start.php] has been stopped
+2018-05-09 18:23:19 pid:28327 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:23:27 pid:28327 Workerman[start.php] stopping ...
+2018-05-09 18:23:27 pid:28327 Workerman[start.php] has been stopped
+2018-05-09 18:23:48 pid:28331 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:23:56 pid:28331 Workerman[start.php] stopping ...
+2018-05-09 18:23:56 pid:28331 Workerman[start.php] has been stopped
+2018-05-09 18:25:20 pid:28579 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:25:35 pid:28579 Workerman[start.php] stopping ...
+2018-05-09 18:25:35 pid:28579 Workerman[start.php] has been stopped
+2018-05-09 18:26:33 pid:28708 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:29:41 pid:28708 Workerman[start.php] stopping ...
+2018-05-09 18:29:41 pid:28708 Workerman[start.php] has been stopped
+2018-05-09 18:29:42 pid:29078 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:30:09 pid:29078 Workerman[start.php] stopping ...
+2018-05-09 18:30:09 pid:29078 Workerman[start.php] has been stopped
+2018-05-09 18:30:10 pid:29207 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:31:02 pid:29207 Workerman[start.php] stopping ...
+2018-05-09 18:31:02 pid:29207 Workerman[start.php] has been stopped
+2018-05-09 18:31:03 pid:29332 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:31:39 pid:29332 Workerman[start.php] stopping ...
+2018-05-09 18:31:39 pid:29332 Workerman[start.php] has been stopped
+2018-05-09 18:31:39 pid:29335 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:32:56 pid:29335 Workerman[start.php] stopping ...
+2018-05-09 18:32:56 pid:29335 Workerman[start.php] has been stopped
+2018-05-09 18:32:56 pid:29460 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:33:31 pid:29460 Workerman[start.php] stopping ...
+2018-05-09 18:33:31 pid:29460 Workerman[start.php] has been stopped
+2018-05-09 18:33:31 pid:29586 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:34:11 pid:29586 Workerman[start.php] stopping ...
+2018-05-09 18:34:11 pid:29586 Workerman[start.php] has been stopped
+2018-05-09 18:34:12 pid:29711 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:34:42 pid:29711 Workerman[start.php] stopping ...
+2018-05-09 18:34:42 pid:29711 Workerman[start.php] has been stopped
+2018-05-09 18:34:43 pid:29714 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:35:54 pid:29714 Workerman[start.php] stopping ...
+2018-05-09 18:35:54 pid:29714 Workerman[start.php] has been stopped
+2018-05-09 18:35:55 pid:29839 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:38:10 pid:29839 Workerman[start.php] stopping ...
+2018-05-09 18:38:10 pid:29839 Workerman[start.php] has been stopped
+2018-05-09 18:38:10 pid:30209 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:39:45 pid:30209 Workerman[start.php] stopping ...
+2018-05-09 18:39:45 pid:30209 Workerman[start.php] has been stopped
+2018-05-09 18:39:46 pid:30376 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:45:23 pid:30376 Workerman[start.php] stopping ...
+2018-05-09 18:45:23 pid:30376 Workerman[start.php] has been stopped
+2018-05-09 18:45:24 pid:31112 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:45:26 pid:31113 Error: Call to undefined method Workerman\MySQL\Connection::fetch() in /home/ubuntu/test/web-chat/app/model/Model.php:29
+Stack trace:
+#0 /home/ubuntu/test/web-chat/app/model/ClientFriends.php(22): App\model\Model->systemType(15)
+#1 /home/ubuntu/test/web-chat/app/ChatServer.php(78): App\model\ClientFriends->companyFriends(15)
+#2 /home/ubuntu/test/web-chat/app/ChatServer.php(57): App\ChatServer->getCompanyFriends(Object(PHPSocketIO\Socket))
+#3 [internal function]: App\ChatServer->App\{closure}()
+#4 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Event/Emitter.php(91): call_user_func_array(Object(Closure), Array)
+#5 [internal function]: PHPSocketIO\Event\Emitter->emit('company_friends')
+#6 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Socket.php(307): call_user_func_array(Array, Array)
+#7 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Socket.php(269): PHPSocketIO\Socket->onevent(Array)
+#8 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Client.php(202): PHPSocketIO\Socket->onpacket(Array)
+#9 [internal function]: PHPSocketIO\Client->ondecoded(Array)
+#10 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Event/Emitter.php(91): call_user_func_array(Array, Array)
+#11 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Parser/Decoder.php(34): PHPSocketIO\Event\Emitter->emit('decoded', Array)
+#12 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Client.php(182): PHPSocketIO\Parser\Decoder->add('2["company_frie...')
+#13 [internal function]: PHPSocketIO\Client->ondata('2["company_frie...')
+#14 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Event/Emitter.php(91): call_user_func_array(Array, Array)
+#15 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Engine/Socket.php(187): PHPSocketIO\Event\Emitter->emit('data', '2["company_frie...')
+#16 [internal function]: PHPSocketIO\Engine\Socket->onPacket(Array)
+#17 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Event/Emitter.php(91): call_user_func_array(Array, Array)
+#18 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Engine/Transport.php(56): PHPSocketIO\Event\Emitter->emit('packet', Array)
+#19 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Engine/Transport.php(61): PHPSocketIO\Engine\Transport->onPacket(Array)
+#20 [internal function]: PHPSocketIO\Engine\Transport->onData('42["company_fri...')
+#21 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Engine/Transports/WebSocket.php(26): call_user_func(Array, '42["company_fri...')
+#22 [internal function]: PHPSocketIO\Engine\Transports\WebSocket->onData2(Object(Workerman\Connection\TcpConnection), '42["company_fri...')
+#23 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Connection/TcpConnection.php(639): call_user_func(Array, Object(Workerman\Connection\TcpConnection), '42["company_fri...')
+#24 [internal function]: Workerman\Connection\TcpConnection->baseRead(Resource id #34, 2, Resource id #34)
+#25 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Events/Event.php(185): EventBase->loop()
+#26 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(2130): Workerman\Events\Event->loop()
+#27 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(1323): Workerman\Worker->run()
+#28 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(1156): Workerman\Worker::forkOneWorkerForLinux(Object(Workerman\Worker))
+#29 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(1130): Workerman\Worker::forkWorkersForLinux()
+#30 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(466): Workerman\Worker::forkWorkers()
+#31 /home/ubuntu/test/web-chat/start.php(22): Workerman\Worker::runAll()
+#32 {main}
+2018-05-09 18:45:26 pid:31113 Worker process terminated
+2018-05-09 18:45:26 pid:31112 worker[PHPSocketIO:31113] exit with status 64000
+2018-05-09 18:45:28 pid:31114 Error: Call to undefined method Workerman\MySQL\Connection::fetch() in /home/ubuntu/test/web-chat/app/model/Model.php:29
+Stack trace:
+#0 /home/ubuntu/test/web-chat/app/model/ClientFriends.php(22): App\model\Model->systemType(15)
+#1 /home/ubuntu/test/web-chat/app/ChatServer.php(78): App\model\ClientFriends->companyFriends(15)
+#2 /home/ubuntu/test/web-chat/app/ChatServer.php(57): App\ChatServer->getCompanyFriends(Object(PHPSocketIO\Socket))
+#3 [internal function]: App\ChatServer->App\{closure}()
+#4 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Event/Emitter.php(91): call_user_func_array(Object(Closure), Array)
+#5 [internal function]: PHPSocketIO\Event\Emitter->emit('company_friends')
+#6 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Socket.php(307): call_user_func_array(Array, Array)
+#7 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Socket.php(269): PHPSocketIO\Socket->onevent(Array)
+#8 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Client.php(202): PHPSocketIO\Socket->onpacket(Array)
+#9 [internal function]: PHPSocketIO\Client->ondecoded(Array)
+#10 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Event/Emitter.php(91): call_user_func_array(Array, Array)
+#11 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Parser/Decoder.php(34): PHPSocketIO\Event\Emitter->emit('decoded', Array)
+#12 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Client.php(182): PHPSocketIO\Parser\Decoder->add('2["company_frie...')
+#13 [internal function]: PHPSocketIO\Client->ondata('2["company_frie...')
+#14 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Event/Emitter.php(91): call_user_func_array(Array, Array)
+#15 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Engine/Socket.php(187): PHPSocketIO\Event\Emitter->emit('data', '2["company_frie...')
+#16 [internal function]: PHPSocketIO\Engine\Socket->onPacket(Array)
+#17 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Event/Emitter.php(91): call_user_func_array(Array, Array)
+#18 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Engine/Transport.php(56): PHPSocketIO\Event\Emitter->emit('packet', Array)
+#19 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Engine/Transport.php(61): PHPSocketIO\Engine\Transport->onPacket(Array)
+#20 [internal function]: PHPSocketIO\Engine\Transport->onData('42["company_fri...')
+#21 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Engine/Transports/WebSocket.php(26): call_user_func(Array, '42["company_fri...')
+#22 [internal function]: PHPSocketIO\Engine\Transports\WebSocket->onData2(Object(Workerman\Connection\TcpConnection), '42["company_fri...')
+#23 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Connection/TcpConnection.php(639): call_user_func(Array, Object(Workerman\Connection\TcpConnection), '42["company_fri...')
+#24 [internal function]: Workerman\Connection\TcpConnection->baseRead(Resource id #35, 2, Resource id #35)
+#25 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Events/Event.php(185): EventBase->loop()
+#26 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(2130): Workerman\Events\Event->loop()
+#27 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(1323): Workerman\Worker->run()
+#28 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(1156): Workerman\Worker::forkOneWorkerForLinux(Object(Workerman\Worker))
+#29 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(1130): Workerman\Worker::forkWorkersForLinux()
+#30 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(1455): Workerman\Worker::forkWorkers()
+#31 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(1404): Workerman\Worker::monitorWorkersForLinux()
+#32 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(468): Workerman\Worker::monitorWorkers()
+#33 /home/ubuntu/test/web-chat/start.php(22): Workerman\Worker::runAll()
+#34 {main}
+2018-05-09 18:45:28 pid:31114 Worker process terminated
+2018-05-09 18:45:28 pid:31112 worker[PHPSocketIO:31114] exit with status 64000
+2018-05-09 18:45:31 pid:31115 Error: Call to undefined method Workerman\MySQL\Connection::fetch() in /home/ubuntu/test/web-chat/app/model/Model.php:29
+Stack trace:
+#0 /home/ubuntu/test/web-chat/app/model/ClientFriends.php(22): App\model\Model->systemType(15)
+#1 /home/ubuntu/test/web-chat/app/ChatServer.php(78): App\model\ClientFriends->companyFriends(15)
+#2 /home/ubuntu/test/web-chat/app/ChatServer.php(57): App\ChatServer->getCompanyFriends(Object(PHPSocketIO\Socket))
+#3 [internal function]: App\ChatServer->App\{closure}()
+#4 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Event/Emitter.php(91): call_user_func_array(Object(Closure), Array)
+#5 [internal function]: PHPSocketIO\Event\Emitter->emit('company_friends')
+#6 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Socket.php(307): call_user_func_array(Array, Array)
+#7 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Socket.php(269): PHPSocketIO\Socket->onevent(Array)
+#8 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Client.php(202): PHPSocketIO\Socket->onpacket(Array)
+#9 [internal function]: PHPSocketIO\Client->ondecoded(Array)
+#10 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Event/Emitter.php(91): call_user_func_array(Array, Array)
+#11 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Parser/Decoder.php(34): PHPSocketIO\Event\Emitter->emit('decoded', Array)
+#12 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Client.php(182): PHPSocketIO\Parser\Decoder->add('2["company_frie...')
+#13 [internal function]: PHPSocketIO\Client->ondata('2["company_frie...')
+#14 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Event/Emitter.php(91): call_user_func_array(Array, Array)
+#15 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Engine/Socket.php(187): PHPSocketIO\Event\Emitter->emit('data', '2["company_frie...')
+#16 [internal function]: PHPSocketIO\Engine\Socket->onPacket(Array)
+#17 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Event/Emitter.php(91): call_user_func_array(Array, Array)
+#18 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Engine/Transport.php(56): PHPSocketIO\Event\Emitter->emit('packet', Array)
+#19 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Engine/Transport.php(61): PHPSocketIO\Engine\Transport->onPacket(Array)
+#20 [internal function]: PHPSocketIO\Engine\Transport->onData('42["company_fri...')
+#21 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Engine/Transports/WebSocket.php(26): call_user_func(Array, '42["company_fri...')
+#22 [internal function]: PHPSocketIO\Engine\Transports\WebSocket->onData2(Object(Workerman\Connection\TcpConnection), '42["company_fri...')
+#23 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Connection/TcpConnection.php(639): call_user_func(Array, Object(Workerman\Connection\TcpConnection), '42["company_fri...')
+#24 [internal function]: Workerman\Connection\TcpConnection->baseRead(Resource id #36, 2, Resource id #36)
+#25 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Events/Event.php(185): EventBase->loop()
+#26 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(2130): Workerman\Events\Event->loop()
+#27 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(1323): Workerman\Worker->run()
+#28 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(1156): Workerman\Worker::forkOneWorkerForLinux(Object(Workerman\Worker))
+#29 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(1130): Workerman\Worker::forkWorkersForLinux()
+#30 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(1455): Workerman\Worker::forkWorkers()
+#31 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(1404): Workerman\Worker::monitorWorkersForLinux()
+#32 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(468): Workerman\Worker::monitorWorkers()
+#33 /home/ubuntu/test/web-chat/start.php(22): Workerman\Worker::runAll()
+#34 {main}
+2018-05-09 18:45:31 pid:31115 Worker process terminated
+2018-05-09 18:45:31 pid:31112 worker[PHPSocketIO:31115] exit with status 64000
+2018-05-09 18:45:34 pid:31116 Error: Call to undefined method Workerman\MySQL\Connection::fetch() in /home/ubuntu/test/web-chat/app/model/Model.php:29
+Stack trace:
+#0 /home/ubuntu/test/web-chat/app/model/ClientFriends.php(22): App\model\Model->systemType(15)
+#1 /home/ubuntu/test/web-chat/app/ChatServer.php(78): App\model\ClientFriends->companyFriends(15)
+#2 /home/ubuntu/test/web-chat/app/ChatServer.php(57): App\ChatServer->getCompanyFriends(Object(PHPSocketIO\Socket))
+#3 [internal function]: App\ChatServer->App\{closure}()
+#4 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Event/Emitter.php(91): call_user_func_array(Object(Closure), Array)
+#5 [internal function]: PHPSocketIO\Event\Emitter->emit('company_friends')
+#6 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Socket.php(307): call_user_func_array(Array, Array)
+#7 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Socket.php(269): PHPSocketIO\Socket->onevent(Array)
+#8 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Client.php(202): PHPSocketIO\Socket->onpacket(Array)
+#9 [internal function]: PHPSocketIO\Client->ondecoded(Array)
+#10 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Event/Emitter.php(91): call_user_func_array(Array, Array)
+#11 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Parser/Decoder.php(34): PHPSocketIO\Event\Emitter->emit('decoded', Array)
+#12 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Client.php(182): PHPSocketIO\Parser\Decoder->add('2["company_frie...')
+#13 [internal function]: PHPSocketIO\Client->ondata('2["company_frie...')
+#14 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Event/Emitter.php(91): call_user_func_array(Array, Array)
+#15 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Engine/Socket.php(187): PHPSocketIO\Event\Emitter->emit('data', '2["company_frie...')
+#16 [internal function]: PHPSocketIO\Engine\Socket->onPacket(Array)
+#17 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Event/Emitter.php(91): call_user_func_array(Array, Array)
+#18 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Engine/Transport.php(56): PHPSocketIO\Event\Emitter->emit('packet', Array)
+#19 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Engine/Transport.php(61): PHPSocketIO\Engine\Transport->onPacket(Array)
+#20 [internal function]: PHPSocketIO\Engine\Transport->onData('42["company_fri...')
+#21 /home/ubuntu/test/web-chat/vendor/workerman/phpsocket.io/src/Engine/Transports/WebSocket.php(26): call_user_func(Array, '42["company_fri...')
+#22 [internal function]: PHPSocketIO\Engine\Transports\WebSocket->onData2(Object(Workerman\Connection\TcpConnection), '42["company_fri...')
+#23 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Connection/TcpConnection.php(639): call_user_func(Array, Object(Workerman\Connection\TcpConnection), '42["company_fri...')
+#24 [internal function]: Workerman\Connection\TcpConnection->baseRead(Resource id #37, 2, Resource id #37)
+#25 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Events/Event.php(185): EventBase->loop()
+#26 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(2130): Workerman\Events\Event->loop()
+#27 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(1323): Workerman\Worker->run()
+#28 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(1156): Workerman\Worker::forkOneWorkerForLinux(Object(Workerman\Worker))
+#29 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(1130): Workerman\Worker::forkWorkersForLinux()
+#30 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(1455): Workerman\Worker::forkWorkers()
+#31 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(1404): Workerman\Worker::monitorWorkersForLinux()
+#32 /home/ubuntu/test/web-chat/vendor/workerman/workerman/Worker.php(468): Workerman\Worker::monitorWorkers()
+#33 /home/ubuntu/test/web-chat/start.php(22): Workerman\Worker::runAll()
+#34 {main}
+2018-05-09 18:45:34 pid:31116 Worker process terminated
+2018-05-09 18:45:34 pid:31112 worker[PHPSocketIO:31116] exit with status 64000
+2018-05-09 18:45:35 pid:31112 Workerman[start.php] stopping ...
+2018-05-09 18:45:35 pid:31112 Workerman[start.php] has been stopped
+2018-05-09 18:50:56 pid:31731 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:51:19 pid:31731 Workerman[start.php] stopping ...
+2018-05-09 18:51:19 pid:31731 Workerman[start.php] has been stopped
+2018-05-09 18:54:55 pid:32223 Workerman[start.php] start in DEBUG mode
+2018-05-09 18:57:05 pid:32223 Workerman[start.php] stopping ...
+2018-05-09 18:57:05 pid:32223 Workerman[start.php] has been stopped
+2018-05-09 18:57:05 pid:32592 Workerman[start.php] start in DEBUG mode
+2018-05-09 19:02:16 pid:32592 Workerman[start.php] stopping ...
+2018-05-09 19:02:16 pid:32592 Workerman[start.php] has been stopped
+2018-05-09 19:02:17 pid:808 Workerman[start.php] start in DEBUG mode
+2018-05-09 19:03:29 pid:808 Workerman[start.php] stopping ...
+2018-05-09 19:03:29 pid:808 Workerman[start.php] has been stopped
+2018-05-09 19:03:29 pid:933 Workerman[start.php] start in DEBUG mode
+2018-05-09 19:03:35 pid:933 Workerman[start.php] stopping ...
+2018-05-09 19:03:35 pid:933 Workerman[start.php] has been stopped
+2018-05-11 12:31:56 pid:18102 Workerman[start.php] status 
+2018-05-11 12:31:56 pid:18102 Workerman[start.php] not run
+2018-05-11 12:33:24 pid:18349 Workerman[start.php] start in DEBUG mode
+2018-05-11 12:36:45 pid:18349 Workerman[start.php] stopping ...
+2018-05-11 12:36:45 pid:18349 Workerman[start.php] has been stopped
+2018-05-11 12:41:53 pid:19371 Workerman[start.php] start in DEBUG mode
+2018-05-11 13:46:20 pid:27463 Workerman[start.php] status 
+2018-05-11 13:46:24 pid:27465 Workerman[start.php] stop 
+2018-05-11 13:46:24 pid:27465 Workerman[start.php] is stopping ...
+2018-05-11 13:46:24 pid:19371 Workerman[start.php] stopping ...
+2018-05-11 13:46:24 pid:19371 Workerman[start.php] has been stopped
+2018-05-11 13:46:24 pid:27465 Workerman[start.php] stop success
+2018-05-11 13:46:27 pid:27467 Workerman[start.php] start in DEBUG mode
+2018-05-11 13:47:01 pid:27467 Workerman[start.php] stopping ...
+2018-05-11 13:47:03 pid:27467 worker[PHPSocketIO:27468] exit with status 9
+2018-05-11 13:47:03 pid:27467 Workerman[start.php] has been stopped
+2018-05-11 13:47:54 pid:27593 Workerman[start.php] start in DEBUG mode
+2018-05-11 13:48:01 pid:27593 Workerman[start.php] stopping ...
+2018-05-11 13:49:21 pid:27843 Workerman[start.php] start in DEBUG mode
+2018-05-11 15:24:46 pid:27843 Workerman[start.php] stopping ...
+2018-05-11 15:24:46 pid:27843 Workerman[start.php] has been stopped
+2018-05-11 15:24:51 pid:7253 Workerman[start.php] start in DEBUG mode
+2018-05-11 15:25:30 pid:7253 Workerman[start.php] stopping ...
+2018-05-11 15:25:30 pid:7253 Workerman[start.php] has been stopped
+2018-05-11 15:25:31 pid:7378 Workerman[start.php] start in DEBUG mode
+2018-05-11 15:26:23 pid:7378 Workerman[start.php] stopping ...
+2018-05-11 15:26:23 pid:7378 Workerman[start.php] has been stopped
