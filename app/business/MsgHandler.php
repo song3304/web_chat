@@ -6,10 +6,17 @@ namespace App\business;
  * and open the template in the editor.
  */
 
+use App\business\msg\CompanyFriendsHandle;
+use App\business\msg\HistoryMessageHandle;
+use App\business\msg\IndexMessageHandle;
+use App\business\msg\SendGroupMessageHandle;
+use App\business\msg\SendMessageHandle;
 use App\business\MsgIds;
 use App\business\msg\JoinGroup;
 use App\business\msg\ErrorMsg;
 use App\business\msg\LoginHandle;
+use App\dbrequest\HistoryMessageRequest;
+
 /**
  * Description of MsgHandler
  *
@@ -33,6 +40,21 @@ class MsgHandler
                 break;
             case MsgIds::MESSAGE_LOGIN :
                 LoginHandle::handle($client_id, $json);
+                break;
+            case MsgIds::MESSAGE_COMPANY_FRIENDS:
+                CompanyFriendsHandle::handle($client_id,$json);
+                break;
+            case MsgIds::MESSAGE_INDEX_MESSAGE:
+                IndexMessageHandle::handle($client_id,$json);
+                break;
+            case MsgIds::MESSAGE_HISTORY_MESSAGE:
+                HistoryMessageHandle::handle($client_id,$json);
+                break;
+            case MsgIds::MESSAGE_SEND_MESSAGE:
+                SendMessageHandle::handle($client_id,$json);
+                break;
+            case MsgIds::MESSAGE_SEND_GROUP_MESSAGE:
+                SendGroupMessageHandle::handle($client_id,$json);
                 break;
             default :
                 //未定义的消息，不做处理

@@ -6,7 +6,12 @@ namespace App;
  * and open the template in the editor.
  */
 
+use App\dbrequest\CompanyFriendsRequest;
 use App\business\MsgIds;
+use App\dbrequest\HistoryMessageRequest;
+use App\dbrequest\IndexMessageRequest;
+use App\dbrequest\SendGroupMessageRequest;
+use App\dbrequest\SendMessageRequest;
 use App\message\JoinGroup;
 use App\ChatServer;
 use App\dbrequest\LoginRequest;
@@ -34,6 +39,21 @@ class MessageHandler
                 break;
             case MsgIds::EVENT_LOGIN :
                 LoginRequest::response($chat_server, $json);
+                break;
+            case MsgIds::EVENT_COMPANY_FRIENDS :
+                CompanyFriendsRequest::response($chat_server, $json);
+                break;
+            case MsgIds::EVENT_INDEX_MESSAGE :
+                IndexMessageRequest::response($chat_server, $json);
+                break;
+            case MsgIds::EVENT_HISTORY_MESSAGE :
+                HistoryMessageRequest::response($chat_server, $json);
+                break;
+            case MsgIds::EVENT_SEND_MESSAGE :
+                SendMessageRequest::response($chat_server, $json);
+                break;
+            case MsgIds::EVENT_SEND_GROUP_MESSAGE :
+                SendGroupMessageRequest::response($chat_server, $json);
                 break;
             default :
                 //未定义的消息，不做处理

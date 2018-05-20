@@ -14,25 +14,53 @@ and open the template in the editor.
     <body>
         <div>TODO write content</div>
         <script>
-            var socketio = io('http://192.168.0.53:8821');
-            socketio.on('connect', function(){
-                socket_id = socketio.id;
-                console.log(socket_id);
-                socketio.emit('login', socket_id, 10);
-            });
-            socketio.on('login', function(msg){
-                console.log(msg);
-                socketio.emit('company_friends');
-                socketio.emit('global_online');
-            });
+            //连接服务器
+            //var socketio = io('http://192.168.0.53:8821');//线上服务器
+            var socketio = io('http://127.0.0.1:8821');
+            //服务器返回结果--连接失败
             socketio.on('disconnect', function(){
                 console.log('111111111111111111111111111');
             });
-            socketio.on('global_online', function(count_authed, count_unauthed, count_terminal){
-                console.log(count_authed);
-                console.log(count_unauthed);
-                console.log(count_terminal);
+            //服务器返回结果--连接成功
+            socketio.on('connect', function(){
+                socket_id = socketio.id;
+                socketio.emit('login', socket_id, 54);//请求登录
             });
+            //服务器返回结果--登录成功
+            socketio.on('login', function(msg){
+                socketio.emit('company_friends',54);//请求好友分组
+                //socketio.emit('global_online');//请求在线人数
+                //socketio.emit('index_message',54,69);//请求当前聊天信息$uid,$to_uid
+                //socketio.emit('history_message',54,69,1);//请求历史聊天信息$uid,$to_uid,$page
+                //socketio.emit('send_message',54,69,'测试单人消息');//发送单人信息$uid,$to_uid,$message
+                //socketio.emit('send_group_message',54,12,'测试群发消息');//群发信息$uid,$group_id,$message
+            });
+            //服务器返回结果--好友分组
+            socketio.on('company_friends', function(msg){
+                console.log(msg);
+            });
+//            //服务器返回结果--当前聊天记录
+//            socketio.on('index_message', function(msg){
+//                console.log(msg);
+//            });
+//            //服务器返回结果--历史聊天记录
+//            socketio.on('history_message', function(msg){
+//                console.log(msg);
+//            });
+//            //服务器返回结果--发送单人信息
+//            socketio.on('send_message', function(msg){
+//                console.log(msg);
+//            });
+//            //服务器返回结果--群发信息
+//            socketio.on('send_group_message', function(msg){
+//                console.log(msg);
+//            });
+//            //服务器返回结果--在线人数
+//            socketio.on('global_online', function(count_authed, count_unauthed, count_terminal){
+//                console.log(count_authed);
+//                console.log(count_unauthed);
+//                console.log(count_terminal);
+//            });
         </script>
     </body>
 </html>

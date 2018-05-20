@@ -9,12 +9,17 @@
 
 namespace App;
 
+use App\dbrequest\HistoryMessageRequest;
+use App\dbrequest\IndexMessageRequest;
+use App\dbrequest\SendGroupMessageRequest;
+use App\dbrequest\SendMessageRequest;
 use PHPSocketIO\SocketIO;
 use Workerman\MySQL\Connection;
 use App\TcpClient;
 use App\business\MsgIds;
 use App\MessageHandler;
 use App\dbrequest\LoginRequest;
+use App\dbrequest\CompanyFriendsRequest;
 use App\XObject;
 use App\message\GlobalOnline;
 
@@ -85,8 +90,24 @@ class ChatServer {
                 $this->disconnect($socket);
             });
             //获取好友列表
-            $socket->on('company_friends', function ()use($socket) {
-                //todo:获取好友列表
+            $socket->on('company_friends',function ($uid)use($socket){
+                CompanyFriendsRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid]));
+            });
+            //获取当前聊天记录
+            $socket->on('index_message',function ($uid,$to_uid)use($socket){
+                IndexMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid]));
+            });
+            //获取历史聊天记录
+            $socket->on('history_message',function ($uid,$to_uid,$page)use($socket){
+                HistoryMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid ,'page'=>$page]));
+            });
+            //发送单人消息
+            $socket->on('send_message',function ($uid,$to_uid,$message)use($socket){
+                SendMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid ,'message'=>$message]));
+            });
+            //群发消息
+            $socket->on('send_group_message',function ($uid,$group_id,$message)use($socket){
+                SendGroupMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id ,'message'=>$message]));
             });
             //获取全局在线人数
             $socket->on('global_online', function ()use($socket) {
@@ -107,15 +128,8 @@ class ChatServer {
     }
 
     //判断用户是否在线
-    private function isOnline($uid) {
+    public function isOnline($uid) {
         return isset($this->uidConnectionMap[$uid]);
-    }
-
-    //获取好友
-    protected function getCompanyFriends($socket) {
-        if (!$this->isLogin($socket)) {
-            return;
-        }
     }
 
 

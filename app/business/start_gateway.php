@@ -19,17 +19,20 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../autoload.php';
 
 // gateway 进程，这里使用Text协议，可以用telnet测试
-$gateway = new Gateway("Text://0.0.0.0:8888");
+//$gateway = new Gateway("Text://192.168.0.53:8888");
+$gateway = new Gateway("Text://127.0.0.1:8888");
 // gateway名称，status方便查看
 $gateway->name = 'YourAppGateway';
 // gateway进程数
 $gateway->count = 1;
 // 本机ip，分布式部署时使用内网ip
+//$gateway->lanIp = '192.168.0.53';
 $gateway->lanIp = '127.0.0.1';
 // 内部通讯起始端口，假如$gateway->count=4，起始端口为4000
 // 则一般会使用4000 4001 4002 4003 4个端口作为内部通讯端口 
 $gateway->startPort = 8900;
 // 服务注册地址
+//$gateway->registerAddress = '192.168.0.53:1288';
 $gateway->registerAddress = '127.0.0.1:1288';
 
 // 心跳间隔

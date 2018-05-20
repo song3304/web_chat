@@ -20,7 +20,8 @@ return [
     ],
     //chatserver监听ip和端口
     'socket' => [
-        'tcp_ip' => '0.0.0.0',
+        //'tcp_ip' => '0.0.0.0',
+        'tcp_ip' => '127.0.0.1',
         'tcp_port' => 8821,
     ],
     //tcpclient配置连接到哪个gateway
