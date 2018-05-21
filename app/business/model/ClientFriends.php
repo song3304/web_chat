@@ -69,7 +69,7 @@ class ClientFriends extends Model{
                 ->leftjoin('en_users AS u','c.user_id=u.id')
                 ->where('c.match_id= :id')
                 ->where('c.user_org_id= :user_org_id')
-                ->bindValues(array('id'=>$uid,'user_org_id'=>$k))
+                ->bindValues(array('id'=>$uid,'user_org_id'=>$v['user_org_id']))
                 ->query();
         }
         //3.查询所有自定义分组
