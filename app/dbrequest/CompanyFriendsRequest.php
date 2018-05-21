@@ -36,17 +36,19 @@ class CompanyFriendsRequest extends DbRequestBase {
         //判断是否成功
         if ( $json->code == 1) {//成功
             //判断每个好友是否在线
-            //$all_groups=$json->company_friends;
-            //$default_groups=$all_groups['default_groups'];
-            //$define_groups=$all_groups->define_groups;
-//            foreach($default_groups as $k1=>$v1){
-//                foreach($v1->friends as $k2=>$v2){
-//                    $v2->is_online='yesyesyes';
-//                }
-//            }
-            //print_r($default_groups);
-            //print_r($default_groups);
-            $chat_server->sendMessage($json->uid, 'company_friends', $json->company_friends);
+            $all_groups=json_decode($json->company_friends);
+            foreach($all_groups->default_groups as $k=>$v){
+                foreach($v->friends as $k2=>$v2){
+                    $v2->isOnline=$chat_server->isOnline($v2->friend_id)?1:0;
+                }
+            }
+            foreach($all_groups->define_groups as $k=>$v){
+                foreach($v->friends as $k2=>$v2){
+                    $v2->isOnline=$chat_server->isOnline($v2->friend_id)?1:0;
+                }
+            }
+	        $group_friends=json_encode($all_groups);
+            $chat_server->sendMessage($json->uid, 'company_friends', $group_friends);
         } else {//失败
 
         }
