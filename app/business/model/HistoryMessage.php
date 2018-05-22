@@ -22,33 +22,16 @@ class HistoryMessage extends Model{
      * @return array
      * @method 获取当前好友的历史聊天记录
      */
-    public function getHistoryMessage($uid,$to_uid,$page) {
+    public function getHistoryMessage($uid,$to_uid,$pageSize,$indexPage) {
         $send_messages=$this
-            ->select('c.id as messageId,c.uid as senderID,c.to_uid as pickerID,c.message as content,c.is_read,c.create_time,u.nickname as userName')
-            ->from('en_chat_messages AS c')
-            ->leftJoin('en_users AS u','c.to_uid=u.id')
-            ->where('c.uid= :uid AND c.to_uid= :to_uid')
-            ->bindValues(array('uid'=>$uid,'to_uid'=>$to_uid))
-            ->limit(50)
-            ->offset(($page-1)*50)
-            ->orderByDesc(array(0=>'c.create_time'))
+            ->select('*')
+            ->from('en_chat_messages')
+            ->where('uid='.$uid.' AND to_uid='.$to_uid)
+            ->orWhere('uid='.$to_uid.' AND to_uid='.$uid)
+            ->limit($pageSize)
+            ->offset(($indexPage-1)*$pageSize)
+            ->orderByDesc(array(0=>'create_time'))
             ->query();
-        $pick_messages=$this
-            ->select('c.id as messageId,c.uid as senderID,c.to_uid as pickerID,c.message as content,c.is_read,c.create_time,u.nickname as userName')
-            ->from('en_chat_messages AS c')
-            ->leftJoin('en_users AS u','c.uid=u.id')
-            ->where('c.uid= :uid AND c.to_uid= :to_uid')
-            ->bindValues(array('uid'=>$to_uid,'to_uid'=>$uid))
-            ->limit(50)
-            ->offset(($page-1)*50)
-            ->orderByDesc(array(0=>'c.create_time'))
-            ->query();
-        $messages=array_merge($send_messages,$pick_messages);
-        $tempArr=[];
-        foreach($messages as $k=>$v){
-            $tempArr[$k]=$v['create_time'];
-        }
-        array_multisort($tempArr,SORT_DESC,$messages);
-        return $messages;
+        return $send_messages;
     }
 }

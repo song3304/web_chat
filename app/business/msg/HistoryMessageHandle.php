@@ -26,9 +26,9 @@ use App\business\MsgIds;
 class HistoryMessageHandle extends MsgHandleBase {
 
     static public function handle($client_id, $json) {
-        if (isset($json->uid) && !empty($json->uid) && isset($json->to_uid) && !empty($json->to_uid) && isset($json->page) && !empty($json->page)) {
+        if (isset($json->uid) && !empty($json->uid) && isset($json->to_uid) && !empty($json->to_uid) && isset($json->pageSize) && !empty($json->pageSize)) {
             $message_model = new HistoryMessage();
-            $msg['messages']  = $message_model->getHistoryMessage($json->uid,$json->to_uid,$json->page);
+            $msg['messages']  = $message_model->getHistoryMessage($json->uid,$json->to_uid,$json->pageSize,$json->indexPage);
             $msg['uid'] = $json->uid;
             $msg['to_uid'] = $json->to_uid;
             $msg['sock_id'] = $json->sock_id;

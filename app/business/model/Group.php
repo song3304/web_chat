@@ -64,7 +64,9 @@ class Group extends Model{
     public function deleteGroup($uid,$group_id) {
         //此好友组是否为空组
         $group=$this->select('*')->from('en_chat_friends')->where('group_id=:group_id')->bindValues(array('group_id'=>$group_id))->query();
-        if($group)return false;
+        if($group){
+            $this->delete('en_chat_friends')->where('group_id=:group_id')->bindValues(array('group_id'=>$group_id))->query();
+        }
         $row_count = $this->delete('en_chat_friend_groups')->where('uid= :uid AND id= :group_id')->bindValues(array('uid'=>$uid,'group_id'=>$group_id))->query();
         if(!$row_count)return false;
         return true;

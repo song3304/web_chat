@@ -19,8 +19,8 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../autoload.php';
 
 // gateway 进程，这里使用Text协议，可以用telnet测试
-//$gateway = new Gateway("Text://192.168.0.53:8888");
-$gateway = new Gateway("Text://127.0.0.1:8888");
+$gateway = new Gateway("Text://192.168.0.53:8888");
+//$gateway = new Gateway("Text://127.0.0.1:8888");
 // gateway名称，status方便查看
 $gateway->name = 'YourAppGateway';
 // gateway进程数

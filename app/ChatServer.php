@@ -107,8 +107,8 @@ class ChatServer {
                 IndexMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid]));
             });
             //获取历史聊天记录
-            $socket->on('history_message',function ($uid,$to_uid,$page)use($socket){
-                HistoryMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid ,'page'=>$page]));
+            $socket->on('history_message',function ($uid,$to_uid,$pageSize,$indexPage)use($socket){
+                HistoryMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid ,'pageSize'=>$pageSize,'indexPage'=>$indexPage]));
             });
             //发送单人消息
             $socket->on('send_message',function ($uid,$to_uid,$message)use($socket){

@@ -28,7 +28,8 @@ class HistoryMessageRequest extends DbRequestBase {
             'sock_id' => $obj->sock_id,
             'uid' => $obj->uid,
             'to_uid' => $obj->to_uid,
-            'page' => $obj->page?$obj->page:1,
+            'pageSize' => $obj->pageSize?$obj->pageSize:50,
+            'indexPage' => $obj->indexPage?$obj->indexPage:1,
         );
         $chat_server->sendMessageToGateway($data);
     }
