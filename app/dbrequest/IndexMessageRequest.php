@@ -53,10 +53,26 @@ class IndexMessageRequest extends DbRequestBase {
 
     /**
      * @param ChatServer $chat_server
+     * @param XObject $obj
+     * @method 未读变已读
+     */
+    static public function requestUnreadToRead(ChatServer $chat_server, XObject $obj) {
+        //构造请求
+        $data = array(
+            'id' => MsgIds::MESSAGE_UNREAD_TO_READ,
+            'sock_id' => $obj->sock_id,
+            'uid' => $obj->uid,
+            'messageIds' => $obj->messageIds,
+        );
+        $chat_server->sendMessageToGateway($data);
+    }
+
+    /**
+     * @param ChatServer $chat_server
      * @param \stdClass $json
      * @method 响应当前聊天记录
      */
-    static public function response(ChatServer $chat_server, \stdClass $json) {
+    static public function responseIndexMessage(ChatServer $chat_server, \stdClass $json) {
         //判断是否成功
         if ( $json->code == 1) {
             //成功
@@ -65,6 +81,7 @@ class IndexMessageRequest extends DbRequestBase {
             //失败
         }
     }
+
     /**
      * @param ChatServer $chat_server
      * @param \stdClass $json
@@ -75,6 +92,21 @@ class IndexMessageRequest extends DbRequestBase {
         if ( $json->code == 1) {
             //成功
             $chat_server->sendMessage($json->uid, 'unread_messages', $json->messages);
+        } else {
+            //失败
+        }
+    }
+
+    /**
+     * @param ChatServer $chat_server
+     * @param \stdClass $json
+     * @method 响应未读变已读
+     */
+    static public function responseUnreadToRead(ChatServer $chat_server, \stdClass $json) {
+        //判断是否成功
+        if ( $json->code == 1) {
+            //成功
+            $chat_server->sendMessage($json->uid, 'unread_to_read', $json->messages);
         } else {
             //失败
         }

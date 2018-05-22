@@ -39,6 +39,7 @@ class SendGroupMessageRequest extends DbRequestBase {
         if ( $json->code == 1) {
             //成功
             $chat_server->sendMessage($json->uid, 'send_group_message', $json->messages);
+            $chat_server->sendMessage($json->to_ids, 'pick_message', $json->messages);
         } else {
             //失败
         }

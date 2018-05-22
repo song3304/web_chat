@@ -8,16 +8,12 @@ namespace App\business;
 
 use App\business\msg\CompanyFriendsHandle;
 use App\business\msg\GroupHandle;
-use App\business\msg\HistoryMessageHandle;
-use App\business\msg\IndexMessageHandle;
-use App\business\msg\SendGroupMessageHandle;
-use App\business\msg\SendMessageHandle;
+use App\business\msg\MessageHandle;
 use App\business\MsgIds;
 use App\business\msg\JoinGroup;
 use App\business\msg\ErrorMsg;
 use App\business\msg\LoginHandle;
-use App\dbrequest\HistoryMessageRequest;
-use App\dbrequest\IndexMessageRequest;
+
 
 /**
  * Description of MsgHandler
@@ -47,28 +43,37 @@ class MsgHandler
                 CompanyFriendsHandle::handle($client_id,$json);
                 break;
             case MsgIds::MESSAGE_UNREAD_MESSAGES:
-                IndexMessageHandle::handleUnread($client_id,$json);
+                MessageHandle::unreadMessages($client_id,$json);
+                break;
+            case MsgIds::MESSAGE_UNREAD_TO_READ:
+                MessageHandle::unreadToRead($client_id,$json);
                 break;
             case MsgIds::MESSAGE_INDEX_MESSAGE:
-                IndexMessageHandle::handle($client_id,$json);
+                MessageHandle::indexMessage($client_id,$json);
                 break;
             case MsgIds::MESSAGE_HISTORY_MESSAGE:
-                HistoryMessageHandle::handle($client_id,$json);
+                MessageHandle::historyMessage($client_id,$json);
                 break;
             case MsgIds::MESSAGE_SEND_MESSAGE:
-                SendMessageHandle::handle($client_id,$json);
+                MessageHandle::sendMessage($client_id,$json);
+                break;
+            case MsgIds::MESSAGE_PICK_MESSAGE:
+                MessageHandle::pickMessage($client_id,$json);
                 break;
             case MsgIds::MESSAGE_SEND_GROUP_MESSAGE:
-                SendGroupMessageHandle::handle($client_id,$json);
+                MessageHandle::sendGroupMessage($client_id,$json);
                 break;
             case MsgIds::MESSAGE_CREATE_GROUP:
                 GroupHandle::handleCreate($client_id,$json);
                 break;
             case MsgIds::MESSAGE_DELETE_GROUP:
-                GroupHandle::handleDelete($client_id,$json);
+                GroupHandle::handleDeleteGroup($client_id,$json);
                 break;
             case MsgIds::MESSAGE_MODIFY_GROUP:
                 GroupHandle::handleModify($client_id,$json);
+                break;
+            case MsgIds::MESSAGE_DELETE_GROUP_FRIEND:
+                GroupHandle::handleDeleteFriend($client_id,$json);
                 break;
             default :
                 //未定义的消息，不做处理

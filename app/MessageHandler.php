@@ -8,12 +8,11 @@ namespace App;
 
 use App\dbrequest\CompanyFriendsRequest;
 use App\business\MsgIds;
-use App\dbrequest\CreateGroupRequest;
 use App\dbrequest\GroupRequest;
 use App\dbrequest\HistoryMessageRequest;
 use App\dbrequest\IndexMessageRequest;
+use App\dbrequest\MessageRequest;
 use App\dbrequest\SendGroupMessageRequest;
-use App\dbrequest\SendMessageRequest;
 use App\message\JoinGroup;
 use App\ChatServer;
 use App\dbrequest\LoginRequest;
@@ -48,14 +47,20 @@ class MessageHandler
             case MsgIds::EVENT_UNREAD_MESSAGES :
                 IndexMessageRequest::responseUnread($chat_server, $json);
                 break;
+            case MsgIds::EVENT_UNREAD_TO_READ :
+                IndexMessageRequest::responseUnreadToRead($chat_server, $json);
+                break;
             case MsgIds::EVENT_INDEX_MESSAGE :
-                IndexMessageRequest::response($chat_server, $json);
+                IndexMessageRequest::responseIndexMessage($chat_server, $json);
                 break;
             case MsgIds::EVENT_HISTORY_MESSAGE :
                 HistoryMessageRequest::response($chat_server, $json);
                 break;
             case MsgIds::EVENT_SEND_MESSAGE :
-                SendMessageRequest::response($chat_server, $json);
+                MessageRequest::responseSendMessage($chat_server, $json);
+                break;
+            case MsgIds::EVENT_PICK_MESSAGE :
+                MessageRequest::responsePickMessage($chat_server, $json);
                 break;
             case MsgIds::EVENT_SEND_GROUP_MESSAGE :
                 SendGroupMessageRequest::response($chat_server, $json);
@@ -64,10 +69,13 @@ class MessageHandler
                 GroupRequest::responseCreate($chat_server, $json);
                 break;
             case MsgIds::EVENT_DELETE_GROUP :
-                GroupRequest::responseDelete($chat_server, $json);
+                GroupRequest::responseDeleteGroup($chat_server, $json);
                 break;
             case MsgIds::EVENT_MODIFY_GROUP :
                 GroupRequest::responseModify($chat_server, $json);
+                break;
+            case MsgIds::EVENT_DELETE_GROUP_FRIEND :
+                GroupRequest::responseDeleteFriend($chat_server, $json);
                 break;
             default :
                 //未定义的消息，不做处理

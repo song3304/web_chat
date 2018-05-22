@@ -12,8 +12,8 @@ namespace App;
 use App\dbrequest\GroupRequest;
 use App\dbrequest\HistoryMessageRequest;
 use App\dbrequest\IndexMessageRequest;
+use App\dbrequest\MessageRequest;
 use App\dbrequest\SendGroupMessageRequest;
-use App\dbrequest\SendMessageRequest;
 use PHPSocketIO\SocketIO;
 use Workerman\MySQL\Connection;
 use App\TcpClient;
@@ -102,6 +102,10 @@ class ChatServer {
             $socket->on('unread_messages', function ($uid)use($socket) {
                 IndexMessageRequest::requestUnread($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid]));
             });
+            //未读变已读
+            $socket->on('unread_to_read', function ($uid,array $messageIds)use($socket) {
+                IndexMessageRequest::requestUnreadToRead($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'messageIds'=>$messageIds]));
+            });
             //获取当前聊天记录
             $socket->on('index_message',function ($uid,$to_uid)use($socket){
                 IndexMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid]));
@@ -112,11 +116,15 @@ class ChatServer {
             });
             //发送单人消息
             $socket->on('send_message',function ($uid,$to_uid,$message)use($socket){
-                SendMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid ,'message'=>$message]));
+                MessageRequest::requestSendMessage($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid ,'message'=>$message]));
             });
             //群发消息
             $socket->on('send_group_message',function ($uid,$group_id,$message)use($socket){
                 SendGroupMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id ,'message'=>$message]));
+            });
+            //接收消息
+            $socket->on('pick_message',function ($uid,$message_id)use($socket){
+                MessageRequest::requestPickMessage($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid,'message_id'=>$message_id]));
             });
             //新建自定义分组
             $socket->on('create_group',function ($uid,$group_name,$group_type,array $userIds)use($socket){
@@ -124,11 +132,15 @@ class ChatServer {
             });
             //删除自定义分组
             $socket->on('delete_group',function ($uid,$group_id)use($socket){
-                GroupRequest::requestDelete($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id ]));
+                GroupRequest::requestDeleteGroup($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id ]));
             });
             //修改自定义分组名
             $socket->on('modify_group',function ($uid,$group_id,$new_name)use($socket){
                 GroupRequest::requestModify($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id , 'group_name' => $new_name]));
+            });
+            //删除自定义分组中的好友
+            $socket->on('delete_group_friend',function ($uid,$group_id,array $userIds)use($socket){
+                GroupRequest::requestDeleteFriend($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id , 'userIds' => $userIds]));
             });
         });
     }

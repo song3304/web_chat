@@ -71,6 +71,7 @@ class Group extends Model{
         if(!$row_count)return false;
         return true;
     }
+
     /**
      * @param $uid
      * @param $to_uid
@@ -85,6 +86,20 @@ class Group extends Model{
             if(!$row_count)return false;
             return true;
         }
+    }
 
+    /**
+     * @param $uid
+     * @param $to_uid
+     * @return array
+     * @method 删除自定义分组中的好友
+     */
+    public function deleteGroupFriend($uid,$group_id,array $userIds) {
+        $group=$this->select('*')->from('en_chat_friends')->where('group_id='.$group_id)->query();
+        if(!$group)return false;
+        foreach($userIds as $friend_id){
+            $this->delete('en_chat_friends')->where('group_id='.$group_id.' AND friend_id='.$friend_id)->query();
+        }
+        return true;
     }
 }

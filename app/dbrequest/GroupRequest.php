@@ -43,7 +43,7 @@ class GroupRequest extends DbRequestBase {
      * @param XObject $obj
      * @method 请求删除分组
      */
-    static public function requestDelete(ChatServer $chat_server, XObject $obj) {
+    static public function requestDeleteGroup(ChatServer $chat_server, XObject $obj) {
         //构造请求
         $data = array(
             'id' => MsgIds::MESSAGE_DELETE_GROUP,
@@ -53,10 +53,11 @@ class GroupRequest extends DbRequestBase {
         );
         $chat_server->sendMessageToGateway($data);
     }
+
     /**
      * @param ChatServer $chat_server
      * @param XObject $obj
-     * @method 请求删除分组
+     * @method 请求修改分组名
      */
     static public function requestModify(ChatServer $chat_server, XObject $obj) {
         //构造请求
@@ -66,6 +67,23 @@ class GroupRequest extends DbRequestBase {
             'uid' => $obj->uid,
             'group_id' => $obj->group_id,
             'group_name' => $obj->group_name,
+        );
+        $chat_server->sendMessageToGateway($data);
+    }
+
+    /**
+     * @param ChatServer $chat_server
+     * @param XObject $obj
+     * @method 请求删除分组中的好友
+     */
+    static public function requestDeleteFriend(ChatServer $chat_server, XObject $obj) {
+        //构造请求
+        $data = array(
+            'id' => MsgIds::MESSAGE_DELETE_GROUP_FRIEND,
+            'sock_id' => $obj->sock_id,
+            'uid' => $obj->uid,
+            'group_id' => $obj->group_id,
+            'userIds' => $obj->userIds,
         );
         $chat_server->sendMessageToGateway($data);
     }
@@ -90,7 +108,7 @@ class GroupRequest extends DbRequestBase {
  * @param XObject $obj
  * @method 响应删除分组
  */
-    static public function responseDelete(ChatServer $chat_server, \stdClass $json) {
+    static public function responseDeleteGroup(ChatServer $chat_server, \stdClass $json) {
         //判断是否成功
         if ( $json->code == 1) {
             //成功
@@ -103,13 +121,28 @@ class GroupRequest extends DbRequestBase {
     /**
      * @param ChatServer $chat_server
      * @param XObject $obj
-     * @method 响应删除分组
+     * @method 响应修改分组名
      */
     static public function responseModify(ChatServer $chat_server, \stdClass $json) {
         //判断是否成功
         if ( $json->code == 1) {
             //成功
             $chat_server->sendMessage($json->uid, 'modify_group', $json->messages);
+        } else {
+            //失败
+        }
+    }
+
+    /**
+     * @param ChatServer $chat_server
+     * @param XObject $obj
+     * @method 响应删除分组中的好友
+     */
+    static public function responseDeleteFriend(ChatServer $chat_server, \stdClass $json) {
+        //判断是否成功
+        if ( $json->code == 1) {
+            //成功
+            $chat_server->sendMessage($json->uid, 'delete_group_friend', $json->messages);
         } else {
             //失败
         }

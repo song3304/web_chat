@@ -59,7 +59,7 @@ class GroupHandle extends MsgHandleBase {
      * @param $json
      * @method 删除自定义分组
      */
-    static public function handleDelete($client_id, $json) {
+    static public function handleDeleteGroup($client_id, $json) {
         if (isset($json->uid) && !empty($json->uid) && isset($json->group_id) && !empty($json->group_id)) {
             $group_model = new Group();
             $msg['uid'] = $json->uid;
@@ -84,7 +84,7 @@ class GroupHandle extends MsgHandleBase {
     /**
      * @param $client_id
      * @param $json
-     * @method 删除自定义分组
+     * @method 修改自定义分组
      */
     static public function handleModify($client_id, $json) {
         if (isset($json->uid) && !empty($json->uid) && isset($json->group_id) && !empty($json->group_id)) {
@@ -104,6 +104,29 @@ class GroupHandle extends MsgHandleBase {
         } else {
             //错误了
             Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_MODIFY_GROUP, 0, 'modify group err!')));
+        }
+
+    }
+
+    /**
+     * @param $client_id
+     * @param $json
+     * @method 删除自定义分组中的好友
+     */
+    static public function handleDeleteFriend($client_id, $json)
+    {
+        if (isset($json->uid) && !empty($json->uid) && isset($json->group_id) && !empty($json->group_id) && !empty($json->userIds)) {
+            $model=new Group();
+            if($model->deleteGroupFriend($json->uid,$json->group_id,$json->userIds)){
+                $msg['messages']='delete friend success!';
+            }else{
+                $msg['messages']='delete friend fail!';
+            }
+            $msg['uid'] = $json->uid;
+            $msg['sock_id'] = $json->sock_id;
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_DELETE_GROUP_FRIEND, 1, $msg)));
+        }else{
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_DELETE_GROUP_FRIEND, 0, 'delete friend err!')));
         }
 
     }
