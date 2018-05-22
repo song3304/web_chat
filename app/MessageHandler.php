@@ -8,6 +8,8 @@ namespace App;
 
 use App\dbrequest\CompanyFriendsRequest;
 use App\business\MsgIds;
+use App\dbrequest\CreateGroupRequest;
+use App\dbrequest\GroupRequest;
 use App\dbrequest\HistoryMessageRequest;
 use App\dbrequest\IndexMessageRequest;
 use App\dbrequest\SendGroupMessageRequest;
@@ -43,6 +45,9 @@ class MessageHandler
             case MsgIds::EVENT_COMPANY_FRIENDS :
                 CompanyFriendsRequest::response($chat_server, $json);
                 break;
+            case MsgIds::EVENT_UNREAD_MESSAGES :
+                IndexMessageRequest::responseUnread($chat_server, $json);
+                break;
             case MsgIds::EVENT_INDEX_MESSAGE :
                 IndexMessageRequest::response($chat_server, $json);
                 break;
@@ -54,6 +59,15 @@ class MessageHandler
                 break;
             case MsgIds::EVENT_SEND_GROUP_MESSAGE :
                 SendGroupMessageRequest::response($chat_server, $json);
+                break;
+            case MsgIds::EVENT_CREATE_GROUP :
+                GroupRequest::responseCreate($chat_server, $json);
+                break;
+            case MsgIds::EVENT_DELETE_GROUP :
+                GroupRequest::responseDelete($chat_server, $json);
+                break;
+            case MsgIds::EVENT_MODIFY_GROUP :
+                GroupRequest::responseModify($chat_server, $json);
                 break;
             default :
                 //未定义的消息，不做处理

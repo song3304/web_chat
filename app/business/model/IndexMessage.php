@@ -48,4 +48,17 @@ class IndexMessage extends Model{
         array_multisort($tempArr,SORT_DESC,$messages);
         return $messages;
     }
+
+    /**
+     * @param $uid
+     * @return mixed
+     * @method 获取所有未读信息
+     */
+    public function getUnreadMessages($uid)
+    {
+        $messages=$this->select('*')->from('en_chat_messages')->where('to_uid= :to_uid AND is_read=0')->bindValues(array('to_uid'=>$uid))->orderByDesc(array(0=>'create_time'))->query();
+        return $messages;
+    }
+
+
 }

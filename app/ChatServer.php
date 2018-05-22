@@ -9,6 +9,7 @@
 
 namespace App;
 
+use App\dbrequest\GroupRequest;
 use App\dbrequest\HistoryMessageRequest;
 use App\dbrequest\IndexMessageRequest;
 use App\dbrequest\SendGroupMessageRequest;
@@ -93,6 +94,14 @@ class ChatServer {
             $socket->on('company_friends',function ($uid)use($socket){
                 CompanyFriendsRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid]));
             });
+            //获取全局在线人数
+            $socket->on('global_online', function ()use($socket) {
+                GlobalOnline::handle($this, null, $socket);
+            });
+            //获取未读信息
+            $socket->on('unread_messages', function ($uid)use($socket) {
+                IndexMessageRequest::requestUnread($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid]));
+            });
             //获取当前聊天记录
             $socket->on('index_message',function ($uid,$to_uid)use($socket){
                 IndexMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid]));
@@ -109,9 +118,17 @@ class ChatServer {
             $socket->on('send_group_message',function ($uid,$group_id,$message)use($socket){
                 SendGroupMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id ,'message'=>$message]));
             });
-            //获取全局在线人数
-            $socket->on('global_online', function ()use($socket) {
-                GlobalOnline::handle($this, null, $socket);
+            //新建自定义分组
+            $socket->on('create_group',function ($uid,$group_name,$group_type,array $userIds)use($socket){
+                GroupRequest::requestCreate($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_name' => $group_name, 'group_type' => $group_type, 'userIds' => $userIds]));
+            });
+            //删除自定义分组
+            $socket->on('delete_group',function ($uid,$group_id)use($socket){
+                GroupRequest::requestDelete($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id ]));
+            });
+            //修改自定义分组名
+            $socket->on('modify_group',function ($uid,$group_id,$new_name)use($socket){
+                GroupRequest::requestModify($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id , 'group_name' => $new_name]));
             });
         });
     }

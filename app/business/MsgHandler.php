@@ -7,6 +7,7 @@ namespace App\business;
  */
 
 use App\business\msg\CompanyFriendsHandle;
+use App\business\msg\GroupHandle;
 use App\business\msg\HistoryMessageHandle;
 use App\business\msg\IndexMessageHandle;
 use App\business\msg\SendGroupMessageHandle;
@@ -16,6 +17,7 @@ use App\business\msg\JoinGroup;
 use App\business\msg\ErrorMsg;
 use App\business\msg\LoginHandle;
 use App\dbrequest\HistoryMessageRequest;
+use App\dbrequest\IndexMessageRequest;
 
 /**
  * Description of MsgHandler
@@ -44,6 +46,9 @@ class MsgHandler
             case MsgIds::MESSAGE_COMPANY_FRIENDS:
                 CompanyFriendsHandle::handle($client_id,$json);
                 break;
+            case MsgIds::MESSAGE_UNREAD_MESSAGES:
+                IndexMessageHandle::handleUnread($client_id,$json);
+                break;
             case MsgIds::MESSAGE_INDEX_MESSAGE:
                 IndexMessageHandle::handle($client_id,$json);
                 break;
@@ -55,6 +60,15 @@ class MsgHandler
                 break;
             case MsgIds::MESSAGE_SEND_GROUP_MESSAGE:
                 SendGroupMessageHandle::handle($client_id,$json);
+                break;
+            case MsgIds::MESSAGE_CREATE_GROUP:
+                GroupHandle::handleCreate($client_id,$json);
+                break;
+            case MsgIds::MESSAGE_DELETE_GROUP:
+                GroupHandle::handleDelete($client_id,$json);
+                break;
+            case MsgIds::MESSAGE_MODIFY_GROUP:
+                GroupHandle::handleModify($client_id,$json);
                 break;
             default :
                 //未定义的消息，不做处理

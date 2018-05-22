@@ -31,14 +31,26 @@ class MsgIds
     const MESSAGE_LOGIN = 10004;
     //好友分组
     const MESSAGE_COMPANY_FRIENDS = 10005;
+    //未读信息
+    const MESSAGE_UNREAD_MESSAGES = 10006;
     //当前聊天记录
-    const MESSAGE_INDEX_MESSAGE = 10006;
+    const MESSAGE_INDEX_MESSAGE = 10007;
     //历史聊天记录
-    const MESSAGE_HISTORY_MESSAGE = 10007;
+    const MESSAGE_HISTORY_MESSAGE = 10008;
     //发送单人消息
-    const MESSAGE_SEND_MESSAGE = 10008;
+    const MESSAGE_SEND_MESSAGE = 10009;
     //群发消息
-    const MESSAGE_SEND_GROUP_MESSAGE = 10009;
+    const MESSAGE_SEND_GROUP_MESSAGE = 10010;
+    //创建自定义分组
+    const MESSAGE_CREATE_GROUP = 10011;
+    //删除自定义分组
+    const MESSAGE_DELETE_GROUP = 10012;
+    //修改自定义分组
+    const MESSAGE_MODIFY_GROUP = 10013;
+    //添加好友至自定义分组
+    const MESSAGE_ADD_GROUP_FRIEND = 10014;
+    //删除自定义分组中的好友
+    const MESSAGE_DELETE_GROUP_FRIEND = 10015;
     
     /*
      * 这里定义business逻辑生成的消息回复时候用的消息编码
@@ -51,14 +63,26 @@ class MsgIds
     const EVENT_LOGIN = 50004;
     //返回给客户端的好友分组
     const EVENT_COMPANY_FRIENDS = 50005;
+    //返回给客户端的未读信息
+    const EVENT_UNREAD_MESSAGES = 50006;
     //返回给客户端的当前聊天记录
-    const EVENT_INDEX_MESSAGE = 50006;
+    const EVENT_INDEX_MESSAGE = 50007;
     //返回给客户端的当前聊天记录
-    const EVENT_HISTORY_MESSAGE = 50007;
+    const EVENT_HISTORY_MESSAGE = 50008;
     //客户端接收信息
-    const EVENT_SEND_MESSAGE = 50008;
+    const EVENT_SEND_MESSAGE = 50009;
     //客户端接收群发信息
-    const EVENT_SEND_GROUP_MESSAGE = 50009;
+    const EVENT_SEND_GROUP_MESSAGE = 50010;
+    //返回给客户端的创建分组结果
+    const EVENT_CREATE_GROUP = 50011;
+    //返回给客户端的创建分组结果
+    const EVENT_DELETE_GROUP = 50012;
+    //返回给客户端的修改分组结果
+    const EVENT_MODIFY_GROUP = 50013;
+    //添加好友至自定义分组
+    const EVENT_ADD_GROUP_FRIEND = 50014;
+    //删除自定义分组中的好友
+    const EVENT_DELETE_GROUP_FRIEND = 50015;
     
     //------------------------------------
 }
