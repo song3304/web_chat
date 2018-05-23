@@ -20,7 +20,11 @@ use App\ChatServer;
  */
 class HistoryMessageRequest extends DbRequestBase {
 
-    //请求
+    /**
+     * @param ChatServer $chat_server
+     * @param XObject $obj
+     * @method 请求历史记录
+     */
     static public function request(ChatServer $chat_server, XObject $obj) {
         //构造请求
         $data = array(
@@ -34,15 +38,13 @@ class HistoryMessageRequest extends DbRequestBase {
         $chat_server->sendMessageToGateway($data);
     }
 
-    //响应
+    /**
+     * @param ChatServer $chat_server
+     * @param \stdClass $json
+     * @method 响应历史记录
+     */
     static public function response(ChatServer $chat_server, \stdClass $json) {
-        //判断是否成功
-        if ( $json->code == 1) {
-            //成功
-            $chat_server->sendMessage($json->uid, 'history_message', $json->messages);
-        } else {
-            //失败
-        }
+        $chat_server->sendMessage($json->uid, 'history_message', $json->data);
     }
 
 }

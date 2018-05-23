@@ -74,63 +74,102 @@ class MessageHandle extends MsgHandleBase {
     /**
      * @param $client_id
      * @param $json
-     * @method 历史聊天记录
+     * @method 处理历史聊天记录
      */
     static public function historyMessage($client_id, $json) {
-        if (isset($json->uid) && !empty($json->uid) && isset($json->to_uid) && !empty($json->to_uid) && isset($json->pageSize) && !empty($json->pageSize)) {
-            $message_model = new Message();
-            $msg['messages']  = $message_model->getHistoryMessage($json->uid,$json->to_uid,$json->pageSize,$json->indexPage);
-            $msg['uid'] = $json->uid;
-            $msg['to_uid'] = $json->to_uid;
-            $msg['sock_id'] = $json->sock_id;
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_HISTORY_MESSAGE, 1, $msg)));
+        $message_model = new Message();
+        $return_data['uid'] = $json->uid;
+        $return_data['to_uid'] = $json->to_uid;
+        $return_data['sock_id'] = $json->sock_id;
+        $history_msg=$message_model->getHistoryMessage($json->uid,$json->to_uid,$json->pageSize,$json->indexPage);
+        if(!empty($history_msg)){
+            $data=[
+                'result'=>'true',
+                'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'pageSize'=>$json->pageSize,'indexPage'=>$json->indexPage],
+                'msg'=>'获取历史记录成功！',
+                'data'=>$history_msg,
+            ];
+            $return_data['data']  = $data;
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_HISTORY_MESSAGE, 1, $return_data)));
         } else {
-            //错误了
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_HISTORY_MESSAGE, 0, 'get history_message err!')));
+            $data=[
+                'result'=>'false',
+                'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'pageSize'=>$json->pageSize,'indexPage'=>$json->indexPage],
+                'msg'=>'获取历史记录失败！',
+                'data'=>[],
+            ];
+            $return_data['data']  = $data;
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_HISTORY_MESSAGE, 0, $return_data)));
         }
     }
 
     /**
      * @param $client_id
      * @param $json
-     * @method 当前聊天记录
+     * @method 处理当前聊天记录
      */
     static public function indexMessage($client_id, $json) {
-        if (isset($json->uid) && !empty($json->uid) && isset($json->to_uid) && !empty($json->to_uid) ) {
-            $message_model = new Message();
-            $msg['messages']  = $message_model->getIndexMessage($json->uid,$json->to_uid);
-            $msg['uid'] = $json->uid;
-            $msg['to_uid'] = $json->to_uid;
-            $msg['sock_id'] = $json->sock_id;
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_INDEX_MESSAGE, 1, $msg)));
+        $message_model = new Message();
+        $return_data['uid'] = $json->uid;
+        $return_data['to_uid'] = $json->to_uid;
+        $return_data['sock_id'] = $json->sock_id;
+        $index_msg = $message_model->getIndexMessage($json->uid,$json->to_uid);
+        if(!empty($index_msg)){
+            $data=[
+                'result'=>'true',
+                'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid],
+                'msg'=>'获取当前聊天记录成功！',
+                'data'=>$index_msg,
+            ];
+            $return_data['data']  = $data;
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_INDEX_MESSAGE, 1, $return_data)));
         } else {
-            //错误了
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_INDEX_MESSAGE, 0, 'get index_message err!')));
+            $data=[
+                'result'=>'false',
+                'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid],
+                'msg'=>'获取当前聊天记录失败！',
+                'data'=>[],
+            ];
+            $return_data['data']  = $data;
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_INDEX_MESSAGE, 0, $return_data)));
         }
     }
 
     /**
      * @param $client_id
      * @param $json
-     * @method 未读信息
+     * @method 处理未读信息
      */
     static public function unreadMessages($client_id, $json) {
-        if (isset($json->uid) && !empty($json->uid)) {
-            $message_model = new Message();
-            $msg['messages']  = $message_model->getUnreadMessages($json->uid);
-            $msg['uid'] = $json->uid;
-            $msg['sock_id'] = $json->sock_id;
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_UNREAD_MESSAGES, 1, $msg)));
+        $message_model = new Message();
+        $unread_msg = $message_model->getUnreadMessages($json->uid);
+        $return_data['uid'] = $json->uid;
+        $return_data['sock_id'] = $json->sock_id;
+        if(!empty($unread_msg)){
+            $data=[
+                'result'=>'true',
+                'params'=>['uid'=>$json->uid],
+                'msg'=>'获取未读消息成功！',
+                'data'=>$unread_msg,
+            ];
+            $return_data['data']  = $data;
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_UNREAD_MESSAGES, 1, $return_data)));
         } else {
-            //错误了
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_UNREAD_MESSAGES, 0, 'get unread message err!')));
+            $data=[
+                'result'=>'false',
+                'params'=>['uid'=>$json->uid],
+                'msg'=>'获取未读消息失败！',
+                'data'=>[],
+            ];
+            $return_data['data']  = $data;
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_UNREAD_MESSAGES, 0, $return_data)));
         }
     }
 
     /**
      * @param $client_id
      * @param $json
-     * @method 未读变已读
+     * @method 处理未读变已读
      */
     static public function unreadToRead($client_id, $json) {
         if (isset($json->uid) && !empty($json->uid)&& !empty($json->messageIds)) {
