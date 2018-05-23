@@ -91,7 +91,7 @@ class ClientFriends extends Model{
                 ->bindValues(array('id'=>$v['group_id']))
                 ->query();
         }
-        return json_encode(['default_groups'=>$default_group_friends,'define_groups'=>$define_group_friends]);
+        return ['default_groups'=>$default_group_friends,'define_groups'=>$define_group_friends];
     }
 
     /**
@@ -147,7 +147,7 @@ class ClientFriends extends Model{
                 ->query();
             $define_group_friends[$k]['friends']=$friends;
         }
-        return json_encode(['default_groups'=>$default_group_friends,'define_groups'=>$define_group_friends]);
+        return ['default_groups'=>$default_group_friends,'define_groups'=>$define_group_friends];
     }
 
 }
