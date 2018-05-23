@@ -219,7 +219,7 @@ class ChatServer {
         //格式化消息
         if (is_string($msg)) {
             
-        } else if (is_array($msg)) {
+        } else if (is_array($msg)||is_object($msg)) {
             $msg = json_encode($msg);
         } else {
             //错误，不处理
