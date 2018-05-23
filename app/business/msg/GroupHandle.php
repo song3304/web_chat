@@ -34,23 +34,26 @@ class GroupHandle extends MsgHandleBase {
     static public function handleCreate($client_id, $json) {
         if (isset($json->uid) && !empty($json->uid) && isset($json->group_name) && !empty($json->group_name)) {
             $group_model = new Group();
-            $msg['uid'] = $json->uid;
-            $msg['group_name'] = $json->group_name;
-            $msg['group_type'] = $json->group_type;
-            $msg['userIds'] = $json->userIds;
-            $msg['sock_id'] = $json->sock_id;
+            $return_data['uid'] = $json->uid;
+            $return_data['group_name'] = $json->group_name;
+            $return_data['group_type'] = $json->group_type;
+            $return_data['userIds'] = $json->userIds;
+            $return_data['sock_id'] = $json->sock_id;
             if($group_model->createGroup($json->uid,$json->group_name,$json->group_type,$json->userIds)){
-                $msg['messages']='create group success';
+                $return_data['messages']='创建分组成功!';
                 //个人逻辑：新建分组成功后，应返回给客户端EVENT_COMPANY_FRIENDS
-                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_CREATE_GROUP, 1, $msg)));
+                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_CREATE_GROUP, 1, $return_data)));
             }else{
-                $msg['messages']='create group false';
-                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_CREATE_GROUP, 0, $msg)));
+                $return_data['uid'] = $json->uid;
+                $return_data['messages']='创建分组失败!';
+                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_CREATE_GROUP, 0, $return_data)));
             }
 
         } else {
             //错误了
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_CREATE_GROUP, 0, 'create group err!')));
+            $return_data['uid'] = $json->uid;
+            $return_data['messages']='创建分组错误!';
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_CREATE_GROUP, 0, $return_data)));
         }
     }
 
@@ -62,21 +65,24 @@ class GroupHandle extends MsgHandleBase {
     static public function handleDeleteGroup($client_id, $json) {
         if (isset($json->uid) && !empty($json->uid) && isset($json->group_id) && !empty($json->group_id)) {
             $group_model = new Group();
-            $msg['uid'] = $json->uid;
-            $msg['group_id'] = $json->group_id;
-            $msg['sock_id'] = $json->sock_id;
+            $return_data['uid'] = $json->uid;
+            $return_data['group_id'] = $json->group_id;
+            $return_data['sock_id'] = $json->sock_id;
             if($group_model->deleteGroup($json->uid,$json->group_id)){
-                $msg['messages']='delete group success';
+                $return_data['messages']='删除分组成功!';
                 //个人逻辑：新建分组成功后，应返回给客户端EVENT_COMPANY_FRIENDS
-                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_DELETE_GROUP, 1, $msg)));
+                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_DELETE_GROUP, 1, $return_data)));
             }else{
-                $msg['messages']='delete group false';
-                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_DELETE_GROUP, 0, $msg)));
+                $return_data['uid'] = $json->uid;
+                $return_data['messages']='删除分组失败!';
+                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_DELETE_GROUP, 0, $return_data)));
             }
 
         } else {
             //错误了
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_DELETE_GROUP, 0, 'delete group err!')));
+            $return_data['uid'] = $json->uid;
+            $return_data['messages']='删除分组错误!';
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_DELETE_GROUP, 0, $return_data)));
         }
 
     }
@@ -89,21 +95,24 @@ class GroupHandle extends MsgHandleBase {
     static public function handleModify($client_id, $json) {
         if (isset($json->uid) && !empty($json->uid) && isset($json->group_id) && !empty($json->group_id)) {
             $group_model = new Group();
-            $msg['uid'] = $json->uid;
-            $msg['group_id'] = $json->group_id;
-            $msg['sock_id'] = $json->sock_id;
+            $return_data['uid'] = $json->uid;
+            $return_data['group_id'] = $json->group_id;
+            $return_data['sock_id'] = $json->sock_id;
             if($group_model->modifyGroup($json->uid,$json->group_id,$json->group_name)){
-                $msg['messages']='modify group success';
+                $return_data['messages']='修改成功!';
                 //个人逻辑：新建分组成功后，应返回给客户端EVENT_COMPANY_FRIENDS
-                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_MODIFY_GROUP, 1, $msg)));
+                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_MODIFY_GROUP, 1, $return_data)));
             }else{
-                $msg['messages']='modify group false';
-                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_MODIFY_GROUP, 0, $msg)));
+                $return_data['uid'] = $json->uid;
+                $return_data['messages']='修改失败!';
+                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_MODIFY_GROUP, 0, $return_data)));
             }
 
         } else {
             //错误了
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_MODIFY_GROUP, 0, 'modify group err!')));
+            $return_data['uid'] = $json->uid;
+            $return_data['messages']='修改错误!';
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_MODIFY_GROUP, 0, $return_data)));
         }
 
     }
@@ -117,16 +126,22 @@ class GroupHandle extends MsgHandleBase {
     {
         if (isset($json->uid) && !empty($json->uid) && isset($json->group_id) && !empty($json->group_id) && !empty($json->userIds)) {
             $model=new Group();
+            $return_data['uid'] = $json->uid;
+            $return_data['sock_id'] = $json->sock_id;
+            $return_data['group_id'] = $json->group_id;
+            $return_data['userIds'] = $json->userIds;
             if($model->deleteGroupFriend($json->uid,$json->group_id,$json->userIds)){
-                $msg['messages']='delete friend success!';
+                $return_data['messages']='删除好友成功!';
+                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_DELETE_GROUP_FRIEND, 1, $return_data)));
             }else{
-                $msg['messages']='delete friend fail!';
+                $return_data['messages']='删除好友失败!';
+                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_DELETE_GROUP_FRIEND, 0, $return_data)));
             }
-            $msg['uid'] = $json->uid;
-            $msg['sock_id'] = $json->sock_id;
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_DELETE_GROUP_FRIEND, 1, $msg)));
+
         }else{
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_DELETE_GROUP_FRIEND, 0, 'delete friend err!')));
+            $return_data['uid'] = $json->uid;
+            $return_data['messages']='删除好友错误!';
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_DELETE_GROUP_FRIEND, 0, $return_data)));
         }
 
     }

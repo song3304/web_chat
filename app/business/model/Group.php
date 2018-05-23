@@ -79,13 +79,16 @@ class Group extends Model{
      * @method 修改自定义分组
      */
     public function modifyGroup($uid,$group_id,$group_name) {
+        //是否存在此组
         $group=$this->select('*')->from('en_chat_friend_groups')->where('id=:group_id AND uid= :uid')->bindValues(array('group_id'=>$group_id,'uid'=>$uid))->query();
         if(!$group)return false;
-        if(!empty($group_name)){
-            $row_count = $this->update('en_chat_friend_groups')->cols(array('group_name'))->where('id='.$group_id)->bindValue('group_name', $group_name)->query();
-            if(!$row_count)return false;
-            return true;
-        }
+        //此组名是否已存在
+        $same_group=$this->select('*')->from('en_chat_friend_groups')->where('uid= :uid AND group_name= :group_name')->bindValues(array('uid'=>$uid,'group_name'=>$group_name))->query();
+        if($same_group)return false;
+        //更改组名
+        $row_count = $this->update('en_chat_friend_groups')->cols(array('group_name'))->where('id='.$group_id)->bindValue('group_name', $group_name)->query();
+        if(!$row_count)return false;
+        return true;
     }
 
     /**
@@ -99,6 +102,11 @@ class Group extends Model{
         if(!$group)return false;
         foreach($userIds as $friend_id){
             $this->delete('en_chat_friends')->where('group_id='.$group_id.' AND friend_id='.$friend_id)->query();
+        }
+        //如果删除好友后该组为空，则同时删除此组
+        $group_friend=$this->select('*')->from('en_chat_friends')->where('group_id= :group_id')->bindValues(array('group_id'=>$group_id))->query();
+        if(!$group_friend){
+            $this->delete('en_chat_friend_groups')->where('id='.$group_id)->query();
         }
         return true;
     }

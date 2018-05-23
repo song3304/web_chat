@@ -20,7 +20,11 @@ use App\ChatServer;
  */
 class SendGroupMessageRequest extends DbRequestBase {
 
-    //请求
+    /**
+     * @param ChatServer $chat_server
+     * @param XObject $obj
+     * @method 请求-群发信息
+     */
     static public function request(ChatServer $chat_server, XObject $obj) {
         //构造请求
         $data = array(
@@ -33,15 +37,20 @@ class SendGroupMessageRequest extends DbRequestBase {
         $chat_server->sendMessageToGateway($data);
     }
 
-    //响应
+    /**
+     * @param ChatServer $chat_server
+     * @param \stdClass $json
+     * @method 响应-群发信息
+     */
     static public function response(ChatServer $chat_server, \stdClass $json) {
         //判断是否成功
         if ( $json->code == 1) {
             //成功
-            $chat_server->sendMessage($json->uid, 'send_group_message', $json->messages);
-            $chat_server->sendMessage($json->to_ids, 'pick_message', $json->messages);
+            $chat_server->sendMessage($json->uid, 'send_group_message', $json->data);
+            $chat_server->sendMessage($json->data->to_ids, 'pick_message', $json->data->content);
         } else {
             //失败
+            $chat_server->sendMessage($json->uid, 'send_group_message', $json->data);
         }
     }
 

@@ -67,8 +67,7 @@ class ClientFriends extends Model{
                 ->select('c.user_id AS friend_id,u.nickname AS trader_nickname,u.realname AS trader_realname,u.pic_url AS img')
                 ->from('en_collection AS c')
                 ->leftjoin('en_users AS u','c.user_id=u.id')
-                ->where('c.match_id= :id')
-                ->where('c.user_org_id= :user_org_id')
+                ->where('c.match_id= :id AND c.user_org_id= :user_org_id')
                 ->bindValues(array('id'=>$uid,'user_org_id'=>$v['user_org_id']))
                 ->query();
         }
@@ -122,8 +121,7 @@ class ClientFriends extends Model{
                 ->select('c.match_id AS friend_id,u.nickname AS matcher_nickname,u.realname AS matcher_realname,u.pic_url AS img')
                 ->from('en_collection AS c')
                 ->leftjoin('en_users AS u','c.match_id=u.id')
-                ->where('c.user_id= :id')
-                ->where('c.match_org_id= :match_org_id')
+                ->where('c.user_id= :id AND c.match_org_id= :match_org_id')
                 ->bindValues(array('id'=>$uid,'match_org_id'=>$v['match_org_id']))
                 ->query();
             $default_group_friends[$k]['friends'] = $friends;

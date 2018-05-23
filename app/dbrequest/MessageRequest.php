@@ -40,7 +40,7 @@ class MessageRequest extends DbRequestBase {
     /**
      * @param ChatServer $chat_server
      * @param XObject $obj
-     * @method 请求发送单人信息
+     * @method 请求接收信息
      */
     static public function requestPickMessage(ChatServer $chat_server, XObject $obj) {
         //构造请求
@@ -62,11 +62,12 @@ class MessageRequest extends DbRequestBase {
         //判断是否成功
         if ( $json->code == 1) {
             //成功,返回给发信人
-            $chat_server->sendMessage($json->uid, 'send_message', $json->messages);
+            $chat_server->sendMessage($json->uid, 'send_message', $json->data);
             //推送给收信人
-            $chat_server->sendMessage($json->to_uid, 'pick_message', $json->messages);
+            $chat_server->sendMessage($json->to_uid, 'pick_message', $json->data->content);
         } else {
             //失败
+            $chat_server->sendMessage($json->uid, 'send_message', $json->data);
         }
     }
 

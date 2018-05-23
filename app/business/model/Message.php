@@ -32,10 +32,10 @@ class Message extends Model{
                 'message'=>htmlspecialchars($message)
                 ])
             ->query();
-        if($insert_id){
-            return $this->select('id,uid,message,is_read')->from('en_chat_messages')->where('id='.$insert_id)->query();
+        if(!$insert_id){
+            return false;
         }else{
-            return array();
+            return true;
         }
     }
 
