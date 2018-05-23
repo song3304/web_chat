@@ -35,7 +35,7 @@ class Message extends Model{
         if(!$insert_id){
             return false;
         }else{
-            return true;
+            return $this->select('*')->from('en_chat_messages')->where('id= :id')->bindValues(['id'=>$insert_id])->row();
         }
     }
 

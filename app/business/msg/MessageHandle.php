@@ -36,12 +36,13 @@ class MessageHandle extends MsgHandleBase {
             $return_data['uid'] = $json->uid;
             $return_data['to_uid'] = $json->to_uid;
             $return_data['sock_id'] = $json->sock_id;
-            if($message_model->send($json->uid,$json->to_uid,$json->message)){
+            $new_row = $message_model->send($json->uid,$json->to_uid,$json->message);
+            if($new_row != false){
                 $data=[
                     'result'=>'true',
                     'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'message'=>$json->message],
                     'msg'=>'发送消息成功！',
-                    'content'=>$json->message,
+                    'data'=>$new_row,
                     'to_uid'=>$json->to_uid,
                 ];
                 $return_data['data']=$data;
@@ -51,7 +52,7 @@ class MessageHandle extends MsgHandleBase {
                     'result'=>'false',
                     'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'message'=>$json->message],
                     'msg'=>'发送消息失败！',
-                    'content'=>$json->message,
+                    'data'=>[],
                     'to_uid'=>$json->to_uid,
                 ];
                 $return_data['data']=$data;

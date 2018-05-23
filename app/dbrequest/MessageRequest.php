@@ -64,7 +64,7 @@ class MessageRequest extends DbRequestBase {
             //成功,返回给发信人
             $chat_server->sendMessage($json->uid, 'send_message', $json->data);
             //推送给收信人
-            $chat_server->sendMessage($json->to_uid, 'pick_message', $json->data->content);
+            $chat_server->sendMessage($json->to_uid, 'pick_message', $json->data);
         } else {
             //失败
             $chat_server->sendMessage($json->uid, 'send_message', $json->data);
