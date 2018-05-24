@@ -47,8 +47,8 @@ class Group extends Model{
         foreach($userIds as $friend_id){
             $this->insert('en_chat_friends')
                 ->cols([
-                    'group_id'=>$friend_id,
-                    'friend_id'=>$uid
+                    'group_id'=>$group_id,
+                    'friend_id'=>$friend_id
                 ])
                 ->query();
         }
@@ -82,8 +82,8 @@ class Group extends Model{
      */
     public function modifyGroup($uid,$group_id,$group_name) {
         //是否存在此组
-        $group=$this->select('*')->from('en_chat_friend_groups')->where('id=:group_id AND uid= :uid')->bindValues(array('group_id'=>$group_id,'uid'=>$uid))->query();
-        if(!$group || $group['name']=$group_name)return false;
+        $group=$this->select('*')->from('en_chat_friend_groups')->where('id=:group_id AND uid= :uid')->bindValues(array('group_id'=>$group_id,'uid'=>$uid))->row();
+        if(!$group || $group['group_name']==$group_name)return false;
         //此组名是否已存在
         $same_group=$this->select('*')->from('en_chat_friend_groups')->where('uid= :uid AND group_name= :group_name')->bindValues(array('uid'=>$uid,'group_name'=>$group_name))->query();
         if($same_group)return false;
@@ -97,12 +97,11 @@ class Group extends Model{
      * @param $uid
      * @param $to_uid
      * @return array
-     * @method 删除自定义分组中的好友
+     * @method 删除好友
      */
     public function deleteGroupFriend($uid,$group_id,array $userIds) {
-        $friends=$this->select('*')->from('en_chat_friends')->where('group_id='.$group_id)->query();
-        if(!$friends)return false;
-        $group=$this->select('*')->from('en_chat_friend_groups')->where('id='.$group_id)->query();
+        //判断此组是否为当前用户所有
+        $group=$this->select('*')->from('en_chat_friend_groups')->where('id='.$group_id)->row();
         if($group['uid']!=$uid)return false;
         foreach($userIds as $friend_id){
             $this->delete('en_chat_friends')->where('group_id='.$group_id.' AND friend_id='.$friend_id)->query();
