@@ -128,7 +128,7 @@ class GroupHandle extends MsgHandleBase {
             if($group_mdf != false){
                 $data = [
                     'result'=>true,
-                    'params'=>['group_id'=>$json->group_id,'group_name'=>$json->group_name],
+                    'params'=>['groupId'=>$json->group_id,'groupType'=>$json->group_type,'groupName'=>$json->group_name],
                     'msg'=>'修改分组成功!',
                     'data'=>$group_mdf
                 ];
@@ -138,7 +138,7 @@ class GroupHandle extends MsgHandleBase {
             }else{
                 $data = [
                     'result'=>false,
-                    'params'=>['group_id'=>$json->group_id,'group_name'=>$json->group_name],
+                    'params'=>['groupId'=>$json->group_id,'groupType'=>$json->group_type,'groupName'=>$json->group_name],
                     'msg'=>'组名不能重复，请重新输入!',
                     'data'=>null
                 ];
@@ -177,7 +177,7 @@ class GroupHandle extends MsgHandleBase {
             if($model->deleteGroupFriend($json->uid,$json->group_id,$json->userIds)){
                 $data = [
                     'result'=>true,
-                    'params'=>['group_id'=>$json->group_id,'userIds'=>$json->userIds],
+                    'params'=>['userId'=>$json->uid,'groupId'=>$json->group_id,'groupType'=>$json->group_type,'userIds'=>$json->userIds],
                     'msg'=>'删除好友成功!',
                     'data'=>$json->userIds
                 ];
@@ -186,7 +186,7 @@ class GroupHandle extends MsgHandleBase {
             }else{
                 $data = [
                     'result'=>false,
-                    'params'=>['group_id'=>$json->group_id,'userIds'=>$json->userIds],
+                    'params'=>['userId'=>$json->uid,'groupId'=>$json->group_id,'groupType'=>$json->group_type,'userIds'=>$json->userIds],
                     'msg'=>'删除好友失败!',
                     'data'=>null
                 ];

@@ -194,7 +194,7 @@ class MessageHandle extends MsgHandleBase {
             $message_model->unreadToRead($json->uid,$json->messageIds);
             $data = [
                 'result'=>true,
-                'params'=>['uid'=>$json->uid,'messageIds'=>$json->messageIds],
+                'params'=>['uid'=>$json->uid,'toUid'=>$json->toUid,'messageIds'=>$json->messageIds],
                 'msg'=>'已读成功',
                 'data'=>$json->messageIds
             ];

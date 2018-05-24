@@ -103,8 +103,8 @@ class ChatServer {
                 IndexMessageRequest::requestUnread($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid]));
             });
             //未读变已读
-            $socket->on('unread_to_read', function ($uid,array $messageIds)use($socket) {
-                IndexMessageRequest::requestUnreadToRead($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'messageIds'=>$messageIds]));
+            $socket->on('unread_to_read', function ($uid, $toUid, array $messageIds)use($socket) {
+                IndexMessageRequest::requestUnreadToRead($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'toUid' => $toUid, 'messageIds'=>$messageIds]));
             });
             //获取当前聊天记录
             $socket->on('index_message',function ($uid,$to_uid)use($socket){
@@ -135,12 +135,12 @@ class ChatServer {
                 GroupRequest::requestDeleteGroup($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id, 'group_type'=>$group_type ]));
             });
             //修改自定义分组名
-            $socket->on('modify_group',function ($uid,$group_id,$new_name)use($socket){
-                GroupRequest::requestModify($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id , 'group_name' => $new_name]));
+            $socket->on('modify_group',function ($uid,$group_id,$group_type,$new_name)use($socket){
+                GroupRequest::requestModify($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id , 'group_type'=>$group_type, 'group_name' => $new_name]));
             });
             //删除自定义分组中的好友
-            $socket->on('delete_group_friend',function ($uid,$group_id,array $userIds)use($socket){
-                GroupRequest::requestDeleteFriend($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id , 'userIds' => $userIds]));
+            $socket->on('delete_group_friend',function ($uid,$group_id,$group_type,array $userIds)use($socket){
+                GroupRequest::requestDeleteFriend($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id, 'group_type' => $group_type , 'userIds' => $userIds]));
             });
         });
     }
