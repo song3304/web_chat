@@ -83,7 +83,7 @@ class GroupHandle extends MsgHandleBase {
             $return_data['sock_id'] = $json->sock_id;
             $data = [
                 'result'=>true,
-                'params'=>['userId'=>$json->uid,'groupId'=>$json->group_id],
+                'params'=>['userId'=>$json->uid,'groupId'=>$json->group_id,'groupType'=>$json->group_type],
                 'msg'=>'删除分组成功!',
                 'data'=>[]
             ];
