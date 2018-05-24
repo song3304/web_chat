@@ -62,7 +62,12 @@ class Message extends Model{
         }else{
             $new_messages=[];
             foreach ($msgIds as $k2=>$mid){
-                $new_messages[$k2]=$this->select('*')->from('en_chat_messages')->where('id= :id')->bindValues(['id'=>$mid])->row();
+                $new_messages[$k2]=[
+                    'result'=>true,
+                    'params'=>['uid'=>$uid,'to_user_id'=>$k2,'message'=>$message],
+                    'msg'=>'群发消息成功!',
+                    'data'=>$this->select('*')->from('en_chat_messages')->where('id= :id')->bindValues(['id'=>$mid])->row(),
+                ];
             }
             return $new_messages;
         }
