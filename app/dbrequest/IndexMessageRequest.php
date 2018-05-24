@@ -62,6 +62,7 @@ class IndexMessageRequest extends DbRequestBase {
             'id' => MsgIds::MESSAGE_UNREAD_TO_READ,
             'sock_id' => $obj->sock_id,
             'uid' => $obj->uid,
+            'toUid' => $obj->toUid,
             'messageIds' => $obj->messageIds,
         );
         $chat_server->sendMessageToGateway($data);
