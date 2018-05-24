@@ -46,26 +46,17 @@ class Message extends Model{
      * @return bool
      * @method 群发消息
      */
-    public function sendGroup($uid,$group_id,$message) {
-        $to_ids=$this
-            ->select('c.friend_id')
-            ->from('en_chat_friends AS c')
-            ->where('c.group_id= :group_id')
-            ->bindValues(array('group_id'=>$group_id))
-            ->query();
-        if(!$to_ids){
-            return false;
-        }
-        foreach($to_ids as $v){
+    public function sendGroup($uid,$to_user_ids,$message) {
+        foreach($to_user_ids as $v){
             $this->insert('en_chat_messages')
                 ->cols([
                     'uid'=>$uid,
-                    'to_uid'=>$v['friend_id'],
+                    'to_uid'=>$v,
                     'message'=>htmlspecialchars($message)
                 ])
                 ->query();
         }
-        return $to_ids;
+        return true;
     }
 
     /**
@@ -158,7 +149,6 @@ class Message extends Model{
      */
     public function unreadToRead($uid,array $messageIds)
     {
-        if(empty($messageIds))return false;
         foreach($messageIds as $msgId){
             $this->update('en_chat_messages')->cols(array('is_read'=>1))->where('to_uid='.$uid.' AND id='.$msgId)->query();
         }

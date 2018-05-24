@@ -76,29 +76,27 @@ class MessageHandle extends MsgHandleBase {
      * @method 处理群发信息
      */
     static public function sendGroupMessage($client_id, $json) {
-        if (isset($json->uid) && !empty($json->uid) && isset($json->group_id) && !empty($json->group_id) && isset($json->message) && !empty($json->message)) {
+        if (isset($json->uid) && !empty($json->uid) && isset($json->to_user_ids) && !empty($json->to_user_ids) && isset($json->message) && !empty($json->message)) {
             $message_model = new Message();
             $return_data['uid'] = $json->uid;
-            $return_data['group_id'] = $json->group_id;
             $return_data['sock_id'] = $json->sock_id;
-            $return_data['messages']=$json->message;
-            $to_ids=$message_model->sendGroup($json->uid,$json->group_id,$json->message);
-            if(!empty($to_ids)){
-                $return_data['to_ids']=$to_ids;
+            $return_data['content']=$json->message;
+            if($message_model->sendGroup($json->uid,$json->to_user_ids,$json->message)){
+                $return_data['to_user_ids']=$json->to_user_ids;
                 $data=[
                     'result'=>true,
-                    'params'=>['uid'=>$json->uid,'group_id'=>$json->group_id,'message'=>$json->message],
-                    'msg'=>'群发消息成功！',
+                    'params'=>['uid'=>$json->uid,'to_user_ids'=>$json->to_user_ids,'message'=>$json->message],
+                    'msg'=>'群发消息成功!',
                     'content'=>$json->message,
-                    'to_ids'=>$to_ids,
+                    'to_user_ids'=>$json->to_user_ids,
                 ];
                 $return_data['data']=$data;
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_SEND_GROUP_MESSAGE, 1, $return_data)));
             }else{
                 $data=[
                     'result'=>false,
-                    'params'=>['uid'=>$json->uid,'group_id'=>$json->group_id,'message'=>$json->message],
-                    'msg'=>'群发消息失败！',
+                    'params'=>['uid'=>$json->uid,'to_user_ids'=>$json->to_user_ids,'message'=>$json->message],
+                    'msg'=>'群发消息失败!',
                     'content'=>$json->message,
                 ];
                 $return_data['data']=$data;
@@ -108,13 +106,10 @@ class MessageHandle extends MsgHandleBase {
         } else {
             //错误了
             $return_data['uid'] = $json->uid;
-            $return_data['group_id'] = $json->group_id;
             $return_data['sock_id'] = $json->sock_id;
             $data=[
                 'result'=>false,
-                'params'=>'参数错误！',
-                'msg'=>'群发消息失败！',
-                'content'=>$json->message,
+                'msg'=>'群发消息失败:参数错误!',
             ];
             $return_data['data']=$data;
             Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_SEND_GROUP_MESSAGE, 0, $return_data)));
@@ -191,32 +186,26 @@ class MessageHandle extends MsgHandleBase {
      */
     static public function unreadToRead($client_id, $json) {
         if (isset($json->uid) && !empty($json->uid)&& !empty($json->messageIds)) {
+            $return_data['uid'] = $json->uid;
+            $return_data['sock_id'] = $json->sock_id;
             $message_model = new Message();
+            $message_model->unreadToRead($json->uid,$json->messageIds);
             $data = [
                 'result'=>true,
-                'params'=>['messageIds'=>$json->messageIds],
-                'msg'=>'',
-                'data'=>''
+                'params'=>['uid'=>$json->uid,'messageIds'=>$json->messageIds],
+                'msg'=>'已读成功',
+                'data'=>$json->messageIds
             ];
-            if($message_model->unreadToRead($json->uid,$json->messageIds)){
-                $data['msg']  = 'success unread to read';
-            }else{
-                $data['msg']  = 'fail unread to read';
-            }
-            $msg['uid'] = $json->uid;
-            $msg['sock_id'] = $json->sock_id;
-            $msg['data'] = $data;
-            
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_UNREAD_TO_READ, 1, $msg)));
+            $return_data['data'] = $data;
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_UNREAD_TO_READ, 1, $return_data)));
         } else {
+            $return_data['uid'] = $json->uid;
             $data=[
                 'result'=>false,
-                'params'=>['messageIds'=>$json->messageIds],
-                'msg'=>'群发消息失败:参数错误！',
-                'content'=>$json->message,
+                'msg'=>'已读失败:参数错误！',
             ];
-            $msg['data']=$data;
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_UNREAD_TO_READ, 0, $msg)));
+            $return_data['data']=$data;
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_UNREAD_TO_READ, 0, $return_data)));
         }
     }
 
@@ -225,21 +214,20 @@ class MessageHandle extends MsgHandleBase {
      * @param $json
      * @method 处理接收信息
      */
-    static public function pickMessage($client_id, $json) {
-        if (isset($json->uid) && !empty($json->uid) && isset($json->message_id) && !empty($json->message_id)) {
-            $message_model = new Message();
-            $message=$message_model->pick($json->uid,$json->message_id);
-            if(!empty($message)){
-                $msg['messages']=$message;
-            }
-            $msg['uid'] = $json->uid;
-            $msg['sock_id'] = $json->sock_id;
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_PICK_MESSAGE, 1, $msg)));
-        } else {
-            //错误了
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_PICK_MESSAGE, 0, 'pick message err!')));
-        }
-
-    }
+//    static public function pickMessage($client_id, $json) {
+//        if (isset($json->uid) && !empty($json->uid) && isset($json->message_id) && !empty($json->message_id)) {
+//            $message_model = new Message();
+//            $message=$message_model->pick($json->uid,$json->message_id);
+//            if(!empty($message)){
+//                $msg['messages']=$message;
+//            }
+//            $msg['uid'] = $json->uid;
+//            $msg['sock_id'] = $json->sock_id;
+//            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_PICK_MESSAGE, 1, $msg)));
+//        } else {
+//            //错误了
+//            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_PICK_MESSAGE, 0, 'pick message err!')));
+//        }
+//    }
 
 }

@@ -119,13 +119,13 @@ class ChatServer {
                 MessageRequest::requestSendMessage($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid ,'message'=>$message]));
             });
             //群发消息
-            $socket->on('send_group_message',function ($uid,$group_id,$message)use($socket){
-                SendGroupMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id ,'message'=>$message]));
+            $socket->on('send_group_message',function ($uid,array $to_user_ids,$message)use($socket){
+                SendGroupMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_user_ids' => $to_user_ids ,'message'=>$message]));
             });
             //接收消息
-            $socket->on('pick_message',function ($uid,$message_id)use($socket){
-                MessageRequest::requestPickMessage($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid,'message_id'=>$message_id]));
-            });
+//            $socket->on('pick_message',function ($uid,$message_id)use($socket){
+//                MessageRequest::requestPickMessage($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid,'message_id'=>$message_id]));
+//            });
             //新建自定义分组
             $socket->on('create_group',function ($uid,$group_name,$group_type,array $userIds)use($socket){
                 GroupRequest::requestCreate($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_name' => $group_name, 'group_type' => $group_type, 'userIds' => $userIds]));

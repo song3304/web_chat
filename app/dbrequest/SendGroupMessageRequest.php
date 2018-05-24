@@ -31,7 +31,7 @@ class SendGroupMessageRequest extends DbRequestBase {
             'id' => MsgIds::MESSAGE_SEND_GROUP_MESSAGE,
             'sock_id' => $obj->sock_id,
             'uid' => $obj->uid,
-            'group_id' => $obj->group_id,
+            'to_user_ids' => $obj->to_user_ids,
             'message' => $obj->message,
         );
         $chat_server->sendMessageToGateway($data);
@@ -47,7 +47,10 @@ class SendGroupMessageRequest extends DbRequestBase {
         if ( $json->code == 1) {
             //成功
             $chat_server->sendMessage($json->uid, 'send_group_message', $json->data);
-            $chat_server->sendMessage($json->data->to_ids, 'pick_message', $json->data->content);
+            $to_user_ids=$json->data->to_user_ids;
+            foreach($to_user_ids as $to_uid){
+                $chat_server->sendMessage($to_uid, 'pick_message', $json->data);
+            }
         } else {
             //失败
             $chat_server->sendMessage($json->uid, 'send_group_message', $json->data);

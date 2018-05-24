@@ -42,16 +42,16 @@ class MessageRequest extends DbRequestBase {
      * @param XObject $obj
      * @method 请求接收信息
      */
-    static public function requestPickMessage(ChatServer $chat_server, XObject $obj) {
-        //构造请求
-        $data = array(
-            'id' => MsgIds::MESSAGE_PICK_MESSAGE,
-            'sock_id' => $obj->sock_id,
-            'uid' => $obj->uid,
-            'message_id' => $obj->message_id,
-        );
-        $chat_server->sendMessageToGateway($data);
-    }
+//    static public function requestPickMessage(ChatServer $chat_server, XObject $obj) {
+//        //构造请求
+//        $data = array(
+//            'id' => MsgIds::MESSAGE_PICK_MESSAGE,
+//            'sock_id' => $obj->sock_id,
+//            'uid' => $obj->uid,
+//            'message_id' => $obj->message_id,
+//        );
+//        $chat_server->sendMessageToGateway($data);
+//    }
 
     /**
      * @param ChatServer $chat_server
@@ -76,14 +76,14 @@ class MessageRequest extends DbRequestBase {
      * @param \stdClass $json
      * @method 响应接收信息
      */
-    static public function responsePickMessage(ChatServer $chat_server, \stdClass $json) {
-        //判断是否成功
-        if ( $json->code == 1) {
-            //成功,返回给收信人
-            $chat_server->sendMessage($json->uid, 'pick_message', $json->messages);
-        } else {
-            //失败
-        }
-    }
+//    static public function responsePickMessage(ChatServer $chat_server, \stdClass $json) {
+//        //判断是否成功
+//        if ( $json->code == 1) {
+//            //成功,返回给收信人
+//            $chat_server->sendMessage($json->uid, 'pick_message', $json->messages);
+//        } else {
+//            //失败
+//        }
+//    }
 
 }

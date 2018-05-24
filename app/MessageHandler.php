@@ -59,9 +59,9 @@ class MessageHandler
             case MsgIds::EVENT_SEND_MESSAGE :
                 MessageRequest::responseSendMessage($chat_server, $json);
                 break;
-            case MsgIds::EVENT_PICK_MESSAGE :
-                MessageRequest::responsePickMessage($chat_server, $json);
-                break;
+//            case MsgIds::EVENT_PICK_MESSAGE :
+//                MessageRequest::responsePickMessage($chat_server, $json);
+//                break;
             case MsgIds::EVENT_SEND_GROUP_MESSAGE :
                 SendGroupMessageRequest::response($chat_server, $json);
                 break;

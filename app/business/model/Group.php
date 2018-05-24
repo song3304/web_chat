@@ -99,15 +99,15 @@ class Group extends Model{
      */
     public function deleteGroupFriend($uid,$group_id,array $userIds) {
         $group=$this->select('*')->from('en_chat_friends')->where('group_id='.$group_id)->query();
-        if(!$group)return false;
+        if(!$group || $group['uid']!=$uid)return false;
         foreach($userIds as $friend_id){
             $this->delete('en_chat_friends')->where('group_id='.$group_id.' AND friend_id='.$friend_id)->query();
         }
         //如果删除好友后该组为空，则同时删除此组
-        $group_friend=$this->select('*')->from('en_chat_friends')->where('group_id= :group_id')->bindValues(array('group_id'=>$group_id))->query();
-        if(!$group_friend){
-            $this->delete('en_chat_friend_groups')->where('id='.$group_id)->query();
-        }
+//        $group_friend=$this->select('*')->from('en_chat_friends')->where('group_id= :group_id')->bindValues(array('group_id'=>$group_id))->query();
+//        if(!$group_friend){
+//            $this->delete('en_chat_friend_groups')->where('id='.$group_id)->query();
+//        }
         return true;
     }
 }

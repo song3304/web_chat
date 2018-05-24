@@ -15,8 +15,8 @@ and open the template in the editor.
         <div>TODO write content</div>
         <script>
             //连接服务器
-            var socketio = io('http://192.168.0.53:8821');//线上服务器
-            //var socketio = io('http://127.0.0.1:8821');
+            //var socketio = io('http://192.168.0.53:8821');//线上服务器
+            var socketio = io('http://127.0.0.1:8821');
             //服务器返回结果--连接失败
             socketio.on('disconnect', function(){
                 console.log('disconnect');
@@ -28,7 +28,7 @@ and open the template in the editor.
             });
             //服务器返回结果--登录成功
             socketio.on('login', function(msg){
-                socketio.emit('company_friends',54);//请求好友分组$uid
+                //socketio.emit('company_friends',54);//请求好友分组$uid
                 //socketio.emit('global_online');//请求在线人数
                 //socketio.emit('unread_messages',54);//请求未读记录
                 //socketio.emit('unread_to_read',54,['26','28']);//未读变已读$uid,$messageIds
@@ -36,16 +36,16 @@ and open the template in the editor.
                 //socketio.emit('history_message',54,69,50,1);//请求历史聊天信息$uid,$to_uid,$pageSize,$indexPage
                 //socketio.emit('send_message',54,69,'发送单人消息');//发送单人信息$uid,$to_uid,$message
                 //socketio.emit('pick_message',54,28);//接收信息$uid,$message_id
-                //socketio.emit('send_group_message',54,22,'测试群发消息20180523');//群发信息$uid,$group_id,$message
+                //socketio.emit('send_group_message',54,['67','68','69'],'群发消息20180524');//群发信息$uid,$to_user_ids,$message
                 //socketio.emit('create_group',54,'分组名称4','common',['67','68','69']);//新建分组$uid,$group_name,$group_type['group','common'],$userIds
                 //socketio.emit('delete_group',54,25);//删除分组$uid,$group_id
                 //socketio.emit('modify_group',54,25,'欲修改的新组名');//修改分组$uid,$group_id,$new_group_name
-                //socketio.emit('delete_group_friend',54,26,['67','68','69']);//删除分组中的好友$uid,$group_id,$friend_ids
+                //socketio.emit('delete_group_friend',54,27,['68','69']);//删除分组中的好友$uid,$group_id,$userIds
             });
 //            //服务器返回结果--好友分组
-            socketio.on('company_friends', function(msg){
-                console.log(msg);
-            });
+//            socketio.on('company_friends', function(msg){
+//                console.log(msg);
+//            });
 //            //服务器返回结果--在线人数
 //            socketio.on('global_online', function(count_authed, count_unauthed, count_terminal){
 //                console.log(count_authed);

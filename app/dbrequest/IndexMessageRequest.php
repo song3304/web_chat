@@ -94,6 +94,7 @@ class IndexMessageRequest extends DbRequestBase {
      * @method 响应-未读变已读
      */
     static public function responseUnreadToRead(ChatServer $chat_server, \stdClass $json) {
+
         $chat_server->sendMessage($json->uid, 'unread_to_read', $json->data);
     }
 

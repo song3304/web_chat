@@ -57,9 +57,9 @@ class MsgHandler
             case MsgIds::MESSAGE_SEND_MESSAGE:
                 MessageHandle::sendMessage($client_id,$json);
                 break;
-            case MsgIds::MESSAGE_PICK_MESSAGE:
-                MessageHandle::pickMessage($client_id,$json);
-                break;
+//            case MsgIds::MESSAGE_PICK_MESSAGE:
+//                MessageHandle::pickMessage($client_id,$json);
+//                break;
             case MsgIds::MESSAGE_SEND_GROUP_MESSAGE:
                 MessageHandle::sendGroupMessage($client_id,$json);
                 break;
