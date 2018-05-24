@@ -81,14 +81,14 @@ class MessageHandle extends MsgHandleBase {
             $return_data['uid'] = $json->uid;
             $return_data['sock_id'] = $json->sock_id;
             $return_data['content']=$json->message;
-            if($message_model->sendGroup($json->uid,$json->to_user_ids,$json->message)){
+            $new_messages=$message_model->sendGroup($json->uid,$json->to_user_ids,$json->message);
+            if($new_messages!=false){
                 $return_data['to_user_ids']=$json->to_user_ids;
                 $data=[
                     'result'=>true,
                     'params'=>['uid'=>$json->uid,'to_user_ids'=>$json->to_user_ids,'message'=>$json->message],
                     'msg'=>'群发消息成功!',
-                    'content'=>$json->message,
-                    'to_user_ids'=>$json->to_user_ids,
+                    'data'=>$new_messages,
                 ];
                 $return_data['data']=$data;
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_SEND_GROUP_MESSAGE, 1, $return_data)));
@@ -97,7 +97,7 @@ class MessageHandle extends MsgHandleBase {
                     'result'=>false,
                     'params'=>['uid'=>$json->uid,'to_user_ids'=>$json->to_user_ids,'message'=>$json->message],
                     'msg'=>'群发消息失败!',
-                    'content'=>$json->message,
+                    'data'=>null,
                 ];
                 $return_data['data']=$data;
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_SEND_GROUP_MESSAGE, 0, $return_data)));
@@ -109,7 +109,9 @@ class MessageHandle extends MsgHandleBase {
             $return_data['sock_id'] = $json->sock_id;
             $data=[
                 'result'=>false,
+                'params'=>$json,
                 'msg'=>'群发消息失败:参数错误!',
+                'data'=>null,
             ];
             $return_data['data']=$data;
             Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_SEND_GROUP_MESSAGE, 0, $return_data)));

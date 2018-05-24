@@ -47,8 +47,9 @@ class Message extends Model{
      * @method 群发消息
      */
     public function sendGroup($uid,$to_user_ids,$message) {
-        foreach($to_user_ids as $v){
-            $this->insert('en_chat_messages')
+        $msgIds=[];
+        foreach($to_user_ids as $k=> $v){
+            $msgIds[$v]=$this->insert('en_chat_messages')
                 ->cols([
                     'uid'=>$uid,
                     'to_uid'=>$v,
@@ -56,7 +57,15 @@ class Message extends Model{
                 ])
                 ->query();
         }
-        return true;
+        if(empty($msgIds)){
+            return false;
+        }else{
+            $new_messages=[];
+            foreach ($msgIds as $k2=>$mid){
+                $new_messages[$k2]=$this->select('*')->from('en_chat_messages')->where('id= :id')->bindValues(['id'=>$mid])->row();
+            }
+            return $new_messages;
+        }
     }
 
     /**
