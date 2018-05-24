@@ -44,10 +44,10 @@ class Group extends Model{
             ])
             ->query();
         if(!$group_id)return false;
-        foreach($userIds as $uid){
+        foreach($userIds as $friend_id){
             $this->insert('en_chat_friends')
                 ->cols([
-                    'group_id'=>$group_id,
+                    'group_id'=>$friend_id,
                     'friend_id'=>$uid
                 ])
                 ->query();
@@ -81,14 +81,14 @@ class Group extends Model{
     public function modifyGroup($uid,$group_id,$group_name) {
         //是否存在此组
         $group=$this->select('*')->from('en_chat_friend_groups')->where('id=:group_id AND uid= :uid')->bindValues(array('group_id'=>$group_id,'uid'=>$uid))->query();
-        if(!$group)return false;
+        if(!$group || $group['name']=$group_name)return false;
         //此组名是否已存在
         $same_group=$this->select('*')->from('en_chat_friend_groups')->where('uid= :uid AND group_name= :group_name')->bindValues(array('uid'=>$uid,'group_name'=>$group_name))->query();
         if($same_group)return false;
         //更改组名
         $row_count = $this->update('en_chat_friend_groups')->cols(array('group_name'))->where('id='.$group_id)->bindValue('group_name', $group_name)->query();
         if(!$row_count)return false;
-        return true;
+        return $this->select('*')->from('en_chat_friend_groups')->where('id= :gid')->bindValues(array('gid'=>$group_id))->row();
     }
 
     /**

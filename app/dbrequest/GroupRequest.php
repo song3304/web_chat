@@ -115,7 +115,7 @@ class GroupRequest extends DbRequestBase {
      */
     static public function responseModify(ChatServer $chat_server, \stdClass $json) {
 
-        $chat_server->sendMessage($json->uid, 'modify_group', $json->messages);
+        $chat_server->sendMessage($json->uid, 'modify_group', $json->data);
     }
 
     /**

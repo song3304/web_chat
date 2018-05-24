@@ -106,25 +106,43 @@ class GroupHandle extends MsgHandleBase {
      * @method 修改自定义分组
      */
     static public function handleModify($client_id, $json) {
-        if (isset($json->uid) && !empty($json->uid) && isset($json->group_id) && !empty($json->group_id)) {
+        if (isset($json->uid) && !empty($json->uid) && isset($json->group_id) && !empty($json->group_id)&& !empty($json->group_name)) {
             $group_model = new Group();
             $return_data['uid'] = $json->uid;
             $return_data['group_id'] = $json->group_id;
             $return_data['sock_id'] = $json->sock_id;
-            if($group_model->modifyGroup($json->uid,$json->group_id,$json->group_name)){
-                $return_data['messages']='修改成功!';
+            $group_mdf = $group_model->modifyGroup($json->uid,$json->group_id,$json->group_name);
+            if($group_mdf != false){
+                $data = [
+                    'result'=>true,
+                    'params'=>['group_id'=>$json->group_id,'group_name'=>$json->group_name],
+                    'msg'=>'修改分组成功!',
+                    'data'=>$group_mdf
+                ];
+                $return_data['data']=$data;
                 //个人逻辑：新建分组成功后，应返回给客户端EVENT_COMPANY_FRIENDS
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_MODIFY_GROUP, 1, $return_data)));
             }else{
-                $return_data['uid'] = $json->uid;
-                $return_data['messages']='修改失败!';
+                $data = [
+                    'result'=>false,
+                    'params'=>['group_id'=>$json->group_id,'group_name'=>$json->group_name],
+                    'msg'=>'组名不能重复，请重新输入!',
+                    'data'=>null
+                ];
+                $return_data['data']=$data;
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_MODIFY_GROUP, 0, $return_data)));
             }
 
         } else {
             //错误了
             $return_data['uid'] = $json->uid;
-            $return_data['messages']='修改错误!';
+            $data = [
+                'result'=>false,
+                'params'=>$json,
+                'msg'=>'参数错误!',
+                'data'=>null
+            ];
+            $return_data['data']=$data;
             Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_MODIFY_GROUP, 0, $return_data)));
         }
 
