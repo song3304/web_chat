@@ -39,7 +39,7 @@ class MessageHandle extends MsgHandleBase {
             $new_row = $message_model->send($json->uid,$json->to_uid,$json->message);
             if($new_row != false){
                 $data=[
-                    'result'=>'true',
+                    'result'=>true,
                     'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'message'=>$json->message],
                     'msg'=>'发送消息成功！',
                     'data'=>$new_row,
@@ -49,7 +49,7 @@ class MessageHandle extends MsgHandleBase {
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_SEND_MESSAGE, 1, $return_data)));
             }else{
                 $data=[
-                    'result'=>'false',
+                    'result'=>false,
                     'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'message'=>$json->message],
                     'msg'=>'发送消息失败！',
                     'data'=>[],
@@ -62,7 +62,7 @@ class MessageHandle extends MsgHandleBase {
             //错误了
             $return_data['uid'] = $json->uid;
             $data=[
-                'result'=>'false',
+                'result'=>false,
                 'msg'=>'参数错误，发送消息失败！',
             ];
             $return_data['data']=$data;
@@ -86,7 +86,7 @@ class MessageHandle extends MsgHandleBase {
             if(!empty($to_ids)){
                 $return_data['to_ids']=$to_ids;
                 $data=[
-                    'result'=>'true',
+                    'result'=>true,
                     'params'=>['uid'=>$json->uid,'group_id'=>$json->group_id,'message'=>$json->message],
                     'msg'=>'群发消息成功！',
                     'content'=>$json->message,
@@ -96,7 +96,7 @@ class MessageHandle extends MsgHandleBase {
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_SEND_GROUP_MESSAGE, 1, $return_data)));
             }else{
                 $data=[
-                    'result'=>'false',
+                    'result'=>false,
                     'params'=>['uid'=>$json->uid,'group_id'=>$json->group_id,'message'=>$json->message],
                     'msg'=>'群发消息失败！',
                     'content'=>$json->message,
@@ -111,7 +111,7 @@ class MessageHandle extends MsgHandleBase {
             $return_data['group_id'] = $json->group_id;
             $return_data['sock_id'] = $json->sock_id;
             $data=[
-                'result'=>'false',
+                'result'=>false,
                 'params'=>'参数错误！',
                 'msg'=>'群发消息失败！',
                 'content'=>$json->message,
@@ -135,7 +135,7 @@ class MessageHandle extends MsgHandleBase {
         $history_msg=$message_model->getHistoryMessage($json->uid,$json->to_uid,$json->pageSize,$json->indexPage);
         if(!empty($history_msg)){
             $data=[
-                'result'=>'true',
+                'result'=>true,
                 'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'pageSize'=>$json->pageSize,'indexPage'=>$json->indexPage],
                 'msg'=>'获取历史记录成功！',
                 'data'=>$history_msg,
@@ -144,7 +144,7 @@ class MessageHandle extends MsgHandleBase {
             Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_HISTORY_MESSAGE, 1, $return_data)));
         } else {
             $data=[
-                'result'=>'false',
+                'result'=>false,
                 'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'pageSize'=>$json->pageSize,'indexPage'=>$json->indexPage],
                 'msg'=>'获取历史记录失败！',
                 'data'=>[],
@@ -167,7 +167,7 @@ class MessageHandle extends MsgHandleBase {
         $index_msg = $message_model->getIndexMessage($json->uid,$json->to_uid);
         if(!empty($index_msg)){
             $data=[
-                'result'=>'true',
+                'result'=>true,
                 'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid],
                 'msg'=>'获取当前聊天记录成功！',
                 'data'=>$index_msg,
@@ -176,7 +176,7 @@ class MessageHandle extends MsgHandleBase {
             Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_INDEX_MESSAGE, 1, $return_data)));
         } else {
             $data=[
-                'result'=>'false',
+                'result'=>false,
                 'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid],
                 'msg'=>'获取当前聊天记录失败！',
                 'data'=>[],
@@ -198,7 +198,7 @@ class MessageHandle extends MsgHandleBase {
         $return_data['sock_id'] = $json->sock_id;
         if(!empty($unread_msg)){
             $data=[
-                'result'=>'true',
+                'result'=>true,
                 'params'=>['uid'=>$json->uid],
                 'msg'=>'获取未读消息成功！',
                 'data'=>$unread_msg,
@@ -207,7 +207,7 @@ class MessageHandle extends MsgHandleBase {
             Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_UNREAD_MESSAGES, 1, $return_data)));
         } else {
             $data=[
-                'result'=>'false',
+                'result'=>false,
                 'params'=>['uid'=>$json->uid],
                 'msg'=>'获取未读消息失败！',
                 'data'=>[],

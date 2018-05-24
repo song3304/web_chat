@@ -38,7 +38,7 @@ class CompanyFriendsHandle extends MsgHandleBase {
             $return_data['sock_id'] = $json->sock_id;
             $company_friends = $model->companyFriends($json->uid);
             $data=[
-                'result'=>'true',
+                'result'=>true,
                 'params'=>['uid'=>$json->uid],
                 'msg'=>'获取好友分组成功！',
                 'data'=>$company_friends,
@@ -47,7 +47,7 @@ class CompanyFriendsHandle extends MsgHandleBase {
             Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_COMPANY_FRIENDS, 1, $return_data)));
         }else{
             $data=[
-                'result'=>'false',
+                'result'=>false,
                 'params'=>['uid'=>'参数错误'],
                 'msg'=>'获取好友分组失败！',
                 'data'=>json_encode(['default_groups'=>[],'define_groups'=>[]]),
