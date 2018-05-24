@@ -81,20 +81,33 @@ class GroupHandle extends MsgHandleBase {
             $return_data['uid'] = $json->uid;
             $return_data['group_id'] = $json->group_id;
             $return_data['sock_id'] = $json->sock_id;
+            $data = [
+                'result'=>true,
+                'params'=>['userId'=>$json->uid,'groupId'=>$json->group_id],
+                'msg'=>'删除分组成功!',
+                'data'=>[]
+            ];
             if($group_model->deleteGroup($json->uid,$json->group_id)){
-                $return_data['messages']='删除分组成功!';
+                $return_data['data'] = $data;
                 //个人逻辑：新建分组成功后，应返回给客户端EVENT_COMPANY_FRIENDS
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_DELETE_GROUP, 1, $return_data)));
             }else{
-                $return_data['uid'] = $json->uid;
-                $return_data['messages']='删除分组失败!';
+                $data['result'] = false;
+                $data['msg']='删除分组失败!';
+                $return_data['data'] = $data;
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_DELETE_GROUP, 0, $return_data)));
             }
 
         } else {
             //错误了
             $return_data['uid'] = $json->uid;
-            $return_data['messages']='删除分组错误!';
+            $data = [
+                'result'=>false,
+                'params'=>$json,
+                'msg'=>'删除分组参数错误!',
+                'data'=>[]
+            ];
+            $return_data['data'] = $data;
             Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_DELETE_GROUP, 0, $return_data)));
         }
 
