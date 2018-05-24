@@ -62,9 +62,11 @@ class Group extends Model{
      * @method 删除自定义分组
      */
     public function deleteGroup($uid,$group_id) {
+        $group= $this->select('*')->from('en_chat_friend_groups')->where('id= :gid')->bindValues(array('gid'=>$group_id))->row();
+        if($group['uid']!=$uid)return false;
         //此好友组是否为空组
-        $group=$this->select('*')->from('en_chat_friends')->where('group_id=:group_id')->bindValues(array('group_id'=>$group_id))->query();
-        if($group){
+        $friends=$this->select('*')->from('en_chat_friends')->where('group_id=:group_id')->bindValues(array('group_id'=>$group_id))->query();
+        if($friends){
             $this->delete('en_chat_friends')->where('group_id=:group_id')->bindValues(array('group_id'=>$group_id))->query();
         }
         $row_count = $this->delete('en_chat_friend_groups')->where('uid= :uid AND id= :group_id')->bindValues(array('uid'=>$uid,'group_id'=>$group_id))->query();
@@ -98,8 +100,10 @@ class Group extends Model{
      * @method 删除自定义分组中的好友
      */
     public function deleteGroupFriend($uid,$group_id,array $userIds) {
-        $group=$this->select('*')->from('en_chat_friends')->where('group_id='.$group_id)->query();
-        if(!$group || $group['uid']!=$uid)return false;
+        $friends=$this->select('*')->from('en_chat_friends')->where('group_id='.$group_id)->query();
+        if(!$friends)return false;
+        $group=$this->select('*')->from('en_chat_friend_groups')->where('id='.$group_id)->query();
+        if($group['uid']!=$uid)return false;
         foreach($userIds as $friend_id){
             $this->delete('en_chat_friends')->where('group_id='.$group_id.' AND friend_id='.$friend_id)->query();
         }

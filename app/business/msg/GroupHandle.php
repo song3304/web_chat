@@ -162,16 +162,34 @@ class GroupHandle extends MsgHandleBase {
             $return_data['group_id'] = $json->group_id;
             $return_data['userIds'] = $json->userIds;
             if($model->deleteGroupFriend($json->uid,$json->group_id,$json->userIds)){
-                $return_data['messages']='删除好友成功!';
+                $data = [
+                    'result'=>true,
+                    'params'=>['group_id'=>$json->group_id,'userIds'=>$json->userIds],
+                    'msg'=>'删除好友成功!',
+                    'data'=>$json->userIds
+                ];
+                $return_data['data']=$data;
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_DELETE_GROUP_FRIEND, 1, $return_data)));
             }else{
-                $return_data['messages']='删除好友失败!';
+                $data = [
+                    'result'=>false,
+                    'params'=>['group_id'=>$json->group_id,'userIds'=>$json->userIds],
+                    'msg'=>'删除好友失败!',
+                    'data'=>null
+                ];
+                $return_data['data']=$data;
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_DELETE_GROUP_FRIEND, 0, $return_data)));
             }
 
         }else{
             $return_data['uid'] = $json->uid;
-            $return_data['messages']='删除好友错误!';
+            $data = [
+                'result'=>false,
+                'params'=>$json,
+                'msg'=>'参数错误!',
+                'data'=>null
+            ];
+            $return_data['data']=$data;
             Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_DELETE_GROUP_FRIEND, 0, $return_data)));
         }
 

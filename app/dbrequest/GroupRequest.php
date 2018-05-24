@@ -125,7 +125,7 @@ class GroupRequest extends DbRequestBase {
      */
     static public function responseDeleteFriend(ChatServer $chat_server, \stdClass $json) {
 
-        $chat_server->sendMessage($json->uid, 'delete_group_friend', $json->messages);
+        $chat_server->sendMessage($json->uid, 'delete_group_friend', $json->data);
     }
 
 }
