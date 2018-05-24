@@ -103,8 +103,8 @@ class ChatServer {
                 IndexMessageRequest::requestUnread($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid]));
             });
             //未读变已读
-            $socket->on('unread_to_read', function ($uid, array $messageIds)use($socket) {
-                IndexMessageRequest::requestUnreadToRead($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'messageIds'=>$messageIds]));
+            $socket->on('unread_to_read', function ($uid, $to_uid, array $messageIds)use($socket) {
+                IndexMessageRequest::requestUnreadToRead($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_uid'=>$to_uid, 'messageIds'=>$messageIds]));
             });
             //获取当前聊天记录
             $socket->on('index_message',function ($uid,$to_uid)use($socket){
