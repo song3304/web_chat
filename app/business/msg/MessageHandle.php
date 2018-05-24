@@ -133,25 +133,14 @@ class MessageHandle extends MsgHandleBase {
         $return_data['to_uid'] = $json->to_uid;
         $return_data['sock_id'] = $json->sock_id;
         $history_msg=$message_model->getHistoryMessage($json->uid,$json->to_uid,$json->pageSize,$json->indexPage);
-        if(!empty($history_msg)){
-            $data=[
-                'result'=>true,
-                'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'pageSize'=>$json->pageSize,'indexPage'=>$json->indexPage],
-                'msg'=>'获取历史记录成功！',
-                'data'=>$history_msg,
-            ];
-            $return_data['data']  = $data;
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_HISTORY_MESSAGE, 1, $return_data)));
-        } else {
-            $data=[
-                'result'=>false,
-                'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'pageSize'=>$json->pageSize,'indexPage'=>$json->indexPage],
-                'msg'=>'获取历史记录失败！',
-                'data'=>[],
-            ];
-            $return_data['data']  = $data;
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_HISTORY_MESSAGE, 0, $return_data)));
-        }
+        $data=[
+            'result'=>true,
+            'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'pageSize'=>$json->pageSize,'indexPage'=>$json->indexPage],
+            'msg'=>!empty($history_msg)?'获取历史记录成功！':'无数据',
+            'data'=>!empty($history_msg)?$history_msg:[],
+        ];
+        $return_data['data']  = $data;
+        Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_HISTORY_MESSAGE, 1, $return_data)));
     }
 
     /**
@@ -165,25 +154,14 @@ class MessageHandle extends MsgHandleBase {
         $return_data['to_uid'] = $json->to_uid;
         $return_data['sock_id'] = $json->sock_id;
         $index_msg = $message_model->getIndexMessage($json->uid,$json->to_uid);
-        if(!empty($index_msg)){
-            $data=[
-                'result'=>true,
-                'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid],
-                'msg'=>'获取当前聊天记录成功！',
-                'data'=>$index_msg,
-            ];
-            $return_data['data']  = $data;
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_INDEX_MESSAGE, 1, $return_data)));
-        } else {
-            $data=[
-                'result'=>false,
-                'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid],
-                'msg'=>'获取当前聊天记录失败！',
-                'data'=>[],
-            ];
-            $return_data['data']  = $data;
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_INDEX_MESSAGE, 0, $return_data)));
-        }
+        $data=[
+            'result'=>true,
+            'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid],
+            'msg'=>!empty($index_msg)?'获取当前聊天记录成功！':'无数据',
+            'data'=>!empty($index_msg)?$index_msg:[],
+        ];
+        $return_data['data']  = $data;
+        Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_INDEX_MESSAGE, 1, $return_data)));
     }
 
     /**
@@ -196,25 +174,14 @@ class MessageHandle extends MsgHandleBase {
         $unread_msg = $message_model->getUnreadMessages($json->uid);
         $return_data['uid'] = $json->uid;
         $return_data['sock_id'] = $json->sock_id;
-        if(!empty($unread_msg)){
-            $data=[
-                'result'=>true,
-                'params'=>['uid'=>$json->uid],
-                'msg'=>'获取未读消息成功！',
-                'data'=>$unread_msg,
-            ];
-            $return_data['data']  = $data;
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_UNREAD_MESSAGES, 1, $return_data)));
-        } else {
-            $data=[
-                'result'=>false,
-                'params'=>['uid'=>$json->uid],
-                'msg'=>'获取未读消息失败！',
-                'data'=>[],
-            ];
-            $return_data['data']  = $data;
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_UNREAD_MESSAGES, 0, $return_data)));
-        }
+        $data=[
+            'result'=>true,
+            'params'=>['uid'=>$json->uid],
+            'msg'=>!empty($unread_msg)?'获取未读消息成功！':'无数据',
+            'data'=>!empty($unread_msg)?$unread_msg:[],
+        ];
+        $return_data['data']  = $data;
+        Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_UNREAD_MESSAGES, 1, $return_data)));
     }
 
     /**
@@ -225,17 +192,30 @@ class MessageHandle extends MsgHandleBase {
     static public function unreadToRead($client_id, $json) {
         if (isset($json->uid) && !empty($json->uid)&& !empty($json->messageIds)) {
             $message_model = new Message();
+            $data = [
+                'result'=>true,
+                'params'=>['messageIds'=>$json->messageIds],
+                'msg'=>'',
+                'data'=>''
+            ];
             if($message_model->unreadToRead($json->uid,$json->messageIds)){
-                $msg['messages']  = 'success unread to read';
+                $data['msg']  = 'success unread to read';
             }else{
-                $msg['messages']  = 'fail unread to read';
+                $data['msg']  = 'fail unread to read';
             }
             $msg['uid'] = $json->uid;
             $msg['sock_id'] = $json->sock_id;
+            $msg['data'] = $data;
+            
             Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_UNREAD_TO_READ, 1, $msg)));
         } else {
-            //错误了
-            $msg['messages']  = 'error unread to read';
+            $data=[
+                'result'=>false,
+                'params'=>['messageIds'=>$json->messageIds],
+                'msg'=>'群发消息失败:参数错误！',
+                'content'=>$json->message,
+            ];
+            $msg['data']=$data;
             Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_UNREAD_TO_READ, 0, $msg)));
         }
     }
