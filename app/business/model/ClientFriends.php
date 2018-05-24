@@ -52,7 +52,7 @@ class ClientFriends extends Model{
         //step1.查询所有默认分组
         //SELECT DISTINCT c.user_org_id,o.name AS trade_org_name  from en_collection AS c LEFT JOIN en_orgs AS o on c.user_org_id=o.id  where c.match_id='35';
         $default_groups=$this
-            ->select('c.user_org_id,o.name AS org_name')
+            ->select('c.user_org_id AS org_id,o.name AS org_name')
             ->distinct()
             ->from('en_collection AS c')
             ->leftjoin('en_orgs AS o','c.user_org_id=o.id')
@@ -63,12 +63,13 @@ class ClientFriends extends Model{
         //SELECT c.user_id,u.nickname,u.realname from en_collection AS c LEFT JOIN en_users AS u on c.user_id=u.id  where c.match_id='35' AND c.user_org_id='7';
         foreach($default_groups as $k=>$v){
             $default_group_friends[$k]['group_name']=$v['org_name'];
+            $default_group_friends[$k]['group_id']=$v['org_id'];
             $default_group_friends[$k]['friends']=$this
                 ->select('c.user_id AS friend_id,u.nickname,u.realname,u.pic_url AS img')
                 ->from('en_collection AS c')
                 ->leftjoin('en_users AS u','c.user_id=u.id')
                 ->where('c.match_id= :id AND c.user_org_id= :user_org_id')
-                ->bindValues(array('id'=>$uid,'user_org_id'=>$v['user_org_id']))
+                ->bindValues(array('id'=>$uid,'user_org_id'=>$v['org_id']))
                 ->query();
         }
         //3.查询所有自定义分组
@@ -105,7 +106,7 @@ class ClientFriends extends Model{
         //step1.查询所有默认分组
         //SELECT DISTINCT c.match_org_id,o.name AS match_org_name  from en_collection AS c LEFT JOIN en_orgs AS o on c.match_org_id=o.id  where c.user_id='54';
         $default_groups=$this
-            ->select('c.match_org_id,o.name AS org_name')
+            ->select('c.match_org_id AS org_id,o.name AS org_name')
             ->distinct()
             ->from('en_collection AS c')
             ->leftjoin('en_orgs AS o','c.match_org_id=o.id')
@@ -116,15 +117,14 @@ class ClientFriends extends Model{
         //SELECT c.match_id,u.nickname AS matcher_nickname,u.realname AS matcher_realname from en_collection AS c LEFT JOIN en_users AS u on c.match_id=u.id  where c.user_id='54' AND c.match_org_id='32';
         foreach($default_groups as $k=>$v){
             $default_group_friends[$k]['group_name']=$v['org_name'];
-            $default_group_friends[$k]['group_id']=$v['match_org_id'];
-            $friends = $this
+            $default_group_friends[$k]['group_id']=$v['org_id'];
+            $default_group_friends[$k]['friends'] = $this
                 ->select('c.match_id AS friend_id,u.nickname,u.realname,u.pic_url AS img')
                 ->from('en_collection AS c')
                 ->leftjoin('en_users AS u','c.match_id=u.id')
                 ->where('c.user_id= :id AND c.match_org_id= :match_org_id')
-                ->bindValues(array('id'=>$uid,'match_org_id'=>$v['match_org_id']))
+                ->bindValues(array('id'=>$uid,'match_org_id'=>$v['org_id']))
                 ->query();
-            $default_group_friends[$k]['friends'] = $friends;
         }
         //3.查询所有自定义分组
         $define_groups=$this
@@ -138,14 +138,13 @@ class ClientFriends extends Model{
             $define_group_friends[$k]['group_name']=$v['group_name'];
             $define_group_friends[$k]['group_id']=$v['group_id'];
             $define_group_friends[$k]['is_group_hair']=$v['is_group_hair'];
-            $friends=$this
+            $define_group_friends[$k]['friends']=$this
                 ->select('c.friend_id,u.nickname,u.realname,u.pic_url AS img')
                 ->from('en_chat_friends AS c')
                 ->leftjoin('en_users AS u','c.friend_id=u.id')
                 ->where('c.group_id= :id')
                 ->bindValues(array('id'=>$v['group_id']))
                 ->query();
-            $define_group_friends[$k]['friends']=$friends;
         }
         return ['default_groups'=>$default_group_friends,'define_groups'=>$define_group_friends];
     }
