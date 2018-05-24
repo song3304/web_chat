@@ -67,6 +67,7 @@ class GroupRequest extends DbRequestBase {
             'sock_id' => $obj->sock_id,
             'uid' => $obj->uid,
             'group_id' => $obj->group_id,
+            'group_type' => $obj->group_type,
             'group_name' => $obj->group_name,
         );
         $chat_server->sendMessageToGateway($data);

@@ -128,7 +128,7 @@ class GroupHandle extends MsgHandleBase {
             if($group_mdf != false){
                 $data = [
                     'result'=>true,
-                    'params'=>['group_id'=>$json->group_id,'group_name'=>$json->group_name],
+                    'params'=>['groupId'=>$json->group_id,'groupType'=>$json->group_type,'groupName'=>$json->group_name],
                     'msg'=>'修改分组成功!',
                     'data'=>$group_mdf
                 ];
@@ -138,7 +138,7 @@ class GroupHandle extends MsgHandleBase {
             }else{
                 $data = [
                     'result'=>false,
-                    'params'=>['group_id'=>$json->group_id,'group_name'=>$json->group_name],
+                    'params'=>['groupId'=>$json->group_id,'groupType'=>$json->group_type,'groupName'=>$json->group_name],
                     'msg'=>'组名不能重复，请重新输入!',
                     'data'=>null
                 ];

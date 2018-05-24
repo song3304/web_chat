@@ -135,8 +135,8 @@ class ChatServer {
                 GroupRequest::requestDeleteGroup($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id, 'group_type'=>$group_type ]));
             });
             //修改自定义分组名
-            $socket->on('modify_group',function ($uid,$group_id,$new_name)use($socket){
-                GroupRequest::requestModify($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id , 'group_name' => $new_name]));
+            $socket->on('modify_group',function ($uid,$group_id,$groupType,$new_name)use($socket){
+                GroupRequest::requestModify($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id , 'group_type'=>$group_type, 'group_name' => $new_name]));
             });
             //删除自定义分组中的好友
             $socket->on('delete_group_friend',function ($uid,$group_id,$group_type,array $userIds)use($socket){
