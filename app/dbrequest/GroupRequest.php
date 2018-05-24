@@ -95,7 +95,7 @@ class GroupRequest extends DbRequestBase {
      */
     static public function responseCreate(ChatServer $chat_server, \stdClass $json) {
 
-        $chat_server->sendMessage($json->uid, 'create_group', $json->messages);
+        $chat_server->sendMessage($json->uid, 'create_group', $json->data);
     }
 
     /**

@@ -52,7 +52,7 @@ class Group extends Model{
                 ])
                 ->query();
         }
-        return true;
+        return $this->select('*')->from('en_chat_friend_groups')->where('id= :gid')->bindValues(array('gid'=>$group_id))->row();
     }
 
     /**
