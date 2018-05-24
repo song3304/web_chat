@@ -52,7 +52,7 @@ class ClientFriends extends Model{
         //step1.查询所有默认分组
         //SELECT DISTINCT c.user_org_id,o.name AS trade_org_name  from en_collection AS c LEFT JOIN en_orgs AS o on c.user_org_id=o.id  where c.match_id='35';
         $default_groups=$this
-            ->select('c.user_org_id,o.name AS trade_org_name')
+            ->select('c.user_org_id,o.name AS org_name')
             ->distinct()
             ->from('en_collection AS c')
             ->leftjoin('en_orgs AS o','c.user_org_id=o.id')
@@ -60,11 +60,11 @@ class ClientFriends extends Model{
             ->bindValues(array('id'=>$uid))
             ->query();
         //step2.查询默认分组下的好友
-        //SELECT c.user_id,u.nickname AS trader_nickname,u.realname AS trader_realname from en_collection AS c LEFT JOIN en_users AS u on c.user_id=u.id  where c.match_id='35' AND c.user_org_id='7';
+        //SELECT c.user_id,u.nickname,u.realname from en_collection AS c LEFT JOIN en_users AS u on c.user_id=u.id  where c.match_id='35' AND c.user_org_id='7';
         foreach($default_groups as $k=>$v){
-            $default_group_friends[$k]['group_name']=$v;
+            $default_group_friends[$k]['group_name']=$v['org_name'];
             $default_group_friends[$k]['friends']=$this
-                ->select('c.user_id AS friend_id,u.nickname AS trader_nickname,u.realname AS trader_realname,u.pic_url AS img')
+                ->select('c.user_id AS friend_id,u.nickname,u.realname,u.pic_url AS img')
                 ->from('en_collection AS c')
                 ->leftjoin('en_users AS u','c.user_id=u.id')
                 ->where('c.match_id= :id AND c.user_org_id= :user_org_id')
@@ -84,7 +84,7 @@ class ClientFriends extends Model{
             $define_group_friends[$k]['group_id']=$v['group_id'];
             $define_group_friends[$k]['is_group_hair']=$v['is_group_hair'];
             $define_group_friends[$k]['friends']=$this
-                ->select('c.friend_id,u.nickname AS matcher_nickname,u.realname AS matcher_realname,u.pic_url AS img')
+                ->select('c.friend_id,u.nickname,u.realname ,u.pic_url AS img')
                 ->from('en_chat_friends AS c')
                 ->leftjoin('en_users AS u','c.friend_id=u.id')
                 ->where('c.group_id= :id')
@@ -105,7 +105,7 @@ class ClientFriends extends Model{
         //step1.查询所有默认分组
         //SELECT DISTINCT c.match_org_id,o.name AS match_org_name  from en_collection AS c LEFT JOIN en_orgs AS o on c.match_org_id=o.id  where c.user_id='54';
         $default_groups=$this
-            ->select('c.match_org_id,o.name AS match_org_name')
+            ->select('c.match_org_id,o.name AS org_name')
             ->distinct()
             ->from('en_collection AS c')
             ->leftjoin('en_orgs AS o','c.match_org_id=o.id')
@@ -115,10 +115,10 @@ class ClientFriends extends Model{
         //step2.查询默认分组下的好友
         //SELECT c.match_id,u.nickname AS matcher_nickname,u.realname AS matcher_realname from en_collection AS c LEFT JOIN en_users AS u on c.match_id=u.id  where c.user_id='54' AND c.match_org_id='32';
         foreach($default_groups as $k=>$v){
-            $default_group_friends[$k]['group_name']=$v['match_org_name'];
+            $default_group_friends[$k]['group_name']=$v['org_name'];
             $default_group_friends[$k]['group_id']=$v['match_org_id'];
             $friends = $this
-                ->select('c.match_id AS friend_id,u.nickname AS matcher_nickname,u.realname AS matcher_realname,u.pic_url AS img')
+                ->select('c.match_id AS friend_id,u.nickname,u.realname,u.pic_url AS img')
                 ->from('en_collection AS c')
                 ->leftjoin('en_users AS u','c.match_id=u.id')
                 ->where('c.user_id= :id AND c.match_org_id= :match_org_id')
@@ -139,7 +139,7 @@ class ClientFriends extends Model{
             $define_group_friends[$k]['group_id']=$v['group_id'];
             $define_group_friends[$k]['is_group_hair']=$v['is_group_hair'];
             $friends=$this
-                ->select('c.friend_id,u.nickname AS matcher_nickname,u.realname AS matcher_realname,u.pic_url AS img')
+                ->select('c.friend_id,u.nickname,u.realname,u.pic_url AS img')
                 ->from('en_chat_friends AS c')
                 ->leftjoin('en_users AS u','c.friend_id=u.id')
                 ->where('c.group_id= :id')
