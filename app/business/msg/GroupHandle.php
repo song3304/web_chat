@@ -32,27 +32,40 @@ class GroupHandle extends MsgHandleBase {
      * @method 创建自定义分组
      */
     static public function handleCreate($client_id, $json) {
+        $return_data['uid'] = $json->uid;
         if (isset($json->uid) && !empty($json->uid) && isset($json->group_name) && !empty($json->group_name)) {
             $group_model = new Group();
-            $return_data['uid'] = $json->uid;
-            $return_data['group_name'] = $json->group_name;
-            $return_data['group_type'] = $json->group_type;
-            $return_data['userIds'] = $json->userIds;
-            $return_data['sock_id'] = $json->sock_id;
-            if($group_model->createGroup($json->uid,$json->group_name,$json->group_type,$json->userIds)){
-                $return_data['messages']='创建分组成功!';
+            $group_new = $group_model->createGroup($json->uid,$json->group_name,$json->group_type,$json->userIds);
+            if($group_new != false){
+                $data = [
+                    'result'=>true,
+                    'params'=>['group_name'=>$json->group_name,'group_type'=>$json->group_type,'userIds'=>$json->userIds],
+                    'msg'=>'创建分组成功!',
+                    'data'=>$group_new
+                ];
+                $return_data['data']=$data;
                 //个人逻辑：新建分组成功后，应返回给客户端EVENT_COMPANY_FRIENDS
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_CREATE_GROUP, 1, $return_data)));
             }else{
-                $return_data['uid'] = $json->uid;
-                $return_data['messages']='创建分组失败!';
+                $data = [
+                    'result'=>false,
+                    'params'=>['group_name'=>$json->group_name,'group_type'=>$json->group_type,'userIds'=>$json->userIds],
+                    'msg'=>'分组名重复，请重新输入!',
+                    'data'=>null
+                ];
+                $return_data['data']=$data;
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_CREATE_GROUP, 0, $return_data)));
             }
 
         } else {
             //错误了
-            $return_data['uid'] = $json->uid;
-            $return_data['messages']='创建分组错误!';
+            $data = [
+               'result'=>false,
+               'params'=>$json,
+               'msg'=>'参数错误!',
+               'data'=>null
+            ];
+            $return_data['data']=$data;
             Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_CREATE_GROUP, 0, $return_data)));
         }
     }
