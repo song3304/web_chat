@@ -204,6 +204,7 @@ class MessageHandle extends MsgHandleBase {
             $return_data['uid'] = $json->uid;
             $data=[
                 'result'=>false,
+                'params'=> $json,
                 'msg'=>'已读失败:参数错误！',
             ];
             $return_data['data']=$data;

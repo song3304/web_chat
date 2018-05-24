@@ -163,8 +163,9 @@ class Message extends Model{
      */
     public function unreadToRead($uid,array $messageIds)
     {
+        $read_time=date('Y-m-d h:i:s',time());
         foreach($messageIds as $msgId){
-            $this->update('en_chat_messages')->cols(array('is_read'=>1))->where('to_uid='.$uid.' AND id='.$msgId)->query();
+            $this->update('en_chat_messages')->cols(array('is_read'=>1,'read_time'=>$read_time))->where('to_uid='.$uid.' AND id='.$msgId)->query();
         }
         return true;
     }
