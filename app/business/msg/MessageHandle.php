@@ -31,7 +31,7 @@ class MessageHandle extends MsgHandleBase {
      * @method 处理发送单条信息
      */
     static public function sendMessage($client_id, $json) {
-        if (isset($json->uid) && !empty($json->uid) && isset($json->to_uid) && !empty($json->to_uid) && $json->message!=null && $json->message!='') {
+        if (isset($json->uid) && !empty($json->uid) && isset($json->to_uid) && !empty($json->to_uid) && isset($json->message) && !empty($json->message)) {
             $message_model = new Message();
             $return_data['uid'] = $json->uid;
             $return_data['to_uid'] = $json->to_uid;
@@ -76,7 +76,7 @@ class MessageHandle extends MsgHandleBase {
      * @method 处理群发信息
      */
     static public function sendGroupMessage($client_id, $json) {
-        if (isset($json->uid) && !empty($json->uid) && isset($json->to_user_ids) && !empty($json->to_user_ids) && $json->message!=null && $json->message!='') {
+        if (isset($json->uid) && !empty($json->uid) && isset($json->to_user_ids) && !empty($json->to_user_ids) && isset($json->message) && !empty($json->message)) {
             $message_model = new Message();
             $return_data['uid'] = $json->uid;
             $return_data['sock_id'] = $json->sock_id;
