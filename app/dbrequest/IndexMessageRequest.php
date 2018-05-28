@@ -86,7 +86,7 @@ class IndexMessageRequest extends DbRequestBase {
      */
     static public function responseUnread(ChatServer $chat_server, \stdClass $json) {
 
-        $chat_server->sendMessage($json->uid, 'unread_messages', $json->data);
+        $chat_server->sendMessage($json->uid, 'unread_messages', $json->data, $json->sock_id);
 
     }
 
