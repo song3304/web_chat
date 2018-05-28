@@ -150,10 +150,11 @@ class MessageHandle extends MsgHandleBase {
         $return_data['uid'] = $json->uid;
         $return_data['to_uid'] = $json->to_uid;
         $return_data['sock_id'] = $json->sock_id;
-        $index_msg = $message_model->getIndexMessage($json->uid,$json->to_uid);
+        $return_data['last_time'] = $json->last_time;
+        $index_msg = $message_model->getIndexMessage($json->uid,$json->to_uid,$json->last_time);
         $data=[
             'result'=>true,
-            'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid],
+            'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'last_time'=>$json->last_time],
             'msg'=>!empty($index_msg)?'获取当前聊天记录成功！':'无数据',
             'data'=>!empty($index_msg)?$index_msg:[],
         ];

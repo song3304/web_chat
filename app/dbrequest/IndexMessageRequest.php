@@ -32,6 +32,7 @@ class IndexMessageRequest extends DbRequestBase {
             'sock_id' => $obj->sock_id,
             'uid' => $obj->uid,
             'to_uid' => $obj->to_uid,
+            'last_time' => $obj->last_time?$obj->last_time:date('Y-m-d H:i:s',time()),
         );
         $chat_server->sendMessageToGateway($data);
     }

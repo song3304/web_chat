@@ -107,8 +107,8 @@ class ChatServer {
                 IndexMessageRequest::requestUnreadToRead($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'toUid'=>$toUid, 'messageIds'=>$messageIds]));
             });
             //获取当前聊天记录
-            $socket->on('index_message',function ($uid,$to_uid)use($socket){
-                IndexMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid]));
+            $socket->on('index_message',function ($uid,$to_uid,$last_unread_msg_time)use($socket){
+                IndexMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid, 'last_time'=>$last_unread_msg_time]));
             });
             //获取历史聊天记录
             $socket->on('history_message',function ($uid,$to_uid,$pageSize,$indexPage)use($socket){
