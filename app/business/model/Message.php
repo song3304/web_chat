@@ -93,8 +93,8 @@ class Message extends Model{
         $messages=$this
             ->select("*")
             ->from("en_chat_messages")
-            ->where("uid=".$uid." AND to_uid=".$to_uid." AND create_time<='".$last_time."'")
-            ->orWhere("uid=".$to_uid." AND to_uid=".$uid." AND create_time<='".$last_time."'")
+            ->where("uid=".$uid." AND to_uid=".$to_uid." AND create_time<'".$last_time."'")
+            ->orWhere("uid=".$to_uid." AND to_uid=".$uid." AND create_time<'".$last_time."'")
             ->orderByDesc(array(0=>'create_time'))
             ->limit(10)
             ->query();
