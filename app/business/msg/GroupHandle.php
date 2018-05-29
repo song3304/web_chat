@@ -33,7 +33,7 @@ class GroupHandle extends MsgHandleBase {
      */
     static public function handleCreate($client_id, $json) {
         $return_data['uid'] = $json->uid;
-        if (isset($json->uid) && !empty($json->uid) && isset($json->group_name) && !empty($json->group_name)) {
+        if (isset($json->uid) && !empty($json->uid) && isset($json->group_name) && !empty($json->group_name) && isset($json->userIds) && is_array($json->userIds) && !empty($json->userIds)) {
             $group_model = new Group();
             $group_new = $group_model->createGroup($json->uid,$json->group_name,$json->group_type,$json->userIds);
             if($group_new != false){
@@ -168,7 +168,7 @@ class GroupHandle extends MsgHandleBase {
      */
     static public function handleDeleteFriend($client_id, $json)
     {
-        if (isset($json->uid) && !empty($json->uid) && isset($json->group_id) && !empty($json->group_id) && !empty($json->userIds)) {
+        if (isset($json->uid) && !empty($json->uid) && isset($json->group_id) && !empty($json->group_id) && isset($json->userIds) && !empty($json->userIds) && is_array($json->userIds)) {
             $model=new Group();
             $return_data['uid'] = $json->uid;
             $return_data['sock_id'] = $json->sock_id;

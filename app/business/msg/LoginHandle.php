@@ -35,10 +35,12 @@ class LoginHandle extends MsgHandleBase {
             $msg['sock_id'] = $json->sock_id;
             if (empty($result)) {
                 //没有登录信息
-                $msg['msg'] = 'logig info empty!';
+                $msg['msg'] = 'login info empty!';
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_LOGIN, 0, $msg)));
             } else {
                 $msg['uid'] = $result['uid'];
+                $msg['userData'] = $login_model->getUser($result['uid']);
+                $msg['to_uids'] = $login_model->getFriends($result['uid']);
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_LOGIN, 1, $msg)));
             }
             
@@ -47,4 +49,5 @@ class LoginHandle extends MsgHandleBase {
             Gateway::sendToClient($client_id, self::output(self::business(0, 'login request err!')));
         }
     }
+
 }

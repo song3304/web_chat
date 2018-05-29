@@ -22,7 +22,7 @@ class Group extends Model{
      * @return array
      * @method 创建自定义分组
      */
-    public function createGroup($uid,$group_name,$group_type,array $userIds) {
+    public function createGroup($uid,$group_name,$group_type,$userIds) {
         $group=$this
             ->select('*')
             ->from('en_chat_friend_groups')
@@ -99,7 +99,7 @@ class Group extends Model{
      * @return array
      * @method 删除好友
      */
-    public function deleteGroupFriend($uid,$group_id,array $userIds) {
+    public function deleteGroupFriend($uid,$group_id,$userIds) {
         //判断此组是否为当前用户所有
         $group=$this->select('*')->from('en_chat_friend_groups')->where('id='.$group_id)->row();
         if($group['uid']!=$uid)return false;

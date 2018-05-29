@@ -76,7 +76,7 @@ class MessageHandle extends MsgHandleBase {
      * @method 处理群发信息
      */
     static public function sendGroupMessage($client_id, $json) {
-        if (isset($json->uid) && !empty($json->uid) && isset($json->to_user_ids) && !empty($json->to_user_ids) && isset($json->message) && !empty($json->message)) {
+        if (isset($json->uid) && !empty($json->uid) && isset($json->to_user_ids) && !empty($json->to_user_ids) && is_array($json->to_user_ids) && isset($json->message) && !empty($json->message)) {
             $message_model = new Message();
             $return_data['uid'] = $json->uid;
             $return_data['sock_id'] = $json->sock_id;
@@ -188,7 +188,7 @@ class MessageHandle extends MsgHandleBase {
      * @method 处理未读变已读
      */
     static public function unreadToRead($client_id, $json) {
-        if (isset($json->uid) && !empty($json->uid)&& !empty($json->messageIds)) {
+        if (isset($json->uid) && !empty($json->uid) && !empty($json->messageIds) && is_array($json->messageIds)) {
             $return_data['uid'] = $json->uid;
             $return_data['sock_id'] = $json->sock_id;
             $message_model = new Message();

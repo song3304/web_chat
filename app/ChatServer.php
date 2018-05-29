@@ -9,6 +9,7 @@
 
 namespace App;
 
+use App\business\model\LoginModel;
 use App\dbrequest\GroupRequest;
 use App\dbrequest\HistoryMessageRequest;
 use App\dbrequest\IndexMessageRequest;
@@ -103,7 +104,7 @@ class ChatServer {
                 IndexMessageRequest::requestUnread($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid]));
             });
             //未读变已读
-            $socket->on('unread_to_read', function ($uid, $toUid, array $messageIds)use($socket) {
+            $socket->on('unread_to_read', function ($uid, $toUid, $messageIds)use($socket) {
                 IndexMessageRequest::requestUnreadToRead($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'toUid'=>$toUid, 'messageIds'=>$messageIds]));
             });
             //获取当前聊天记录
@@ -119,7 +120,7 @@ class ChatServer {
                 MessageRequest::requestSendMessage($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid ,'message'=>$message]));
             });
             //群发消息
-            $socket->on('send_group_message',function ($uid,array $to_user_ids,$message)use($socket){
+            $socket->on('send_group_message',function ($uid,$to_user_ids,$message)use($socket){
                 SendGroupMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_user_ids' => $to_user_ids ,'message'=>$message]));
             });
             //接收消息
@@ -127,7 +128,7 @@ class ChatServer {
 //                MessageRequest::requestPickMessage($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid,'message_id'=>$message_id]));
 //            });
             //新建自定义分组
-            $socket->on('create_group',function ($uid,$group_name,$group_type,array $userIds)use($socket){
+            $socket->on('create_group',function ($uid,$group_name,$group_type,$userIds)use($socket){
                 GroupRequest::requestCreate($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_name' => $group_name, 'group_type' => $group_type, 'userIds' => $userIds]));
             });
             //删除自定义分组
@@ -139,7 +140,7 @@ class ChatServer {
                 GroupRequest::requestModify($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id , 'group_type'=>$group_type, 'group_name' => $new_name]));
             });
             //删除自定义分组中的好友
-            $socket->on('delete_group_friend',function ($uid,$group_id,$group_type,array $userIds)use($socket){
+            $socket->on('delete_group_friend',function ($uid,$group_id,$group_type,$userIds)use($socket){
                 GroupRequest::requestDeleteFriend($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id, 'group_type' => $group_type , 'userIds' => $userIds]));
             });
         });
@@ -173,8 +174,17 @@ class ChatServer {
             if (count($this->uidConnectionMap[$socket->uid]) === 0) {
                 unset($this->uidConnectionMap[$socket->uid]);
             }
+            //给好友推送下线消息
+            $uid=$socket->uid;
+            $model=new LoginModel();
+            $userData=$model->getUser($uid);
+            $to_uids=$model->getFriends($uid);
+            foreach($to_uids as $to_uid){
+                $this->sendMessage($to_uid['friend_id'], 'offline_notice', $userData);
+            }
         }
     }
+
 
     //客户端登录成功操作
     public function login_sucess($sock_id, $uid, $error = false) {

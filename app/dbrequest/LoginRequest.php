@@ -41,6 +41,12 @@ class LoginRequest extends DbRequestBase {
             $uid = $json->uid;
             //登录成功
             $chat_server->login_sucess($sock_id, $uid);
+            //给好友推送上线通知
+            $to_uids=$json->to_uids;
+            foreach($to_uids as $to_uid){
+                $chat_server->sendMessage($to_uid->friend_id, 'online_notice', $json->userData);
+            }
+
         } else {
             //登录失败
             $sock_id = $json->sock_id;

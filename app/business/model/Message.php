@@ -138,7 +138,7 @@ class Message extends Model{
      * @param $messageIds
      * @method 未读变已读
      */
-    public function unreadToRead($uid,array $messageIds)
+    public function unreadToRead($uid,$messageIds)
     {
         $read_time=date('Y-m-d H:i:s',time());
         foreach($messageIds as $msgId){
