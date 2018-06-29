@@ -25,6 +25,8 @@ class MsgIds
      * 这里定义需要business逻辑处理的消息编码
      * MESSAGE与EVENT一一对应，一个request的编码对应一个response的编码
      */
+    //登陆校验
+    const MESSAGE_AUTH_CHECK = 10002;
     //加入组
     const MESSAGE_JOIN_GROUP = 10003;
     //获取登录信息
@@ -63,6 +65,8 @@ class MsgIds
     const EVENT_ERROR = 50000;
     //返回给客户端的业务代码
     const EVENT_JOIN_GROUP = 50001;
+    //登陆校验
+    const EVENT_AUTH_CHECK = 50002;
     //返回登录信息
     const EVENT_LOGIN = 50004;
     //返回给客户端的好友分组

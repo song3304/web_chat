@@ -13,16 +13,18 @@
  */
 namespace App\business\model;
 use App\business\model\Model;
+use App\business\model\XRedis;
 
 class LoginModel extends Model{
     
     public function uid($session_id)
     {
-        $result = $this->select('uid')->from('session')->where(['session_id'=>$session_id])->row();
-        if (empty($result)) {
+        $xredis = new XRedis();
+        $uid = $xredis->get_uid($session_id);
+        if (empty($uid)) {
             return false;
         } else {
-            return $result['uid'];
+            return $uid;
         }
     }
 

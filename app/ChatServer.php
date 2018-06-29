@@ -9,6 +9,7 @@
 
 namespace App;
 
+use App\dbrequest\AuthCheckRequest;
 use App\business\model\LoginModel;
 use App\dbrequest\GroupRequest;
 use App\dbrequest\HistoryMessageRequest;
@@ -81,6 +82,7 @@ class ChatServer {
             //客户端登录
             $socket->on('login', function ($session_id, $uid)use($socket) {
                 //保留连接信息
+                $socket->session_id = $session_id;
                 $this->connectionMap[$socket->id] = $socket;
                 //告诉客户端，正在登录
                 $socket->emit('login_ing');
@@ -157,9 +159,31 @@ class ChatServer {
         }
     }
 
+    //检测登陆信息
+    public function authCheck($socket, $uid) {
+        if (!$this->isLogin($socket)){
+            return false;
+        } else if ($socket->uid == $uid) {
+            //登陆过了，检测非法
+            $this->disconnect($socket);
+            return false;
+        } else {
+            //检测是否失效
+            AuthCheckRequest::request($this, new XObject(['sock_id' => $socket->id, 'session_id' => $socket->session_id, 'uid' => $socket->uid]));
+            return true;
+        }
+    }
+
     //判断用户是否在线
     public function isOnline($uid) {
         return isset($this->uidConnectionMap[$uid]);
+    }
+
+    //退出某用户
+    public function disconnectByUid($uid) {
+        if (isset($this->uidConnectionMap[$uid])) {
+            $this->disconnect($this->uidConnectionMap[$uid]);
+        }
     }
 
 
