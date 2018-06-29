@@ -27,4 +27,15 @@ return [
     //tcpclient配置连接到哪个gateway
     //'gateway' => '192.168.0.53:8888',
     'gateway' => '127.0.0.1:8888',
+    //redis配置
+    'redis' => [
+        //redis服务器地址
+        'hostname' => '192.168.0.53',
+        //redis服务端口
+        'hostport' => 6379,
+        //redis密码
+        'password' => 'foobared',
+        //跟web服务器session前缀一致
+        'session_prefix' => 'en_',
+    ],
 ];

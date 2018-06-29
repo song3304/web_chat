@@ -5,13 +5,21 @@ namespace App\business\model;
 class XRedis
 {
     private $redis = null;
+    private $config = [
+        'hostname' => '127.0.01',
+        'hostport' => 6379,
+        'password' => '',
+        'session_prefix' => '',
+    ];
 
     public function __construct()
     {
+        $config = include(__DIR__ . '/../../conf/config.php');
+        $this->config = array_merge($this->config, $config['redis']);
         try {
             $redis = new \Redis();
-            $redis->connect('192.168.0.53', 6379);
-            $redis->auth('foobared');
+            $redis->connect($this->config['hostname'], $this->config['hostport']);
+            $redis->auth($this->config['password']);
             $this->redis = $redis;
         } catch (Exception $e) {
 
@@ -27,12 +35,13 @@ class XRedis
      */
     public function get_session($session_id)
     {
-        if ($this->redis && method_exists($this->redis, $name)) {
+        if ($this->redis) {
             try {
                 $session = $this->redis->get($session_id);
                 if ($session) {
                     //去掉前缀进行反序列化
-                    $session = unserialize(substr($session, strlen('en_|')));
+                    $session_prefix = $this->config['session_prefix'];
+                    $session = unserialize(substr($session, strlen($session_prefix.'|')));
                 }
                 return $session;
             } catch(\Exception $e) {
@@ -53,7 +62,9 @@ class XRedis
     {
         $session = $this->get_session($session_id);
         if ($session) {
-            return isset($session['en_user']['uid'])?$session['en_user']['uid']:false;
+            return isset($session[$this->config['session_prefix'].'user']['uid'])
+                ?$session[$this->config['session_prefix'].'user']['uid']
+                :false;
         } else {
             return false;
         }
