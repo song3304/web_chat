@@ -30,8 +30,7 @@ class AuthCheckHandle extends MsgHandleBase {
         if (isset($json->sock_id) && !empty($json->sock_id) && isset($json->session_id) && !empty($json->session_id) && isset($json->uid) && !empty($json->uid)) {
             //查找用户是否失效　
             $xredis = new XRedis();
-            $session = $xredis->get_session($json->session_id);
-            $uid = isset($session['en_user']['uid'])?$session['en_user']['uid']:NULL;
+            $uid = $xredis->get_uid($json->session_id);
             if (empty($uid) || $uid != $json->uid) {
                 //登陆信息失效了
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_AUTH_CHECK, 0, '')));
