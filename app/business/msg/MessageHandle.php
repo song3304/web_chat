@@ -213,25 +213,4 @@ class MessageHandle extends MsgHandleBase {
         }
     }
 
-    /**
-     * @param $client_id
-     * @param $json
-     * @method 处理接收信息
-     */
-//    static public function pickMessage($client_id, $json) {
-//        if (isset($json->uid) && !empty($json->uid) && isset($json->message_id) && !empty($json->message_id)) {
-//            $message_model = new Message();
-//            $message=$message_model->pick($json->uid,$json->message_id);
-//            if(!empty($message)){
-//                $msg['messages']=$message;
-//            }
-//            $msg['uid'] = $json->uid;
-//            $msg['sock_id'] = $json->sock_id;
-//            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_PICK_MESSAGE, 1, $msg)));
-//        } else {
-//            //错误了
-//            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_PICK_MESSAGE, 0, 'pick message err!')));
-//        }
-//    }
-
 }

@@ -6,8 +6,10 @@ namespace App\business;
  * and open the template in the editor.
  */
 
+use App\business\msg\AuthCheckHandle;
 use App\business\msg\CompanyFriendsHandle;
 use App\business\msg\GroupHandle;
+use App\business\msg\LogoutHandle;
 use App\business\msg\MessageHandle;
 use App\business\MsgIds;
 use App\business\msg\JoinGroup;
@@ -39,6 +41,12 @@ class MsgHandler
             case MsgIds::MESSAGE_LOGIN :
                 LoginHandle::handle($client_id, $json);
                 break;
+            case MsgIds::MESSAGE_AUTH_CHECK :
+                AuthCheckHandle::handle($client_id, $json);
+                break;
+            case MsgIds::MESSAGE_LOGOUT :
+                LogoutHandle::handle($client_id, $json);
+                break;
             case MsgIds::MESSAGE_COMPANY_FRIENDS:
                 CompanyFriendsHandle::handle($client_id,$json);
                 break;
@@ -57,9 +65,6 @@ class MsgHandler
             case MsgIds::MESSAGE_SEND_MESSAGE:
                 MessageHandle::sendMessage($client_id,$json);
                 break;
-//            case MsgIds::MESSAGE_PICK_MESSAGE:
-//                MessageHandle::pickMessage($client_id,$json);
-//                break;
             case MsgIds::MESSAGE_SEND_GROUP_MESSAGE:
                 MessageHandle::sendGroupMessage($client_id,$json);
                 break;

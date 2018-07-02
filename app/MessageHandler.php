@@ -6,11 +6,13 @@ namespace App;
  * and open the template in the editor.
  */
 
+use App\dbrequest\AuthCheckRequest;
 use App\dbrequest\CompanyFriendsRequest;
 use App\business\MsgIds;
 use App\dbrequest\GroupRequest;
 use App\dbrequest\HistoryMessageRequest;
 use App\dbrequest\IndexMessageRequest;
+use App\dbrequest\LogoutRequest;
 use App\dbrequest\MessageRequest;
 use App\dbrequest\SendGroupMessageRequest;
 use App\message\JoinGroup;
@@ -41,6 +43,12 @@ class MessageHandler
             case MsgIds::EVENT_LOGIN :
                 LoginRequest::response($chat_server, $json);
                 break;
+            case MsgIds::EVENT_AUTH_CHECK :
+                AuthCheckRequest::response($chat_server, $json);
+                break;
+            case MsgIds::EVENT_LOGOUT :
+                LogoutRequest::response($chat_server, $json);
+                break;
             case MsgIds::EVENT_COMPANY_FRIENDS :
                 CompanyFriendsRequest::response($chat_server, $json);
                 break;
@@ -59,9 +67,6 @@ class MessageHandler
             case MsgIds::EVENT_SEND_MESSAGE :
                 MessageRequest::responseSendMessage($chat_server, $json);
                 break;
-//            case MsgIds::EVENT_PICK_MESSAGE :
-//                MessageRequest::responsePickMessage($chat_server, $json);
-//                break;
             case MsgIds::EVENT_SEND_GROUP_MESSAGE :
                 SendGroupMessageRequest::response($chat_server, $json);
                 break;

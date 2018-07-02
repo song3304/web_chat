@@ -14,6 +14,7 @@ use App\business\model\LoginModel;
 use App\dbrequest\GroupRequest;
 use App\dbrequest\HistoryMessageRequest;
 use App\dbrequest\IndexMessageRequest;
+use App\dbrequest\LogoutRequest;
 use App\dbrequest\MessageRequest;
 use App\dbrequest\SendGroupMessageRequest;
 use PHPSocketIO\SocketIO;
@@ -95,6 +96,9 @@ class ChatServer {
             });
             //获取好友列表
             $socket->on('company_friends',function ($uid)use($socket){
+                if(!$this->authCheck($socket,$uid)){
+                    $socket->emit('logout');return;
+                }
                 CompanyFriendsRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid]));
             });
             //获取全局在线人数
@@ -103,26 +107,44 @@ class ChatServer {
             });
             //获取未读信息
             $socket->on('unread_messages', function ($uid)use($socket) {
+                if(!$this->authCheck($socket,$uid)){
+                    $socket->emit('logout');return;
+                }
                 IndexMessageRequest::requestUnread($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid]));
             });
             //未读变已读
             $socket->on('unread_to_read', function ($uid, $toUid, $messageIds)use($socket) {
+                if(!$this->authCheck($socket,$uid)){
+                    $socket->emit('logout');return;
+                }
                 IndexMessageRequest::requestUnreadToRead($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'toUid'=>$toUid, 'messageIds'=>$messageIds]));
             });
             //获取当前聊天记录
             $socket->on('index_message',function ($uid,$to_uid,$last_unread_msg_time)use($socket){
+                if(!$this->authCheck($socket,$uid)){
+                    $socket->emit('logout');return;
+                }
                 IndexMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid, 'last_time'=>$last_unread_msg_time]));
             });
             //获取历史聊天记录
             $socket->on('history_message',function ($uid,$to_uid,$pageSize,$indexPage)use($socket){
+                if(!$this->authCheck($socket,$uid)){
+                    $socket->emit('logout');return;
+                }
                 HistoryMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid ,'pageSize'=>$pageSize,'indexPage'=>$indexPage]));
             });
             //发送单人消息
             $socket->on('send_message',function ($uid,$to_uid,$message)use($socket){
+                if(!$this->authCheck($socket,$uid)){
+                    $socket->emit('logout');return;
+                }
                 MessageRequest::requestSendMessage($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid ,'message'=>$message]));
             });
             //群发消息
             $socket->on('send_group_message',function ($uid,$to_user_ids,$message)use($socket){
+                if(!$this->authCheck($socket,$uid)){
+                    $socket->emit('logout');return;
+                }
                 SendGroupMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_user_ids' => $to_user_ids ,'message'=>$message]));
             });
             //接收消息
@@ -131,18 +153,30 @@ class ChatServer {
 //            });
             //新建自定义分组
             $socket->on('create_group',function ($uid,$group_name,$group_type,$userIds)use($socket){
+                if(!$this->authCheck($socket,$uid)){
+                    $socket->emit('logout');return;
+                }
                 GroupRequest::requestCreate($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_name' => $group_name, 'group_type' => $group_type, 'userIds' => $userIds]));
             });
             //删除自定义分组
             $socket->on('delete_group',function ($uid,$group_id,$group_type)use($socket){
+                if(!$this->authCheck($socket,$uid)){
+                    $socket->emit('logout');return;
+                }
                 GroupRequest::requestDeleteGroup($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id, 'group_type'=>$group_type ]));
             });
             //修改自定义分组名
             $socket->on('modify_group',function ($uid,$group_id,$group_type,$new_name)use($socket){
+                if(!$this->authCheck($socket,$uid)){
+                    $socket->emit('logout');return;
+                }
                 GroupRequest::requestModify($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id , 'group_type'=>$group_type, 'group_name' => $new_name]));
             });
             //删除自定义分组中的好友
             $socket->on('delete_group_friend',function ($uid,$group_id,$group_type,$userIds)use($socket){
+                if(!$this->authCheck($socket,$uid)){
+                    $socket->emit('logout');return;
+                }
                 GroupRequest::requestDeleteFriend($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id, 'group_type' => $group_type , 'userIds' => $userIds]));
             });
         });
@@ -159,12 +193,12 @@ class ChatServer {
         }
     }
 
-    //检测登陆信息
+    //检测登录信息
     public function authCheck($socket, $uid) {
         if (!$this->isLogin($socket)){
             return false;
         } else if ($socket->uid == $uid) {
-            //登陆过了，检测非法
+            //登录过了，检测非法
             $this->disconnect($socket);
             return false;
         } else {
@@ -199,13 +233,14 @@ class ChatServer {
                 unset($this->uidConnectionMap[$socket->uid]);
             }
             //给好友推送下线消息
-            $uid=$socket->uid;
-            $model=new LoginModel();
-            $userData=$model->getUser($uid);
-            $to_uids=$model->getFriends($uid);
-            foreach($to_uids as $to_uid){
-                $this->sendMessage($to_uid['friend_id'], 'offline_notice', $userData);
-            }
+            LogoutRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $socket->uid]));
+//            $uid=$socket->uid;
+//            $model=new LoginModel();
+//            $userData=$model->getUser($uid);
+//            $to_uids=$model->getFriends($uid);
+//            foreach($to_uids as $to_uid){
+//                $this->sendMessage($to_uid['friend_id'], 'offline_notice', $userData);
+//            }
         }
     }
 

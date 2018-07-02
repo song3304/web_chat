@@ -57,6 +57,8 @@ class MsgIds
     const MESSAGE_ADD_GROUP_FRIEND = 10016;
     //删除自定义分组中的好友
     const MESSAGE_DELETE_GROUP_FRIEND = 10017;
+    //获取登出信息
+    const MESSAGE_LOGOUT = 10018;
     
     /*
      * 这里定义business逻辑生成的消息回复时候用的消息编码
@@ -95,6 +97,8 @@ class MsgIds
     const EVENT_ADD_GROUP_FRIEND = 50016;
     //删除自定义分组中的好友
     const EVENT_DELETE_GROUP_FRIEND = 50017;
+    //返回登出信息
+    const EVENT_LOGOUT = 50018;
     
     //------------------------------------
 }
