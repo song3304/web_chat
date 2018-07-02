@@ -40,7 +40,7 @@ class AuthCheckHandle extends MsgHandleBase {
             
         } else {
             //错误了
-            Gateway::sendToClient($client_id, self::output(self::business(0, 'authcheck request err!')));
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_AUTH_CHECK,0, 'authcheck request err!')));
         }
     }
 

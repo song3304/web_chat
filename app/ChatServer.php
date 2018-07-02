@@ -147,10 +147,6 @@ class ChatServer {
                 }
                 SendGroupMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_user_ids' => $to_user_ids ,'message'=>$message]));
             });
-            //接收消息
-//            $socket->on('pick_message',function ($uid,$message_id)use($socket){
-//                MessageRequest::requestPickMessage($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid,'message_id'=>$message_id]));
-//            });
             //新建自定义分组
             $socket->on('create_group',function ($uid,$group_name,$group_type,$userIds)use($socket){
                 if(!$this->authCheck($socket,$uid)){
@@ -234,13 +230,6 @@ class ChatServer {
             }
             //给好友推送下线消息
             LogoutRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $socket->uid]));
-//            $uid=$socket->uid;
-//            $model=new LoginModel();
-//            $userData=$model->getUser($uid);
-//            $to_uids=$model->getFriends($uid);
-//            foreach($to_uids as $to_uid){
-//                $this->sendMessage($to_uid['friend_id'], 'offline_notice', $userData);
-//            }
         }
     }
 
