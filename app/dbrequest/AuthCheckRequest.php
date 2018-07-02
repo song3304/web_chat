@@ -34,13 +34,13 @@ class AuthCheckRequest extends DbRequestBase {
 
     //响应
     static public function response(ChatServer $chat_server, \stdClass $json) {
+        $obj = json_decode($json->msg);
         //判断是否登录成功
         if (isset($json->code) && $json->code == 1) {
             //登陆信息有效，不需要操作
         } else {
             //登陆信息失效
-            $uid = $json->uid;
-            $chat_server->disconnectByUid($uid);
+            $chat_server->disconnectByUid($obj->uid, $obj->sock_id);
         }
     }
 

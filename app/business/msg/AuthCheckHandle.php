@@ -31,16 +31,17 @@ class AuthCheckHandle extends MsgHandleBase {
             //查找用户是否失效　
             $xredis = new XRedis();
             $uid = $xredis->get_uid($json->session_id);
+
             if (empty($uid) || $uid != $json->uid) {
                 //登陆信息失效了
-                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_AUTH_CHECK, 0, '')));
+                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_AUTH_CHECK, 0, json_encode($json))));
             } else {
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_AUTH_CHECK, 1, '')));
             }
             
         } else {
             //错误了
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_AUTH_CHECK,0, 'authcheck request err!')));
+            //Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_AUTH_CHECK,0, 'authcheck request err!')));
         }
     }
 

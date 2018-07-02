@@ -210,9 +210,9 @@ class ChatServer {
     }
 
     //退出某用户
-    public function disconnectByUid($uid) {
-        if (isset($this->uidConnectionMap[$uid])) {
-            $this->disconnect($this->uidConnectionMap[$uid]);
+    public function disconnectByUid($uid, $sock_id) {
+        if (isset($this->uidConnectionMap[$uid][$sock_id])) {
+            $this->disconnect($this->uidConnectionMap[$uid][$sock_id]);
         }
     }
 
