@@ -39,7 +39,7 @@ class LoginHandle extends MsgHandleBase {
             } else {
                 $msg['uid'] = $session_user_id;
                 $msg['userData'] = $login_model->getUser($session_user_id);
-                $msg['to_uids'] = $login_model->getFriends($session_user_id);
+                $msg['to_uids'] = $login_model->getFriends($session_user_id)?$login_model->getFriends($session_user_id):[];
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_LOGIN, 1, $msg)));
             }
             

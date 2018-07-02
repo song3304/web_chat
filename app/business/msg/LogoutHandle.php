@@ -40,7 +40,7 @@ class LogoutHandle extends MsgHandleBase {
             } else {
                 $msg['uid'] = $result['uid'];
                 $msg['userData'] = $login_model->getUser($result['uid']);
-                $msg['to_uids'] = $login_model->getFriends($result['uid']);
+                $msg['to_uids'] = $login_model->getFriends($result['uid'])?$login_model->getFriends($result['uid']):[];
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_LOGOUT, 1, $msg)));
             }
             
