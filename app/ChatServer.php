@@ -197,7 +197,7 @@ class ChatServer {
     public function authCheck($socket, $uid) {
         if (!$this->isLogin($socket)){
             return false;
-        } else if ($socket->uid == $uid) {
+        } else if ($socket->uid != $uid) {
             //登录过了，检测非法
             $this->disconnect($socket);
             return false;
