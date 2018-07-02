@@ -6,7 +6,7 @@ class XRedis
 {
     private $redis = null;
     private $config = [
-        'hostname' => '127.0.01',
+        'hostname' => '127.0.0.1',
         'hostport' => 6379,
         'password' => '',
         'session_prefix' => '',

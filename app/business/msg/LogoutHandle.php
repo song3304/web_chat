@@ -46,7 +46,8 @@ class LogoutHandle extends MsgHandleBase {
             
         } else {
             //错误了
-            Gateway::sendToClient($client_id, self::output(self::business(0, 'logout request err!')));
+            $msg['msg'] = 'logout request err!';
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_LOGOUT, 0, $msg)));
         }
     }
 
