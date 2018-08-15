@@ -92,6 +92,7 @@ class ClientFriends extends Model{
                 ->bindValues(array('id'=>$v['group_id']))
                 ->query();
         }
+        
         return ['default_groups'=>$default_group_friends,'define_groups'=>$define_group_friends];
     }
 
@@ -148,5 +149,18 @@ class ClientFriends extends Model{
         }
         return ['default_groups'=>$default_group_friends,'define_groups'=>$define_group_friends];
     }
-
+    //查询验证加好友 
+    public function _getValidateFriendsMsg($uid)
+    {
+        
+    }
+    //查询群及好友
+    public function _getQunFriendsList($uid)
+    {
+        
+    }
+    //查询自定义分组及好友
+    public function _getGroupFriendsList($uid){
+        
+    }
 }

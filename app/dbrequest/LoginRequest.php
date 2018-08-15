@@ -46,7 +46,8 @@ class LoginRequest extends DbRequestBase {
             foreach($to_uids as $to_uid){
                 $chat_server->sendMessage($to_uid->friend_id, 'online_notice', $json->userData);
             }
-
+            //登录大厅
+            
         } else {
             //登录失败
             $sock_id = $json->sock_id;

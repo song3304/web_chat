@@ -43,7 +43,8 @@ class LogoutRequest extends DbRequestBase {
             foreach($to_uids as $to_uid){
                 $chat_server->sendMessage($to_uid->friend_id, 'offline_notice', $json->userData);
             }
-
+            //大厅踢出
+            
         } else {
             //登出失败
 

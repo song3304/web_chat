@@ -175,6 +175,26 @@ class ChatServer {
                 }
                 GroupRequest::requestDeleteFriend($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id, 'group_type' => $group_type , 'userIds' => $userIds]));
             });
+            //加好友验证消息->推送给对方
+                
+            //群聊消息
+            
+            //新建自定义群聊组
+            
+            //删除自定义群聊组
+            
+            //修改自定义群聊组
+            
+            //删除自定义群聊成员
+            
+            //查看今天群聊消息
+            
+            //查看历史群聊消息(最近七天)
+            
+            //获取当前在线所有人信息
+            
+            //同意，拒绝对方验证
+            
         });
     }
 
