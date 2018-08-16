@@ -80,6 +80,10 @@ class MsgHandler
             case MsgIds::MESSAGE_DELETE_GROUP_FRIEND:
                 GroupHandle::handleDeleteFriend($client_id,$json);
                 break;
+            /***新加***/
+            case MsgIds::MESSAGE_TRANSFER_GROUP:
+                GroupHandle::handleTransferGroup($client_id,$json);
+                break;
             default :
                 //未定义的消息，不做处理
                 ErrorMsg::handle($client_id, MsgIds::MSG_FORMAT_ERROR);

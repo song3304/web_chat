@@ -59,6 +59,8 @@ class MsgIds
     const MESSAGE_DELETE_GROUP_FRIEND = 10017;
     //获取登出信息
     const MESSAGE_LOGOUT = 10018;
+    //好友分组转移
+    const MESSAGE_TRANSFER_GROUP = 10019;
     
     /*
      * 这里定义business逻辑生成的消息回复时候用的消息编码
@@ -99,6 +101,7 @@ class MsgIds
     const EVENT_DELETE_GROUP_FRIEND = 50017;
     //返回登出信息
     const EVENT_LOGOUT = 50018;
-    
+    //返回好友转移分组
+    const EVENT_TRANSFER_GROUP = 10019;
     //------------------------------------
 }

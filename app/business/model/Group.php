@@ -44,14 +44,17 @@ class Group extends Model{
             ])
             ->query();
         if(!$group_id)return false;
-        foreach($userIds as $friend_id){
-            $this->insert('en_chat_friends')
-                ->cols([
-                    'group_id'=>$group_id,
-                    'friend_id'=>$friend_id
-                ])
-                ->query();
+        if(!empty($userIds) && is_array($userIds)){
+            foreach($userIds as $friend_id){
+                $this->insert('en_chat_friends')
+                    ->cols([
+                        'group_id'=>$group_id,
+                        'friend_id'=>$friend_id
+                    ])
+                    ->query();
+            }  
         }
+        
         return $this->select('*')->from('en_chat_friend_groups')->where('id= :gid')->bindValues(array('gid'=>$group_id))->row();
     }
 
@@ -113,4 +116,6 @@ class Group extends Model{
 //        }
         return true;
     }
+    
+    public function 
 }

@@ -33,7 +33,7 @@ class GroupHandle extends MsgHandleBase {
      */
     static public function handleCreate($client_id, $json) {
         $return_data['uid'] = $json->uid;
-        if (isset($json->uid) && !empty($json->uid) && isset($json->group_name) && !empty($json->group_name) && isset($json->userIds) && is_array($json->userIds) && !empty($json->userIds)) {
+        if (isset($json->uid) && !empty($json->uid) && isset($json->group_name) && !empty($json->group_name)) {//&& isset($json->userIds) && is_array($json->userIds) && !empty($json->userIds)
             $group_model = new Group();
             $group_new = $group_model->createGroup($json->uid,$json->group_name,$json->group_type,$json->userIds);
             if($group_new != false){
@@ -207,5 +207,44 @@ class GroupHandle extends MsgHandleBase {
         }
 
     }
-
+    /**
+     * @param $client_id
+     * @param $json
+     * @method 转移好友到其他分组
+     */
+    static public function handleTransferGroup($client_id, $json){
+        if (!empty($json->uid) && !empty($json->group_id) && !empty($json->friend_id)) {
+            $model=new Group();
+            $return_data['uid'] = $json->uid;
+            $return_data['sock_id'] = $json->sock_id;
+            $return_data['group_id'] = $json->group_id;
+            $return_data['friend_id'] = $json->friend_id;
+            $return_data['data'] = [
+                'result'=>null,
+                'params'=>['userId'=>$json->uid,'groupId'=>$json->group_id,'friendId'=>$json->friend_id],
+                'msg'=>'',
+                'data'=>null
+            ];
+            if($model->transferGroupFriend($json->uid,$json->friend_id,$json->group_id)){
+                $return_data['data']['result'] = true;
+                $return_data['data']['msg'] = '移动好友成功!';
+                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_TRANSFER_GROUP, 1, $return_data)));
+            }else{
+                $return_data['data']['result'] = false;
+                $return_data['data']['msg'] = '转移好友失败!';
+                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_TRANSFER_GROUP, 0, $return_data)));
+            }
+        
+        }else{
+            $return_data['uid'] = $json->uid;
+            $data = [
+                'result'=>false,
+                'params'=>$json,
+                'msg'=>'参数错误!',
+                'data'=>null
+            ];
+            $return_data['data']=$data;
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_TRANSFER_GROUP, 0, $return_data)));
+        }
+    }
 }

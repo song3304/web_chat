@@ -71,16 +71,20 @@ class MessageHandler
                 SendGroupMessageRequest::response($chat_server, $json);
                 break;
             case MsgIds::EVENT_CREATE_GROUP :
-                GroupRequest::responseCreate($chat_server, $json);
+                GroupRequest::response($chat_server, $json, 'create_group');
                 break;
             case MsgIds::EVENT_DELETE_GROUP :
-                GroupRequest::responseDeleteGroup($chat_server, $json);
+                GroupRequest::response($chat_server, $json, 'delete_group');
                 break;
             case MsgIds::EVENT_MODIFY_GROUP :
-                GroupRequest::responseModify($chat_server, $json);
+                GroupRequest::response($chat_server, $json, 'modify_group');
                 break;
             case MsgIds::EVENT_DELETE_GROUP_FRIEND :
-                GroupRequest::responseDeleteFriend($chat_server, $json);
+                GroupRequest::response($chat_server, $json, 'delete_group_friend');
+                break;
+            /*************新加***********************/
+            case MsgIds::EVENT_TRANSFER_GROUP :
+                GroupRequest::response($chat_server, $json, 'transfer_group');
                 break;
             default :
                 //未定义的消息，不做处理

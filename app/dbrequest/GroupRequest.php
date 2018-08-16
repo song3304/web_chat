@@ -90,45 +90,24 @@ class GroupRequest extends DbRequestBase {
         );
         $chat_server->sendMessageToGateway($data);
     }
-
     /**
      * @param ChatServer $chat_server
      * @param XObject $obj
-     * @method 响应-创建分组
+     * @method 好友转移分组
      */
-    static public function responseCreate(ChatServer $chat_server, \stdClass $json) {
-
-        $chat_server->sendMessage($json->uid, 'create_group', $json->data);
+    static public function requestTransferGroup(ChatServer $chat_server, XObject $obj) {
+        //构造请求
+        $data = array(
+            'id' => MsgIds::MESSAGE_TRANSFER_GROUP,
+            'sock_id' => $obj->sock_id,
+            'uid' => $obj->uid,
+            'friend_id' => $obj->friend_id,
+            'group_id' => $obj->group_id
+        );
+        $chat_server->sendMessageToGateway($data);
+    }    
+    /*****************以下代码为回复******************/    
+    static public function response(ChatServer $chat_server, \stdClass $json, $event_name){
+        $chat_server->sendMessage($json->uid, $event_name, $json->data);
     }
-
-    /**
- * @param ChatServer $chat_server
- * @param XObject $obj
- * @method 响应-删除分组
- */
-    static public function responseDeleteGroup(ChatServer $chat_server, \stdClass $json) {
-
-        $chat_server->sendMessage($json->uid, 'delete_group', $json->data);
-    }
-
-    /**
-     * @param ChatServer $chat_server
-     * @param XObject $obj
-     * @method 响应-修改分组名
-     */
-    static public function responseModify(ChatServer $chat_server, \stdClass $json) {
-
-        $chat_server->sendMessage($json->uid, 'modify_group', $json->data);
-    }
-
-    /**
-     * @param ChatServer $chat_server
-     * @param XObject $obj
-     * @method 响应-删除分组中的好友
-     */
-    static public function responseDeleteFriend(ChatServer $chat_server, \stdClass $json) {
-
-        $chat_server->sendMessage($json->uid, 'delete_group_friend', $json->data);
-    }
-
 }
