@@ -25,14 +25,8 @@ class CompanyFriendsRequest extends DbRequestBase {
      * @param XObject $obj
      * @method 请求-好友分组
      */
-    static public function request(ChatServer $chat_server, XObject $obj) {
-        //构造请求
-        $data = array(
-            'id' => MsgIds::MESSAGE_COMPANY_FRIENDS,
-            'sock_id' => $obj->sock_id,
-            'uid' => $obj->uid,
-        );
-        $chat_server->sendMessageToGateway($data);
+    static public function request(ChatServer $chat_server, $data, $message_type) {
+        $chat_server->sendMessageToGateway($data+['id'=>$message_type]);
     }
 
     /**

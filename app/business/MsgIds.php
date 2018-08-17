@@ -61,7 +61,10 @@ class MsgIds
     const MESSAGE_LOGOUT = 10018;
     //好友分组转移
     const MESSAGE_TRANSFER_GROUP = 10019;
-    
+    //加好友验证
+    const MESSAGE_FRIEND_VERIFY = 10020;
+    //加好友处理
+    const MESSAGE_FRIEND_VERIFY_HANDLE = 10021;
     /*
      * 这里定义business逻辑生成的消息回复时候用的消息编码
      */
@@ -102,6 +105,10 @@ class MsgIds
     //返回登出信息
     const EVENT_LOGOUT = 50018;
     //返回好友转移分组
-    const EVENT_TRANSFER_GROUP = 10019;
+    const EVENT_TRANSFER_GROUP = 50019;
+    //返回加好友验证
+    const EVENT_FRIEND_VERIFY = 50020;
+    //返回加好友处理
+    const EVENT_FRIEND_VERIFY_HANDLE = 50021;
     //------------------------------------
 }

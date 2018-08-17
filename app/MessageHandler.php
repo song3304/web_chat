@@ -18,6 +18,7 @@ use App\dbrequest\SendGroupMessageRequest;
 use App\message\JoinGroup;
 use App\ChatServer;
 use App\dbrequest\LoginRequest;
+use App\dbrequest\FriendVerifyRequest;
 
 /**
  * Description of MsgHandler
@@ -53,13 +54,13 @@ class MessageHandler
                 CompanyFriendsRequest::response($chat_server, $json);
                 break;
             case MsgIds::EVENT_UNREAD_MESSAGES :
-                IndexMessageRequest::responseUnread($chat_server, $json);
+                IndexMessageRequest::response($chat_server, $json, 'unread_messages');
                 break;
             case MsgIds::EVENT_UNREAD_TO_READ :
-                IndexMessageRequest::responseUnreadToRead($chat_server, $json);
+                IndexMessageRequest::response($chat_server, 'unread_to_read');
                 break;
             case MsgIds::EVENT_INDEX_MESSAGE :
-                IndexMessageRequest::responseIndexMessage($chat_server, $json);
+                IndexMessageRequest::response($chat_server, $json, 'index_message');
                 break;
             case MsgIds::EVENT_HISTORY_MESSAGE :
                 HistoryMessageRequest::response($chat_server, $json);
@@ -85,6 +86,12 @@ class MessageHandler
             /*************新加***********************/
             case MsgIds::EVENT_TRANSFER_GROUP :
                 GroupRequest::response($chat_server, $json, 'transfer_group');
+                break;
+            case MsgIds::EVENT_FRIEND_VERIFY :
+                FriendVerifyRequest::verifyResponse($chat_server, $json);
+                break;
+            case MsgIds::EVENT_FRIEND_VERIFY_HANDLE :
+                FriendVerifyRequest::verifyHandle($chat_server, $json);
                 break;
             default :
                 //未定义的消息，不做处理

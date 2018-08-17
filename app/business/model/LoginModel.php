@@ -30,7 +30,7 @@ class LoginModel extends Model{
 
     public function getUser($uid)
     {
-        return $this->select('id,nickname,realname,system_type')->from('en_users')->where('id='.$uid)->row();
+        return $this->select('id,nickname,realname,system_type,pic_url AS img')->from('en_users')->where('id='.$uid)->row();
     }
 
     public function getFriends($uid)

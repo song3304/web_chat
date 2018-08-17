@@ -15,7 +15,7 @@ use App\business\MsgIds;
 use App\business\msg\JoinGroup;
 use App\business\msg\ErrorMsg;
 use App\business\msg\LoginHandle;
-
+use App\business\msg\FriendVerifyHandle;
 
 /**
  * Description of MsgHandler
@@ -84,6 +84,12 @@ class MsgHandler
             case MsgIds::MESSAGE_TRANSFER_GROUP:
                 GroupHandle::handleTransferGroup($client_id,$json);
                 break;
+            case MsgIds::MESSAGE_FRIEND_VERIFY:
+                FriendVerifyHandle::addFriendVerify($client_id,$json);
+                break;
+            case MsgIds::MESSAGE_FRIEND_VERIFY_HANDLE:
+                FriendVerifyHandle::handleFriendVerify($client_id,$json);
+                break;            
             default :
                 //未定义的消息，不做处理
                 ErrorMsg::handle($client_id, MsgIds::MSG_FORMAT_ERROR);

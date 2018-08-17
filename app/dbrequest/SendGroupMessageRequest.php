@@ -20,21 +20,8 @@ use App\ChatServer;
  */
 class SendGroupMessageRequest extends DbRequestBase {
 
-    /**
-     * @param ChatServer $chat_server
-     * @param XObject $obj
-     * @method 请求-群发信息
-     */
-    static public function request(ChatServer $chat_server, XObject $obj) {
-        //构造请求
-        $data = array(
-            'id' => MsgIds::MESSAGE_SEND_GROUP_MESSAGE,
-            'sock_id' => $obj->sock_id,
-            'uid' => $obj->uid,
-            'to_user_ids' => $obj->to_user_ids,
-            'message' => $obj->message,
-        );
-        $chat_server->sendMessageToGateway($data);
+    static public function request(ChatServer $chat_server, $data, $message_type) {
+        $chat_server->sendMessageToGateway($data+['id'=>$message_type]);
     }
 
     /**

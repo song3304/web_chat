@@ -117,5 +117,21 @@ class Group extends Model{
         return true;
     }
     
-    public function 
+    public function transferGroupFriend($uid,$friend_id,$group_id,$to_group_id){
+        //判断此组是否为当前用户所有
+        $group=$this->select('*')->from('en_chat_friend_groups')->where('id='.$group_id)->row();
+        if($group['uid']!=$uid)return false;
+        //判断这个分组下有没有这个好友
+        $group_friend_id = $this->select('id')->from('en_chat_friends')->where('group_id='.$group_id.' and friend_id='.$friend_id)->single();
+        if(!empty($group_friend_id)){
+            $group=$this->select('*')->from('en_chat_friend_groups')->where('id='.$to_group_id)->row();
+            if($group['uid']!=$uid)return false;
+            //判断是否已经在分组之中
+            if($this->select('count(*)')->from('en_chat_friends')->where('group_id='.intval($to_group_id).' and friend_id='.intval($friend_id))->single()<1){
+                $this->update('en_chat_friends')->where('id='.$group_friend_id)->cols(['group_id'=>$to_group_id])->query();
+            }
+            return true;
+        }
+        return false;
+    }
 }

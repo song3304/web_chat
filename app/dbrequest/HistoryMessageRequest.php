@@ -20,24 +20,9 @@ use App\ChatServer;
  */
 class HistoryMessageRequest extends DbRequestBase {
 
-    /**
-     * @param ChatServer $chat_server
-     * @param XObject $obj
-     * @method 请求历史记录
-     */
-    static public function request(ChatServer $chat_server, XObject $obj) {
-        //构造请求
-        $data = array(
-            'id' => MsgIds::MESSAGE_HISTORY_MESSAGE,
-            'sock_id' => $obj->sock_id,
-            'uid' => $obj->uid,
-            'to_uid' => $obj->to_uid,
-            'pageSize' => $obj->pageSize?$obj->pageSize:50,
-            'indexPage' => $obj->indexPage?$obj->indexPage:1,
-        );
-        $chat_server->sendMessageToGateway($data);
+    static public function request(ChatServer $chat_server, $data, $message_type) {
+        $chat_server->sendMessageToGateway($data+['id'=>$message_type]);
     }
-
     /**
      * @param ChatServer $chat_server
      * @param \stdClass $json

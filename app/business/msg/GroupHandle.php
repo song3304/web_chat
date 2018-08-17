@@ -217,15 +217,13 @@ class GroupHandle extends MsgHandleBase {
             $model=new Group();
             $return_data['uid'] = $json->uid;
             $return_data['sock_id'] = $json->sock_id;
-            $return_data['group_id'] = $json->group_id;
-            $return_data['friend_id'] = $json->friend_id;
             $return_data['data'] = [
                 'result'=>null,
-                'params'=>['userId'=>$json->uid,'groupId'=>$json->group_id,'friendId'=>$json->friend_id],
+                'params'=>['userId'=>$json->uid,'groupId'=>$json->group_id,'friendId'=>$json->friend_id,'toGroupId'=>$json->to_group_id],
                 'msg'=>'',
                 'data'=>null
             ];
-            if($model->transferGroupFriend($json->uid,$json->friend_id,$json->group_id)){
+            if($model->transferGroupFriend($json->uid,$json->friend_id,$json->group_id,$json->to_group_id)){
                 $return_data['data']['result'] = true;
                 $return_data['data']['msg'] = '移动好友成功!';
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_TRANSFER_GROUP, 1, $return_data)));

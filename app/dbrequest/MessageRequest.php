@@ -20,24 +20,9 @@ use App\ChatServer;
  */
 class MessageRequest extends DbRequestBase {
 
-    /**
-     * @param ChatServer $chat_server
-     * @param XObject $obj
-     * @method 请求发送单人信息
-     */
-    static public function requestSendMessage(ChatServer $chat_server, XObject $obj) {
-        //构造请求
-        $data = array(
-            'id' => MsgIds::MESSAGE_SEND_MESSAGE,
-            'sock_id' => $obj->sock_id,
-            'uid' => $obj->uid,
-            'to_uid' => $obj->to_uid,
-            'message' => $obj->message,
-        );
-        $chat_server->sendMessageToGateway($data);
+    static public function request(ChatServer $chat_server, $data, $message_type) {
+        $chat_server->sendMessageToGateway($data+['id'=>$message_type]);
     }
-
-
     /**
      * @param ChatServer $chat_server
      * @param \stdClass $json

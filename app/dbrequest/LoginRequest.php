@@ -21,15 +21,8 @@ use App\ChatServer;
 class LoginRequest extends DbRequestBase {
 
     //请求
-    static public function request(ChatServer $chat_server, XObject $obj) {
-        //构造登录请求
-        $data = array(
-            'id' => MsgIds::MESSAGE_LOGIN,
-            'sock_id' => $obj->sock_id,
-            'session_id' => $obj->session_id,
-            'uid' => $obj->uid,
-        );
-        $chat_server->sendMessageToGateway($data);
+    static public function request(ChatServer $chat_server, $data, $message_type) {
+        $chat_server->sendMessageToGateway($data+['id' => $message_type]);
     }
 
     //响应
