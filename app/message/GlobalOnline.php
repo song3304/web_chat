@@ -15,7 +15,7 @@ namespace App\message;
  */
 use App\message\MsgHandleBase;
 use App\ChatServer;
-
+use App\business\MsgIds;
 /**
  * 获取全局目前在线人数
  *
@@ -43,5 +43,19 @@ class GlobalOnline extends MsgHandleBase {
         echo($count_authed . '  ' . $count_unauthed . '  ' . $count_terminal . '  ');
         $socket->emit('global_online', $count_authed, $count_unauthed, $count_terminal);
     }
-
+   //获取大厅人员信息
+   static function onlineList(ChatServer $chat_server, $data, $socket = null) {
+        //需要登录
+        if (!$chat_server->isLogin($socket)) {
+            //未登录
+            $socket->emit('logout');
+            return;
+        }
+        $uids = array_keys($chat_server->uidConnectionMap);
+        $chat_server->sendMessageToGateway($data+['id' => MsgIds::EVENT_HALL_MEMBER,'uids'=>$uids]);
+    }
+   //返回大厅所有在线人员
+   static function onlineMemberResponse(ChatServer $chat_server, \stdClass $json){
+       $chat_server->sendMessage($json->uid, 'online_list', $json->data);
+   }
 }

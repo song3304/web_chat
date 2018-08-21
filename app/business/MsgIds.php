@@ -65,6 +65,10 @@ class MsgIds
     const MESSAGE_FRIEND_VERIFY = 10020;
     //加好友处理
     const MESSAGE_FRIEND_VERIFY_HANDLE = 10021;
+    //获取大厅所有人员
+    const MESSAGE_HALL_MEMBER = 10022;
+    //发送群消息
+    const MESSAGE_SEND_QUN_MESSAGE = 10023;
     /*
      * 这里定义business逻辑生成的消息回复时候用的消息编码
      */
@@ -110,5 +114,9 @@ class MsgIds
     const EVENT_FRIEND_VERIFY = 50020;
     //返回加好友处理
     const EVENT_FRIEND_VERIFY_HANDLE = 50021;
+    //返回大厅所有人员
+    const EVENT_HALL_MEMBER = 50022;
+    //返回群消息
+    const EVENT_SEND_QUN_MESSAGE = 50023;
     //------------------------------------
 }

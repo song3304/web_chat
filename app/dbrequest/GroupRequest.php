@@ -27,4 +27,23 @@ class GroupRequest extends DbRequestBase {
     static public function response(ChatServer $chat_server, \stdClass $json, $event_name){
         $chat_server->sendMessage($json->uid, $event_name, $json->data);
     }
+    
+    static public function responseDeleteFriend(ChatServer $chat_server, \stdClass $json)
+    {
+        if ( $json->code == 1) {
+            //成功
+            $chat_server->sendMessage($json->uid, 'delete_group_friend', $json->data);
+            //对方在线接收被删除好友消息
+            $userIds = $json->data->params->userIds;
+            if(!empty($userIds)){
+                $json_data = $json->data->params;
+                foreach ($userIds as $to_uid){
+                    $chat_server->sendMessage($to_uid, 'pick_delete_friend', ['userId'=>$json_data->userId,'groupId'=>$json_data->groupId,'groupType'=>$json_data->groupType]);
+                }
+            }
+        } else {
+            //失败
+            $chat_server->sendMessage($json->uid, 'delete_group_friend', $json->data);
+        }
+    }
 }

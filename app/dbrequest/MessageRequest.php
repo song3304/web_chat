@@ -40,6 +40,22 @@ class MessageRequest extends DbRequestBase {
             $chat_server->sendMessage($json->uid, 'send_message', $json->data);
         }
     }
-
+    //响应群聊消息、
+    static public function responseSendQunMessage(ChatServer $chat_server, \stdClass $json) {
+        //判断是否成功
+        if ( $json->code == 1) {
+            //成功,返回给发信人
+            $chat_server->sendMessage($json->uid, 'send_qun_message', $json->data);
+            //推送给群内所有收信人
+            if(!empty($json->data->to_uids)){
+                foreach ($json->data->to_uids as $to_uid){
+                    $chat_server->sendMessage($json->to_uid, 'pick_qun_message', $json->data->data);
+                }
+            }
+        } else {
+            //失败
+            $chat_server->sendMessage($json->uid, 'send_message', $json->data);
+        }
+    }
 
 }

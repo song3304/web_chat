@@ -114,25 +114,25 @@ class ChatServer {
                 IndexMessageRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid],MsgIds::MESSAGE_UNREAD_MESSAGES);
             });
             //未读变已读
-            $socket->on('unread_to_read', function ($uid, $toUid, $messageIds)use($socket) {
+            $socket->on('unread_to_read', function ($uid, $toUid, $messageIds, $type)use($socket) {
                 if(!$this->authCheck($socket,$uid)){
                     $socket->emit('logout');return;
                 }
-                IndexMessageRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'toUid'=>$toUid, 'messageIds'=>$messageIds],MsgIds::MESSAGE_UNREAD_TO_READ);
+                IndexMessageRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'toUid'=>$toUid, 'messageIds'=>$messageIds, 'messageType'=>$type],MsgIds::MESSAGE_UNREAD_TO_READ);
             });
-            //获取当前聊天记录
-            $socket->on('index_message',function ($uid,$to_uid,$last_unread_msg_time)use($socket){
+            //获取当前聊天记录--群消息纪录
+            $socket->on('index_message',function ($uid,$to_uid_or_qid,$last_unread_msg_time,$type)use($socket){
                 if(!$this->authCheck($socket,$uid)){
                     $socket->emit('logout');return;
                 }
-                IndexMessageRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid, 'last_time'=>!empty($last_unread_msg_time)?$last_unread_msg_time:date('Y-m-d H:i:s')],MsgIds::MESSAGE_INDEX_MESSAGE);
+                IndexMessageRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid_or_qid, 'last_time'=>!empty($last_unread_msg_time)?$last_unread_msg_time:date('Y-m-d H:i:s'),'type'=>$type],MsgIds::MESSAGE_INDEX_MESSAGE);
             });
-            //获取历史聊天记录
-            $socket->on('history_message',function ($uid,$to_uid,$pageSize,$indexPage)use($socket){
+            //获取历史聊天记录-群消息
+            $socket->on('history_message',function ($uid,$to_uid,$pageSize,$indexPage,$type)use($socket){
                 if(!$this->authCheck($socket,$uid)){
                     $socket->emit('logout');return;
                 }
-                HistoryMessageRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid ,'pageSize'=>!empty($pageSize)?$pageSize:50,'indexPage'=>!empty($indexPage)?$indexPage:1],MsgIds::MESSAGE_HISTORY_MESSAGE);
+                HistoryMessageRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid ,'pageSize'=>!empty($pageSize)?$pageSize:50,'indexPage'=>!empty($indexPage)?$indexPage:1,'type'=>$type],MsgIds::MESSAGE_HISTORY_MESSAGE);
             });
             //发送单人消息
             $socket->on('send_message',function ($uid,$to_uid,$message)use($socket){
@@ -148,28 +148,28 @@ class ChatServer {
                 }
                 SendGroupMessageRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'to_user_ids' => $to_user_ids ,'message'=>$message],MsgIds::MESSAGE_SEND_GROUP_MESSAGE);
             });
-            //新建自定义分组
+            //新建自定义分组/群聊组
             $socket->on('create_group',function ($uid,$group_name,$group_type,$userIds)use($socket){
                 if(!$this->authCheck($socket,$uid)){
                     $socket->emit('logout');return;
                 }
                 GroupRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'group_name' => $group_name, 'group_type' => $group_type, 'userIds' => $userIds],MsgIds::MESSAGE_CREATE_GROUP);
             }); 
-            //删除自定义分组
+            //删除自定义分组/群聊组
             $socket->on('delete_group',function ($uid,$group_id,$group_type)use($socket){
                 if(!$this->authCheck($socket,$uid)){
                     $socket->emit('logout');return;
                 }
                 GroupRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id, 'group_type'=>$group_type ],MsgIds::MESSAGE_DELETE_GROUP);
             });
-            //修改自定义分组名
+            //修改自定义分组名/群聊组名
             $socket->on('modify_group',function ($uid,$group_id,$group_type,$new_name)use($socket){
                 if(!$this->authCheck($socket,$uid)){
                     $socket->emit('logout');return;
                 }
                 GroupRequest::request($this, ['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id , 'group_type'=>$group_type, 'group_name' => $new_name],MsgIds::MESSAGE_MODIFY_GROUP);
             });
-            //删除自定义分组中的好友
+            //删除自定义分组中的好友/群聊成员
             $socket->on('delete_group_friend',function ($uid,$group_id,$group_type,$userIds)use($socket){
                 if(!$this->authCheck($socket,$uid)){
                     $socket->emit('logout');return;
@@ -198,62 +198,20 @@ class ChatServer {
                 }
                 FriendVerifyRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'msg_id' => $msg_id, 'is_agree' => $is_agree],MsgIds::MESSAGE_FRIEND_VERIFY_HANDLE);
             });
-            //群聊消息
-            $socket->on('send_qun_message',function ($uid,$qid,$message)use($socket){
-                if(!$this->authCheck($socket,$uid)){
-                    $socket->emit('logout');return;
-                }
-                //MessageRequest::requestSendMessage($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'qid' => $qid ,'message'=>$message]));
-            });
-            //新建自定义群聊组
-            $socket->on('create_qun',function ($uid,$group_name,$group_type,$userIds)use($socket){
-                if(!$this->authCheck($socket,$uid)){
-                    $socket->emit('logout');return;
-                }
-                //GroupRequest::requestCreate($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_name' => $group_name, 'group_type' => $group_type, 'userIds' => $userIds]));
-            });
-            //删除自定义群聊组
-            $socket->on('delete_qun',function ($uid,$group_name,$group_type,$userIds)use($socket){
-                if(!$this->authCheck($socket,$uid)){
-                    $socket->emit('logout');return;
-                }
-                //GroupRequest::requestCreate($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_name' => $group_name, 'group_type' => $group_type, 'userIds' => $userIds]));
-            });
-            //修改自定义群聊组名
-            $socket->on('modify_qun',function ($uid,$qun_id,$new_name)use($socket){
-                if(!$this->authCheck($socket,$uid)){
-                    $socket->emit('logout');return;
-                }
-                //GroupRequest::requestCreate($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_name' => $group_name, 'group_type' => $group_type, 'userIds' => $userIds]));
-            });
-            //删除自定义群聊成员
-            $socket->on('delete_qun_member',function ($uid,$qun_id,$userIds)use($socket){
-                if(!$this->authCheck($socket,$uid)){
-                    $socket->emit('logout');return;
-                }
-                //GroupRequest::requestDeleteFriend($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id, 'group_type' => $group_type , 'userIds' => $userIds]));
-            });
-            //查看今天群聊消息
-            $socket->on('index_qun_message',function ($uid,$to_uid,$last_unread_msg_time)use($socket){
-                if(!$this->authCheck($socket,$uid)){
-                    $socket->emit('logout');return;
-                }
-                //IndexMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid, 'last_time'=>$last_unread_msg_time]));
-            });
-            //查看历史群聊消息(最近七天)
-            $socket->on('history_qun_message',function ($uid,$to_uid,$pageSize,$indexPage)use($socket){
-                if(!$this->authCheck($socket,$uid)){
-                    $socket->emit('logout');return;
-                }
-                //HistoryMessageRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid ,'pageSize'=>$pageSize,'indexPage'=>$indexPage]));
-            });
             //获取当前在线所有人信息
             $socket->on('online_list',function ($uid)use($socket){
                 if(!$this->authCheck($socket,$uid)){
                     $socket->emit('logout');return;
                 }
-                //GlobalOnline::handle($this, null, $socket);
+                GlobalOnline::onlineList($this, ['sock_id' => $socket->id, 'uid' => $uid], $socket);
             });
+            //群聊消息
+            $socket->on('send_qun_message',function ($uid,$qid,$to_uid,$message)use($socket){
+                if(!$this->authCheck($socket,$uid)){
+                    $socket->emit('logout');return;
+                }
+                MessageRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'qid'=>$qid, 'to_uid' => $to_uid ,'message'=>$message],MsgIds::MESSAGE_SEND_QUN_MESSAGE);
+            });      
         });
     }
 
@@ -306,9 +264,10 @@ class ChatServer {
             unset($this->uidConnectionMap[$socket->uid][$socket->id]);
             if (count($this->uidConnectionMap[$socket->uid]) === 0) {
                 unset($this->uidConnectionMap[$socket->uid]);
+                
+                //给好友推送下线消息--当这个用户所有终端下线，发送下线通知
+                LogoutRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $socket->uid]));
             }
-            //给好友推送下线消息
-            LogoutRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $socket->uid]));
         }
     }
 

@@ -41,10 +41,14 @@ class LogoutRequest extends DbRequestBase {
             //给好友推送下线通知
             $to_uids=$json->to_uids;
             foreach($to_uids as $to_uid){
-                $chat_server->sendMessage($to_uid->friend_id, 'offline_notice', $json->userData);
+                if($to_uid == $uid) continue;
+                $chat_server->sendMessage($to_uid, 'offline_notice', $json->userData);
             }
             //大厅踢出
-            
+            foreach ($chat_server->uidConnectionMap as $online_uid => $sockets){
+                if($to_uid == $uid) continue;
+                $chat_server->sendMessage($online_uid, 'offline_hall_notice', $json->userData);//通知所有人下线大厅
+            }
         } else {
             //登出失败
 

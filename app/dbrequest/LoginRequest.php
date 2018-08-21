@@ -37,10 +37,15 @@ class LoginRequest extends DbRequestBase {
             //给好友推送上线通知
             $to_uids=$json->to_uids;
             foreach($to_uids as $to_uid){
-                $chat_server->sendMessage($to_uid->friend_id, 'online_notice', $json->userData);
+                if($to_uid == $uid) continue;
+                $chat_server->sendMessage($to_uid, 'online_notice', $json->userData);//好友上线
             }
             //登录大厅
-            
+            foreach ($chat_server->uidConnectionMap as $online_uid => $sockets){
+                if($to_uid == $uid) continue;
+                $chat_server->sendMessage($online_uid, 'online_hall_notice', $json->userData);//通知所有人上线大厅
+            }
+                
         } else {
             //登录失败
             $sock_id = $json->sock_id;

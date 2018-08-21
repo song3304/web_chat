@@ -13,7 +13,7 @@
  */
 namespace App\business\model;
 use App\business\model\Model;
-use App\ChatServer;
+use App\business\model\LoginModel;
 
 class ClientFriends extends Model{
 
@@ -72,28 +72,7 @@ class ClientFriends extends Model{
                 ->bindValues(array('id'=>$uid,'user_org_id'=>$v['org_id']))
                 ->query();
         }
-        //3.查询所有自定义分组
-        $define_groups=$this
-            ->select('id AS group_id,group_name,is_group_hair')
-            ->from('en_chat_friend_groups')
-            ->where('uid= :id')
-            ->bindValues(array('id'=>$uid))
-            ->query();
-        //4.查询自定义下的所有好友
-        foreach ($define_groups as $k=>$v){
-            $define_group_friends[$k]['group_name']=$v['group_name'];
-            $define_group_friends[$k]['group_id']=$v['group_id'];
-            $define_group_friends[$k]['is_group_hair']=$v['is_group_hair'];
-            $define_group_friends[$k]['friends']=$this
-                ->select('c.friend_id,u.nickname,u.realname ,u.pic_url AS img')
-                ->from('en_chat_friends AS c')
-                ->leftjoin('en_users AS u','c.friend_id=u.id')
-                ->where('c.group_id= :id')
-                ->bindValues(array('id'=>$v['group_id']))
-                ->query();
-        }
-        
-        return ['default_groups'=>$default_group_friends,'define_groups'=>$define_group_friends];
+        return ['default_groups'=>$default_group_friends,'define_groups'=>$this->_getGroupFriendsList($uid)];
     }
 
     /**
@@ -127,40 +106,70 @@ class ClientFriends extends Model{
                 ->bindValues(array('id'=>$uid,'match_org_id'=>$v['org_id']))
                 ->query();
         }
-        //3.查询所有自定义分组
-        $define_groups=$this
-            ->select('id AS group_id,group_name,is_group_hair')
-            ->from('en_chat_friend_groups')
-            ->where('uid= :id')
-            ->bindValues(array('id'=>$uid))
-            ->query();
-        //4.查询自定义下的所有好友
-        foreach ($define_groups as $k=>$v){
-            $define_group_friends[$k]['group_name']=$v['group_name'];
-            $define_group_friends[$k]['group_id']=$v['group_id'];
-            $define_group_friends[$k]['is_group_hair']=$v['is_group_hair'];
-            $define_group_friends[$k]['friends']=$this
-                ->select('c.friend_id,u.nickname,u.realname,u.pic_url AS img')
-                ->from('en_chat_friends AS c')
-                ->leftjoin('en_users AS u','c.friend_id=u.id')
-                ->where('c.group_id= :id')
-                ->bindValues(array('id'=>$v['group_id']))
-                ->query();
+        return ['default_groups'=>$default_group_friends,'define_groups'=>$this->_getGroupFriendsList($uid)];
+    }
+    //查询验证加好友 信息
+    public function getValidateFriendsMsg($uid)
+    {
+        //未处理验证消息
+        $verify_messages = $this->select("*")->from('en_chat_validate_messages')->where('(uid='.$uid.' or to_uid='.$uid.') and is_handle=0')->query();
+        $user_model = new LoginModel;
+        foreach ($verify_messages as &$msg){
+            $msg['user_info'] = $user_model->getUser($msg['uid']);
+            $msg['to_user_info'] = $user_model->getUser($msg['to_uid']);
         }
-        return ['default_groups'=>$default_group_friends,'define_groups'=>$define_group_friends];
+        return $verify_messages;
     }
-    //查询验证加好友 
-    public function _getValidateFriendsMsg($uid)
+    //查询群及好友 信息
+    public function getQunFriendsList($uid)
     {
+        $qun_ids = $this->select('group_id')->from('en_chat_group_members')->where('member_id='.$uid)->column();
+        $define_quns=$this->select('id AS group_id,group_name,uid as owner_id')
+                          ->from('en_chat_groups')
+                          ->where('id in ('.join($qun_ids, ',').')')
+                          ->orderByASC(['porder'])
+                          ->query();
+        //4.查询自定义下的所有好友
+        $user_model = new LoginModel;
+        foreach ($define_quns as &$v){
+            $members = $this->select('member_id,member_name')->from('en_chat_group_members')->where('group_id='.$v['group_id'])->query();
+            if(empty($members)){
+                $v['members'] = [];
+            }else{
+                $members = array_column($members, 'member_name','member_id');
+                $members_info = $user_model->getMembers(array_keys($members));
+                foreach ($members_info as &$member_info){
+                    $member_info['member_name'] = isset($members[$friend_info['id']])?$members[$member_info['id']]:$member_info['nickname'];
+                }
+                $v['members'] = $members_info;
+            }
+        }
         
-    }
-    //查询群及好友
-    public function _getQunFriendsList($uid)
-    {
-        
+        return $define_quns;
     }
     //查询自定义分组及好友
     public function _getGroupFriendsList($uid){
+        $define_groups=$this->select('id AS group_id,group_name,is_group_hair')
+                            ->from('en_chat_friend_groups')
+                            ->where('uid= :id')->bindValues(array('id'=>$uid))
+                            ->orderByASC(['porder'])
+                            ->query();
+        //4.查询自定义下的所有好友
+        $user_model = new LoginModel;
+        foreach ($define_groups as &$v){
+            $friends = $this->select('friend_id,friend_name')->from('en_chat_friends')->where('group_id='.$v['group_id'])->query();
+            if(empty($friends)){
+               $v['friends'] = [];
+            }else{
+                $friends = array_column($friends, 'friend_name','friend_id');
+                $friends_info = $user_model->getMembers(array_keys($friends));
+                foreach ($friends_info as &$friend_info){
+                    $friend_info['friend_name'] = isset($friends[$friend_info['id']])?$friends[$friend_info['id']]:$friend_info['nickname'];
+                }
+                $v['friends'] = $friends_info;
+            }
+        }
         
+        return $define_groups;
     }
 }

@@ -38,7 +38,38 @@ class Message extends Model{
             return $this->select('*')->from('en_chat_messages')->where('id= :id')->bindValues(['id'=>$insert_id])->row();
         }
     }
-
+    //发送群消息--to_uid 备用参数，@用户可能会用到.
+    public function sendQunMessage($uid,$qid,$to_uid,$message){
+        $qun_info = $this->select('*')->from('en_chat_groups')->where('id='.$qid)->row();
+        if(empty($qun_info)) return false;
+        $insert_id = $this
+            ->insert('en_chat_group_messages')
+            ->cols([
+                'uid'=>$uid,
+                'group_id'=>$qid,
+                'group_name'=>$qun_info['group_name'],
+                'message'=>htmlspecialchars($message)
+            ])
+        ->query();
+        if(!$insert_id){
+            return false;
+        }else{
+            //发送给每个人都接收一下
+            $member_ids = $this->select('member_id')->from('en_chat_group_members')->where('group_id='.$qid)->column();
+            foreach ($member_ids as $member_id){
+                $insert_data = [ 'msg_id'=>$insert_id,'to_uid'=>$member_id,'group_id'=>$qid];
+                if($member_id == $uid) $insert_data+=['is_read'=>1,'read_time'=>date("Y-m-d H:i:s")];
+                $this->insert('en_chat_group_user_messages')
+                     ->cols($insert_data)
+                     ->query();
+            }
+            $insert_msg = $this->select('*')->from('en_chat_group_messages')->where('id= :id')->bindValues(['id'=>$insert_id])->row();
+            $user_info = $this->select('system_type,pic_url AS user_img')->from('en_users')->where('id='.$uid)->row();
+            $user_member_name = $this->select('member_name')->from('en_chat_group_members')->where('group_id='.$qid.' and member_id='.$uid)->single();
+            return ['member_ids'=>$member_ids,'insert_msg'=>$insert_msg+$user_info+['user_member_name'=>$user_member_name]];
+        }  
+    }
+    
     /**
      * @param $uid
      * @param $group_id
@@ -89,15 +120,23 @@ class Message extends Model{
      * @return array
      * @method 获取当前好友的当天聊天记录
      */
-    public function getIndexMessage($uid,$to_uid,$last_time) {
-        $messages=$this
-            ->select("*")
-            ->from("en_chat_messages")
-            ->where("uid=".$uid." AND to_uid=".$to_uid." AND create_time<='".$last_time."'")
-            ->orWhere("uid=".$to_uid." AND to_uid=".$uid." AND create_time<='".$last_time."'")
-            ->orderByDesc(array(0=>'create_time'))
-            ->limit(10)
-            ->query();
+    public function getIndexMessage($uid,$to_uid,$last_time,$messageType) {
+        $messages = [];
+        if(empty($messageType) || $messageType=="single_chat"){//单聊
+            $messages=$this->select("*")->from("en_chat_messages")
+                ->where("uid=".$uid." AND to_uid=".$to_uid." AND create_time<='".$last_time."' and create_time>='".date('Y-m-d H:i:s')."'")
+                ->orWhere("uid=".$to_uid." AND to_uid=".$uid." AND create_time<='".$last_time."' and create_time>='".date('Y-m-d H:i:s')."'")
+                ->orderByDesc(array(0=>'create_time'))
+                ->limit(10)
+                ->query();
+        }elseif($messageType=="group_chat"){//群聊
+            $qid = $to_uid;
+            $messages=$this->select("*")->from("en_chat_group_messages")
+                ->where("group_id=".$qid." AND create_time<='".$last_time."' and create_time>='".date('Y-m-d H:i:s')."'")
+                ->orderByDesc(['create_time'])
+                ->limit(10)
+                ->query();
+        }
         return $messages;
     }
 
@@ -120,16 +159,25 @@ class Message extends Model{
      * @return mixed
      * @method 获取当前好友的历史聊天记录
      */
-    public function getHistoryMessage($uid,$to_uid,$pageSize,$indexPage) {
-        $history_messages=$this
-            ->select('*')
-            ->from('en_chat_messages')
-            ->where('uid='.$uid.' AND to_uid='.$to_uid)
-            ->orWhere('uid='.$to_uid.' AND to_uid='.$uid)
-            ->limit($pageSize)
-            ->offset(($indexPage-1)*$pageSize)
-            ->orderByDesc(array(0=>'create_time'))
-            ->query();
+    public function getHistoryMessage($uid,$to_uid,$pageSize,$indexPage,$messageType) {
+        $history_messages = [];
+        if(empty($messageType) || $messageType=="single_chat"){//单聊
+            $history_messages=$this->select('*')->from('en_chat_messages')
+                                    ->where('uid='.$uid.' AND to_uid='.$to_uid)
+                                    ->orWhere('uid='.$to_uid.' AND to_uid='.$uid)
+                                    ->limit($pageSize)
+                                    ->offset(($indexPage-1)*$pageSize)
+                                    ->orderByDesc(['create_time'])
+                                    ->query();
+        }elseif($messageType=="group_chat"){//群聊
+            $qun_id = $to_uid;
+            $history_messages=$this->select('*')->from('en_chat_group_messages')
+                                   ->where('group_id='.$qun_id)
+                                   ->limit($pageSize)
+                                   ->offset(($indexPage-1)*$pageSize)
+                                   ->orderByDesc(['create_time'])
+                                   ->query();
+        }
         return $history_messages;
     }
 
@@ -138,11 +186,17 @@ class Message extends Model{
      * @param $messageIds
      * @method 未读变已读
      */
-    public function unreadToRead($uid,$messageIds)
+    public function unreadToRead($uid,$messageIds,$messageType)
     {
         $read_time=date('Y-m-d H:i:s',time());
-        foreach($messageIds as $msgId){
-            $this->update('en_chat_messages')->cols(array('is_read'=>1,'read_time'=>$read_time))->where('to_uid='.$uid.' AND id='.$msgId)->query();
+        if(empty($messageType) || $messageType=="single_chat"){//单聊
+            foreach($messageIds as $msgId){
+                $this->update('en_chat_messages')->cols(array('is_read'=>1,'read_time'=>$read_time))->where('to_uid='.$uid.' AND id='.$msgId)->query();
+            }
+        }elseif($messageType=="group_chat"){//群聊
+            foreach($messageIds as $msgId){
+                $this->update('en_chat_group_user_messages')->cols(array('is_read'=>1,'read_time'=>$read_time))->where('to_uid='.$uid.' AND msg_id='.$msgId)->query();
+            }
         }
         return true;
     }

@@ -33,7 +33,7 @@ class GroupHandle extends MsgHandleBase {
      */
     static public function handleCreate($client_id, $json) {
         $return_data['uid'] = $json->uid;
-        if (isset($json->uid) && !empty($json->uid) && isset($json->group_name) && !empty($json->group_name)) {//&& isset($json->userIds) && is_array($json->userIds) && !empty($json->userIds)
+        if (isset($json->uid) && !empty($json->uid) && isset($json->group_name) && !empty($json->group_name)) {
             $group_model = new Group();
             $group_new = $group_model->createGroup($json->uid,$json->group_name,$json->group_type,$json->userIds);
             if($group_new != false){
@@ -87,9 +87,8 @@ class GroupHandle extends MsgHandleBase {
                 'msg'=>'删除分组成功!',
                 'data'=>[]
             ];
-            if($group_model->deleteGroup($json->uid,$json->group_id)){
+            if($group_model->deleteGroup($json->uid,$json->group_id,$json->group_type)){
                 $return_data['data'] = $data;
-                //个人逻辑：新建分组成功后，应返回给客户端EVENT_COMPANY_FRIENDS
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_DELETE_GROUP, 1, $return_data)));
             }else{
                 $data['result'] = false;
@@ -116,20 +115,20 @@ class GroupHandle extends MsgHandleBase {
     /**
      * @param $client_id
      * @param $json
-     * @method 修改自定义分组
+     * @method 修改自定义分组/群聊组名
      */
     static public function handleModify($client_id, $json) {
-        if (isset($json->uid) && !empty($json->uid) && isset($json->group_id) && !empty($json->group_id)&& !empty($json->group_name)) {
+        if (!empty($json->uid) && !empty($json->group_id)&& !empty($json->group_name)) {
             $group_model = new Group();
             $return_data['uid'] = $json->uid;
             $return_data['group_id'] = $json->group_id;
             $return_data['sock_id'] = $json->sock_id;
-            $group_mdf = $group_model->modifyGroup($json->uid,$json->group_id,$json->group_name);
+            $group_mdf = $group_model->modifyGroup($json->uid,$json->group_id,$json->group_name,$json->group_type);
             if($group_mdf != false){
                 $data = [
                     'result'=>true,
                     'params'=>['groupId'=>$json->group_id,'groupType'=>$json->group_type,'groupName'=>$json->group_name],
-                    'msg'=>'修改分组成功!',
+                    'msg'=>'修改分群组名成功!',
                     'data'=>$group_mdf
                 ];
                 $return_data['data']=$data;
@@ -139,7 +138,7 @@ class GroupHandle extends MsgHandleBase {
                 $data = [
                     'result'=>false,
                     'params'=>['groupId'=>$json->group_id,'groupType'=>$json->group_type,'groupName'=>$json->group_name],
-                    'msg'=>'组名不能重复，请重新输入!',
+                    'msg'=>'群组名不能重复，请重新输入!',
                     'data'=>null
                 ];
                 $return_data['data']=$data;
@@ -168,13 +167,13 @@ class GroupHandle extends MsgHandleBase {
      */
     static public function handleDeleteFriend($client_id, $json)
     {
-        if (isset($json->uid) && !empty($json->uid) && isset($json->group_id) && !empty($json->group_id) && isset($json->userIds) && !empty($json->userIds) && is_array($json->userIds)) {
+        if (!empty($json->uid) && !empty($json->group_id) && !empty($json->userIds) && is_array($json->userIds)) {
             $model=new Group();
             $return_data['uid'] = $json->uid;
             $return_data['sock_id'] = $json->sock_id;
             $return_data['group_id'] = $json->group_id;
             $return_data['userIds'] = $json->userIds;
-            if($model->deleteGroupFriend($json->uid,$json->group_id,$json->userIds)){
+            if($model->deleteGroupFriend($json->uid,$json->group_id,$json->userIds,$json->group_type)){
                 $data = [
                     'result'=>true,
                     'params'=>['userId'=>$json->uid,'groupId'=>$json->group_id,'groupType'=>$json->group_type,'userIds'=>$json->userIds],

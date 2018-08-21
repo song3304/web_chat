@@ -19,6 +19,7 @@ use App\message\JoinGroup;
 use App\ChatServer;
 use App\dbrequest\LoginRequest;
 use App\dbrequest\FriendVerifyRequest;
+use App\message\GlobalOnline;
 
 /**
  * Description of MsgHandler
@@ -81,7 +82,7 @@ class MessageHandler
                 GroupRequest::response($chat_server, $json, 'modify_group');
                 break;
             case MsgIds::EVENT_DELETE_GROUP_FRIEND :
-                GroupRequest::response($chat_server, $json, 'delete_group_friend');
+                GroupRequest::responseDeleteFriend($chat_server, $json);
                 break;
             /*************新加***********************/
             case MsgIds::EVENT_TRANSFER_GROUP :
@@ -93,6 +94,13 @@ class MessageHandler
             case MsgIds::EVENT_FRIEND_VERIFY_HANDLE :
                 FriendVerifyRequest::verifyHandle($chat_server, $json);
                 break;
+            case MsgIds::EVENT_FRIEND_VERIFY_HANDLE :
+                GlobalOnline::onlineMemberResponse($chat_server, $json);
+                break;
+            case MsgIds::EVENT_SEND_QUN_MESSAGE :
+                MessageRequest::responseSendQunMessage($chat_server, $json);
+                break;
+                
             default :
                 //未定义的消息，不做处理
                 break;

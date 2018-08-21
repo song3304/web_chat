@@ -69,7 +69,47 @@ class MessageHandle extends MsgHandleBase {
             Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_SEND_MESSAGE, 0, $return_data)));
         }
     }
-
+    //发送群消息
+    static public function sendQunMessage($client_id, $json){
+        if (!empty($json->uid) && !empty($json->qid) && !empty($json->message) && isset($json->to_uid)) {
+            $message_model = new Message();
+            $return_data['uid'] = $json->uid;
+            $return_data['qid'] = $json->qid;
+            $return_data['to_uid'] = $json->to_uid;
+            $return_data['sock_id'] = $json->sock_id;
+            $new_row = $message_model->sendQunMessage($json->uid,$json->qid,$json->to_uid,$json->message);
+            if($new_row != false){
+                $data=[
+                    'result'=>true,
+                    'params'=>['uid'=>$json->uid,'qid'=>$json->qid,'to_uid'=>$json->to_uid,'message'=>$json->message],
+                    'msg'=>'发送消息成功！',
+                    'data'=>$new_row['insert_msg'],
+                    'to_uids'=>$new_row['member_ids'],
+                ];
+                $return_data['data']=$data;
+                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_SEND_QUN_MESSAGE, 1, $return_data)));
+            }else{
+                $data=[
+                    'result'=>false,
+                    'params'=>['uid'=>$json->uid,'qid'=>$json->qid,'to_uid'=>$json->to_uid,'message'=>$json->message],
+                    'msg'=>'发送消息失败！',
+                    'data'=>[],
+                    'to_uid'=>null,
+                ];
+                $return_data['data']=$data;
+                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_SEND_QUN_MESSAGE, 0, $return_data)));
+            }
+        } else {
+            //错误了
+            $return_data['uid'] = $json->uid;
+            $data=[
+                'result'=>false,
+                'msg'=>'参数错误，发送消息失败！',
+            ];
+            $return_data['data']=$data;
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_SEND_QUN_MESSAGE, 0, $return_data)));
+        }
+    }
     /**
      * @param $client_id
      * @param $json
@@ -129,7 +169,7 @@ class MessageHandle extends MsgHandleBase {
         $return_data['uid'] = $json->uid;
         $return_data['to_uid'] = $json->to_uid;
         $return_data['sock_id'] = $json->sock_id;
-        $history_msg=$message_model->getHistoryMessage($json->uid,$json->to_uid,$json->pageSize,$json->indexPage);
+        $history_msg=$message_model->getHistoryMessage($json->uid,$json->to_uid,$json->pageSize,$json->indexPage,$json->type);
         $data=[
             'result'=>true,
             'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'pageSize'=>$json->pageSize,'indexPage'=>$json->indexPage],
@@ -148,13 +188,13 @@ class MessageHandle extends MsgHandleBase {
     static public function indexMessage($client_id, $json) {
         $message_model = new Message();
         $return_data['uid'] = $json->uid;
-        $return_data['to_uid'] = $json->to_uid;
+        $return_data['to_uid_or_qid'] = $json->to_uid;
         $return_data['sock_id'] = $json->sock_id;
         $return_data['last_time'] = $json->last_time;
-        $index_msg = $message_model->getIndexMessage($json->uid,$json->to_uid,$json->last_time);
+        $index_msg = $message_model->getIndexMessage($json->uid,$json->to_uid,$json->last_time,$json->type);
         $data=[
             'result'=>true,
-            'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'last_time'=>$json->last_time],
+            'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'last_time'=>$json->last_time,'type'=>$json->type],
             'msg'=>!empty($index_msg)?'获取当前聊天记录成功！':'无数据',
             'data'=>!empty($index_msg)?$index_msg:[],
         ];
@@ -192,10 +232,10 @@ class MessageHandle extends MsgHandleBase {
             $return_data['uid'] = $json->uid;
             $return_data['sock_id'] = $json->sock_id;
             $message_model = new Message();
-            $message_model->unreadToRead($json->uid,$json->messageIds);
+            $message_model->unreadToRead($json->uid,$json->messageIds,$json->messageType);
             $data = [
                 'result'=>true,
-                'params'=>['uid'=>$json->uid,'toUid'=>$json->toUid,'messageIds'=>$json->messageIds],
+                'params'=>['uid'=>$json->uid,'toUid'=>$json->toUid,'messageIds'=>$json->messageIds,'messageType'=>messageType],
                 'msg'=>'已读成功',
                 'data'=>$json->messageIds
             ];
