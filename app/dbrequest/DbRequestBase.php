@@ -16,6 +16,6 @@ use App\XObject;
  */
 abstract class DbRequestBase {
     //定义数据请求返回的数据
-    static public function request(ChatServer $chat_server, XObject $obj) {}
-    static public function response(ChatServer $chat_server, \stdClass $json) {}
+    static public function request(ChatServer $chat_server, XObject $obj,$message_type) {}
+    static public function response(ChatServer $chat_server, \stdClass $json,$event_type) {}
 }

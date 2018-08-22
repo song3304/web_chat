@@ -28,8 +28,8 @@ class HistoryMessageRequest extends DbRequestBase {
      * @param \stdClass $json
      * @method 响应历史记录
      */
-    static public function response(ChatServer $chat_server, \stdClass $json) {
-        $chat_server->sendMessage($json->uid, 'history_message', $json->data);
+    static public function response(ChatServer $chat_server, \stdClass $json,$event_type = 'history_message') {
+        $chat_server->sendMessage($json->uid, $event_type, $json->data);
     }
 
 }

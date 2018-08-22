@@ -21,10 +21,10 @@ use App\ChatServer;
 class AuthCheckRequest extends DbRequestBase {
 
     //请求
-    static public function request(ChatServer $chat_server, XObject $obj) {
+    static public function request(ChatServer $chat_server, XObject $obj,$message_type=MsgIds::MESSAGE_AUTH_CHECK) {
         //构造登录请求
         $data = array(
-            'id' => MsgIds::MESSAGE_AUTH_CHECK,
+            'id' => $message_type,
             'sock_id' => $obj->sock_id,
             'session_id' => $obj->session_id,
             'uid' => $obj->uid,
@@ -33,7 +33,7 @@ class AuthCheckRequest extends DbRequestBase {
     }
 
     //响应
-    static public function response(ChatServer $chat_server, \stdClass $json) {
+    static public function response(ChatServer $chat_server, \stdClass $json,$event='') {
         $obj = json_decode($json->msg);
         //判断是否登录成功
         if (isset($json->code) && $json->code == 1) {

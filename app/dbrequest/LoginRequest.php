@@ -26,7 +26,7 @@ class LoginRequest extends DbRequestBase {
     }
 
     //响应
-    static public function response(ChatServer $chat_server, \stdClass $json) {
+    static public function response(ChatServer $chat_server, \stdClass $json, $event_type='') {
         //判断是否登录成功
         if (isset($json->code) && $json->code == 1) {
             //登录成功了

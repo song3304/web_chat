@@ -34,7 +34,7 @@ class CompanyFriendsRequest extends DbRequestBase {
      * @param \stdClass $json
      * @method 响应-好友分组
      */
-    static public function response(ChatServer $chat_server, \stdClass $json) {
+    static public function response(ChatServer $chat_server, \stdClass $json,$event_type='company_friends') {
         //判断是否成功
         if ( $json->code == 1) {//成功
             //判断每个好友是否在线
@@ -51,10 +51,10 @@ class CompanyFriendsRequest extends DbRequestBase {
                 }
             }
 	        $group_friends=$return_data;
-            $chat_server->sendMessage($json->uid, 'company_friends', $group_friends, $json->sock_id);
+            $chat_server->sendMessage($json->uid, $event_type, $group_friends, $json->sock_id);
         } else {//失败
             $return_data=$json->data;
-            $chat_server->sendMessage($json->uid, 'company_friends', $return_data, $json->sock_id);
+            $chat_server->sendMessage($json->uid, $event_type, $return_data, $json->sock_id);
         }
     }
 

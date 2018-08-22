@@ -29,18 +29,18 @@ class SendGroupMessageRequest extends DbRequestBase {
      * @param \stdClass $json
      * @method 响应-群发信息
      */
-    static public function response(ChatServer $chat_server, \stdClass $json) {
+    static public function response(ChatServer $chat_server, \stdClass $json, $event_type='send_group_message') {
         //判断是否成功
         if ( $json->code == 1) {
             //成功
-            $chat_server->sendMessage($json->uid, 'send_group_message', $json->data);
+            $chat_server->sendMessage($json->uid, $event_type, $json->data);
             $new_messages=$json->data->data;
             foreach($new_messages as $to_uid=>$msg){
                 $chat_server->sendMessage($to_uid, 'pick_message', $msg);
             }
         } else {
             //失败
-            $chat_server->sendMessage($json->uid, 'send_group_message', $json->data);
+            $chat_server->sendMessage($json->uid, $event_type, $json->data);
         }
     }
 
