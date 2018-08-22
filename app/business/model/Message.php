@@ -150,7 +150,26 @@ class Message extends Model{
         $messages=$this->select('*')->from('en_chat_messages')->where('to_uid= :to_uid AND is_read=0')->bindValues(array('to_uid'=>$uid))->orderByDesc(array(0=>'create_time'))->query();
         return $messages;
     }
-
+    //获取验证消息
+    public function getUnreadVerifyMessage($uid)
+    {
+        //查询未处理验证消息
+        $verify_messages = $this->select('*')->from('en_chat_validate_messages')
+                                ->where('(uid='.$uid.' or to_uid='.$uid.') and is_handle=0')
+                                ->query();
+        return $verify_messages;
+    }
+    
+    //获取群未读信息
+    public function getUnreadQunMessage($uid)
+    {
+        //查询群的未读消息
+        $messages = $this->select('m.*')->from('en_chat_group_user_messages as um')
+                         ->leftjoin('en_chat_group_messages AS m','um.msg_id=m.id')
+                         ->where('um.to_uid='.$uid.' and um.is_read=0')
+                         ->query();
+       return $messages;
+    }
     /**
      * @param $uid
      * @param $to_uid

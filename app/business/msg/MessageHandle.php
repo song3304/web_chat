@@ -216,7 +216,11 @@ class MessageHandle extends MsgHandleBase {
             'result'=>true,
             'params'=>['uid'=>$json->uid],
             'msg'=>!empty($unread_msg)?'获取未读消息成功！':'无数据',
-            'data'=>!empty($unread_msg)?$unread_msg:[],
+            'data'=>!empty($unread_msg)?$unread_msg:[],//兼容之前版本
+            'new_data'=> [
+                    'qunMessages'=>$message_model->getUnreadQunMessage($json->uid),
+                    'verifyMessages'=>$message_model->getUnreadVerifyMessage($json->uid)
+            ]//新版本附加新群消息,验证加好友信息
         ];
         $return_data['data']  = $data;
         Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_UNREAD_MESSAGES, 1, $return_data)));
