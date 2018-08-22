@@ -48,8 +48,10 @@ class LoginRequest extends DbRequestBase {
                 
         } else {
             //登录失败
-            $sock_id = $json->sock_id;
-            $chat_server->login_sucess($sock_id, '', true);
+            if(!empty($sock_id)){
+                $sock_id = $json->sock_id;
+                $chat_server->login_sucess($sock_id, '', true);
+            }
         }
     }
 

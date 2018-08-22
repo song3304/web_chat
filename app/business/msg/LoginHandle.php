@@ -27,7 +27,7 @@ class LoginHandle extends MsgHandleBase {
 
     static public function handle($client_id, $json) {
         //登录
-        if (isset($json->sock_id) && !empty($json->sock_id) && isset($json->session_id) && !empty($json->session_id)) {
+        if (!empty($json->sock_id) && !empty($json->session_id)) {
             //查找用户id并返回
             $login_model = new LoginModel();
             $session_user_id = $login_model->uid($json->session_id);
@@ -46,6 +46,7 @@ class LoginHandle extends MsgHandleBase {
             
         } else {
             //错误了
+            $msg['sock_id'] = isset($json->sock_id)?$json->sock_id:null;
             $msg['msg'] = 'login request err!';
             Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_LOGIN, 0, $msg)));
         }
