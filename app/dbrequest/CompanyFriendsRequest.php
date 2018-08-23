@@ -50,6 +50,11 @@ class CompanyFriendsRequest extends DbRequestBase {
                     $v2->isOnline=$chat_server->isOnline($v2->friend_id)?1:0;
                 }
             }
+            foreach($all_groups->fun_friends as $k=>$v){
+                foreach($v->friends as $k2=>$v2){
+                    $v2->isOnline=$chat_server->isOnline($v2->id)?1:0;
+                }
+            }
 	        $group_friends=$return_data;
             $chat_server->sendMessage($json->uid, $event_type, $group_friends, $json->sock_id);
         } else {//失败

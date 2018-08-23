@@ -21,18 +21,12 @@ use App\ChatServer;
 class LogoutRequest extends DbRequestBase {
 
     //请求
-    static public function request(ChatServer $chat_server, XObject $obj,$message_type= MsgIds::MESSAGE_LOGOUT) {
-        //构造登出请求
-        $data = array(
-            'id' => $message_type,
-            'sock_id' => $obj->sock_id,
-            'uid' => $obj->uid,
-        );
-        $chat_server->sendMessageToGateway($data);
+    static public function request(ChatServer $chat_server, $data,$message_type= MsgIds::MESSAGE_LOGOUT) {
+        $chat_server->sendMessageToGateway($data+['id'=>$message_type]);
     }
 
     //响应
-    static public function response(ChatServer $chat_server, \stdClass $json, $event_type='offline_notice') {
+    static public function response(ChatServer $chat_server, \stdClass $json, $event_type) {
         //判断是否登出成功
         if (isset($json->code) && $json->code == 1) {
             //登出成功了

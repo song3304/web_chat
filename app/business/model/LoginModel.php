@@ -59,7 +59,7 @@ class LoginModel extends Model{
         $group_ids = $this->select('id')->from('en_chat_friend_groups')->where('uid='.$uid)->column();
         $friend_ids = [];
         if(!empty($group_ids)){
-            $friend_ids = $this->select('friend_id')->from('en_chat_friend_groups')->where('group_id in('.join(',', $group_ids).')')->column();
+            $friend_ids = $this->select('friend_id')->from('en_chat_friends')->where('group_id in('.join(',', $group_ids).')')->column();
         }
         //所有群成员
         $qun_ids = $this->select('group_id')->from('en_chat_group_members')->where('member_id='.$uid)->column();
@@ -72,10 +72,9 @@ class LoginModel extends Model{
     
     public function getMembers($uids)
     {
-       $this->select('u.id,u.nickname,u.realname,u.system_type,u.pic_url AS img,u.phone,u.org_id,o.name as company_name,o.shortName as company_short_name')->from('en_users as u')
-            ->leftjoin('en_org AS o','o.id=u.org_id')
-            ->where('u.id in (:ids)')
-            ->bindValues(['ids'=>join(',', $uids)])
+       return $this->select('u.id,u.nickname,u.realname,u.system_type,u.pic_url AS img,u.phone,u.org_id,o.name as company_name,o.shortName as company_short_name')->from('en_users as u')
+            ->leftjoin('en_orgs AS o','o.id=u.org_id')
+            ->where('u.id in ('.join(',', $uids).')')
             ->query();
     }
 }

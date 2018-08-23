@@ -32,6 +32,7 @@ class LoginRequest extends DbRequestBase {
             //登录成功了
             $sock_id = $json->sock_id;
             $uid = $json->uid;
+           
             //登录成功
             $chat_server->login_sucess($sock_id, $uid);
             //给好友推送上线通知
@@ -48,7 +49,7 @@ class LoginRequest extends DbRequestBase {
                 
         } else {
             //登录失败
-            if(!empty($sock_id)){
+            if(!empty($json->sock_id)){
                 $sock_id = $json->sock_id;
                 $chat_server->login_sucess($sock_id, '', true);
             }

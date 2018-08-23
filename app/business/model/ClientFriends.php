@@ -124,11 +124,16 @@ class ClientFriends extends Model{
     public function getQunFriendsList($uid)
     {
         $qun_ids = $this->select('group_id')->from('en_chat_group_members')->where('member_id='.$uid)->column();
-        $define_quns=$this->select('id AS group_id,group_name,uid as owner_id')
-                          ->from('en_chat_groups')
-                          ->where('id in ('.join($qun_ids, ',').')')
-                          ->orderByASC(['porder'])
-                          ->query();
+        if(empty($qun_ids)){
+            $define_quns=[];
+        }else{
+            $define_quns=$this->select('id AS group_id,group_name,uid as owner_id')
+            ->from('en_chat_groups')
+            ->where('id in ('.join(',',$qun_ids).')')
+            ->orderByASC(['porder'])
+            ->query();
+        }
+        
         //4.查询自定义下的所有好友
         $user_model = new LoginModel;
         foreach ($define_quns as &$v){
@@ -165,6 +170,7 @@ class ClientFriends extends Model{
                 $friends_info = $user_model->getMembers(array_keys($friends));
                 foreach ($friends_info as &$friend_info){
                     $friend_info['friend_name'] = isset($friends[$friend_info['id']])?$friends[$friend_info['id']]:$friend_info['nickname'];
+                    $friend_info['friend_id'] =$friend_info['id'];
                 }
                 $v['friends'] = $friends_info;
             }

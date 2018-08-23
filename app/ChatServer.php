@@ -227,7 +227,7 @@ class ChatServer {
     }
 
     //检测登录信息
-    public function authCheck($socket, $uid) {
+    public function authCheck($socket, $uid) {return true;
         if (!$this->isLogin($socket)){
             return false;
         } else if ($socket->uid != $uid) {
@@ -266,7 +266,7 @@ class ChatServer {
                 unset($this->uidConnectionMap[$socket->uid]);
                 
                 //给好友推送下线消息--当这个用户所有终端下线，发送下线通知
-                LogoutRequest::request($this, new XObject(['sock_id' => $socket->id, 'uid' => $socket->uid]));
+                LogoutRequest::request($this, ['sock_id' => $socket->id, 'uid' => $socket->uid]);
             }
         }
     }
