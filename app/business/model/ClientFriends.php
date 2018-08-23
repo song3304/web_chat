@@ -144,7 +144,7 @@ class ClientFriends extends Model{
                 $members = array_column($members, 'member_name','member_id');
                 $members_info = $user_model->getMembers(array_keys($members));
                 foreach ($members_info as &$member_info){
-                    $member_info['member_name'] = isset($members[$friend_info['id']])?$members[$member_info['id']]:$member_info['nickname'];
+                    $member_info['member_name'] = isset($members[$member_info['id']])?$members[$member_info['id']]:$member_info['nickname'];
                 }
                 $v['members'] = $members_info;
             }
