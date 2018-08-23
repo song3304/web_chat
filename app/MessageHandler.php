@@ -100,7 +100,9 @@ class MessageHandler
             case MsgIds::EVENT_SEND_QUN_MESSAGE :
                 MessageRequest::responseSendQunMessage($chat_server, $json);
                 break;
-                
+            case MsgIds::EVENT_HALL_MEMBER:
+                GlobalOnline::onlineMemberResponse($chat_server, $json);
+                break;
             default :
                 //未定义的消息，不做处理
                 break;
