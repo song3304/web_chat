@@ -49,7 +49,7 @@ class MessageHandler
                 AuthCheckRequest::response($chat_server, $json);
                 break;
             case MsgIds::EVENT_LOGOUT :
-                LogoutRequest::response($chat_server, $json);
+                LogoutRequest::response($chat_server, $json, 'offline_notice');
                 break;
             case MsgIds::EVENT_COMPANY_FRIENDS :
                 CompanyFriendsRequest::response($chat_server, $json);

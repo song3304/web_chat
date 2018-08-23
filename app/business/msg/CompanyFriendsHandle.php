@@ -43,7 +43,7 @@ class CompanyFriendsHandle extends MsgHandleBase {
                 'result'=>true,
                 'params'=>['uid'=>$json->uid],
                 'msg'=>'获取好友分组成功！',
-                'data'=>$company_friends+['verify_messages'=>$verify_messages,'fun_friends'=>$qun_friends]
+                'data'=>$company_friends+['verify_messages'=>$verify_messages,'qun_friends'=>$qun_friends]
             ];
             $return_data['data']  = $data;
             Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_COMPANY_FRIENDS, 1, $return_data)));
@@ -52,7 +52,7 @@ class CompanyFriendsHandle extends MsgHandleBase {
                 'result'=>false,
                 'params'=>['uid'=>'参数错误'],
                 'msg'=>'获取好友分组失败！',
-                'data'=>json_encode(['default_groups'=>[],'define_groups'=>[],'verify_messages'=>[],'fun_friends'=>[]]),
+                'data'=>json_encode(['default_groups'=>[],'define_groups'=>[],'verify_messages'=>[],'qun_friends'=>[]]),
             ];
             $return_data['data']  = $data;
             Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_COMPANY_FRIENDS, 0, $return_data)));

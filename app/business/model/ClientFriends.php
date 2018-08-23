@@ -112,7 +112,7 @@ class ClientFriends extends Model{
     public function getValidateFriendsMsg($uid)
     {
         //未处理验证消息
-        $verify_messages = $this->select("*")->from('en_chat_validate_messages')->where('(uid='.$uid.' or to_uid='.$uid.') and is_handle=0')->query();
+        $verify_messages = $this->select("*")->from('en_chat_validate_messages')->where('(uid='.$uid.' or to_uid='.$uid.') and is_handle=0')->orderByDESC(['create_time'])->query();
         $user_model = new LoginModel;
         foreach ($verify_messages as &$msg){
             $msg['user_info'] = $user_model->getUser($msg['uid']);

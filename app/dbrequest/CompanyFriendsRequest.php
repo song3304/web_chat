@@ -50,7 +50,7 @@ class CompanyFriendsRequest extends DbRequestBase {
                     $v2->isOnline=$chat_server->isOnline($v2->friend_id)?1:0;
                 }
             }
-            foreach($all_groups->fun_friends as $k=>$v){
+            foreach($all_groups->qun_friends as $k=>$v){
                 foreach($v->friends as $k2=>$v2){
                     $v2->isOnline=$chat_server->isOnline($v2->id)?1:0;
                 }
