@@ -98,6 +98,7 @@ class MsgHandler
                 MessageHandle::sendQunMessage($client_id,$json);
                 break;
             default :
+                echo $json->id."\n";
                 //未定义的消息，不做处理
                 ErrorMsg::handle($client_id, MsgIds::MSG_FORMAT_ERROR);
                 break;

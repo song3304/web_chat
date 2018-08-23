@@ -52,7 +52,7 @@ class GlobalOnline extends MsgHandleBase {
             return;
         }
         $uids = array_keys($chat_server->uidConnectionMap);
-        $chat_server->sendMessageToGateway($data+['id' => MsgIds::EVENT_HALL_MEMBER,'uids'=>$uids]);
+        $chat_server->sendMessageToGateway($data+['id' => MsgIds::MESSAGE_HALL_MEMBER,'uids'=>$uids]);
     }
    //返回大厅所有在线人员
    static function onlineMemberResponse(ChatServer $chat_server, \stdClass $json){
