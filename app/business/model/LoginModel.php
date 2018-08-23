@@ -31,7 +31,7 @@ class LoginModel extends Model{
     public function getUser($uid)
     {
         return $this->select('u.id,u.nickname,u.realname,u.system_type,u.pic_url AS img,u.phone,u.org_id,o.name as company_name,o.shortName as company_short_name')
-                    ->from('en_users as u')->leftjoin('en_org AS o','o.id=u.org_id')
+                    ->from('en_users as u')->leftjoin('en_orgs AS o','o.id=u.org_id')
                     ->where('u.id='.$uid)->row();
     }
  
