@@ -43,7 +43,7 @@ class LoginRequest extends DbRequestBase {
             }
             //登录大厅
             foreach ($chat_server->uidConnectionMap as $online_uid => $sockets){
-                if($to_uid == $uid) continue;
+                if($online_uid == $uid) continue;
                 $chat_server->sendMessage($online_uid, 'online_hall_notice', $json->userData);//通知所有人上线大厅
             }
                 

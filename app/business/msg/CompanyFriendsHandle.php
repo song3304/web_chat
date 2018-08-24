@@ -37,13 +37,13 @@ class CompanyFriendsHandle extends MsgHandleBase {
             $return_data['uid'] = $json->uid;
             $return_data['sock_id'] = $json->sock_id;
             $company_friends = $model->companyFriends($json->uid);
-            $verify_messages = $model->getValidateFriendsMsg($json->uid);
-            $qun_friends = $model->getQunFriendsList($json->uid);
+            $company_friends['verify_messages'] = $model->getValidateFriendsMsg($json->uid);
+            $company_friends['qun_friends'] = $model->getQunFriendsList($json->uid);
             $data=[
                 'result'=>true,
                 'params'=>['uid'=>$json->uid],
                 'msg'=>'获取好友分组成功！',
-                'data'=>$company_friends+['verify_messages'=>$verify_messages,'qun_friends'=>$qun_friends]
+                'data'=>$company_friends
             ];
             $return_data['data']  = $data;
             Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_COMPANY_FRIENDS, 1, $return_data)));

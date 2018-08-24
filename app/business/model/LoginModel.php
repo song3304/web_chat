@@ -67,7 +67,7 @@ class LoginModel extends Model{
         if(!empty($qun_ids)){
             $qun_member_ids = $this->select('member_id')->from('en_chat_group_members')->where('group_id in('.join(',', $qun_ids).')')->column();
         }
-        return array_unique(array_merge($collection_user_ids,$friend_ids,$qun_member_ids));
+        return array_unique(array_merge((array)$collection_user_ids,(array)$friend_ids,(array)$qun_member_ids));
     }
     
     public function getMembers($uids)
