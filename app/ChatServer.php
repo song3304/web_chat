@@ -121,14 +121,14 @@ class ChatServer {
                 IndexMessageRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'toUid'=>$toUid, 'messageIds'=>$messageIds, 'messageType'=>$type],MsgIds::MESSAGE_UNREAD_TO_READ);
             });
             //获取当前聊天记录--群消息纪录
-            $socket->on('index_message',function ($uid,$to_uid_or_qid,$last_unread_msg_time,$type)use($socket){
+            $socket->on('index_message',function ($uid,$to_uid_or_qid,$last_unread_msg_time,$type="")use($socket){
                 if(!$this->authCheck($socket,$uid)){
                     $socket->emit('logout');return;
                 }
                 IndexMessageRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid_or_qid, 'last_time'=>!empty($last_unread_msg_time)?$last_unread_msg_time:date('Y-m-d H:i:s'),'type'=>$type],MsgIds::MESSAGE_INDEX_MESSAGE);
             });
             //获取历史聊天记录-群消息
-            $socket->on('history_message',function ($uid,$to_uid,$pageSize,$indexPage,$type)use($socket){
+            $socket->on('history_message',function ($uid,$to_uid,$pageSize,$indexPage,$type="")use($socket){
                 if(!$this->authCheck($socket,$uid)){
                     $socket->emit('logout');return;
                 }
