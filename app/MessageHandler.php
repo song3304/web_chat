@@ -58,7 +58,7 @@ class MessageHandler
                 IndexMessageRequest::response($chat_server, $json, 'unread_messages');
                 break;
             case MsgIds::EVENT_UNREAD_TO_READ :
-                IndexMessageRequest::response($chat_server, 'unread_to_read');
+                IndexMessageRequest::response($chat_server, $json, 'unread_to_read');
                 break;
             case MsgIds::EVENT_INDEX_MESSAGE :
                 IndexMessageRequest::response($chat_server, $json, 'index_message');
