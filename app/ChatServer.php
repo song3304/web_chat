@@ -114,7 +114,7 @@ class ChatServer {
                 IndexMessageRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid],MsgIds::MESSAGE_UNREAD_MESSAGES);
             });
             //未读变已读
-            $socket->on('unread_to_read', function ($uid, $toUid, $messageIds, $type)use($socket) {
+            $socket->on('unread_to_read', function ($uid, $toUid, $messageIds, $type="")use($socket) {
                 if(!$this->authCheck($socket,$uid)){
                     $socket->emit('logout');return;
                 }
