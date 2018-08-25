@@ -124,8 +124,7 @@ class Message extends Model{
         $messages = [];
         if(empty($messageType) || $messageType=="single_chat"){//单聊
             $messages=$this->select("*")->from("en_chat_messages")
-                ->where("uid=".$uid." AND to_uid=".$to_uid." AND create_time<='".$last_time."' and create_time>='".date('Y-m-d H:i:s')."'")
-                ->orWhere("uid=".$to_uid." AND to_uid=".$uid." AND create_time<='".$last_time."' and create_time>='".date('Y-m-d H:i:s')."'")
+                ->where("uid in(".$uid.",".$to_uid.") AND to_uid in(".$uid.",".$to_uid.") AND create_time<='".$last_time."' and create_time>='".date('Y-m-d 00:00:00')."'")
                 ->orderByDesc(array(0=>'create_time'))
                 ->limit(10)
                 ->query();
