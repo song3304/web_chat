@@ -47,7 +47,7 @@ class FriendVerifyRequest extends DbRequestBase {
             //成功
             $chat_server->sendMessage($json->uid, 'handle_friend_verification', $json->data);
             //对方在线接收验证消息
-            $chat_server->sendMessage($json->data->data->uid, 'pick_handle__verify_message', $json->data->data);
+            $chat_server->sendMessage($json->data->data->uid, 'pick_handle_verify_message', $json->data->data);
         } else {
             //失败
             $chat_server->sendMessage($json->uid, 'handle_friend_verification', $json->data);

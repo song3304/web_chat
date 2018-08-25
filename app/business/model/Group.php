@@ -147,7 +147,7 @@ class Group extends Model{
             $same_group=$this->select('*')->from('en_chat_friends')->where('group_id= '.$group_id.' AND friend_id= '.$friend_id)->query();
             if(empty($same_group)) return false;
             //更改组名
-            $row_count = $this->update('en_chat_friends')->cols(array('friend_name'))->where('id='.$group_id)->bindValue('friend_name', $friend_name)->query();
+            $row_count = $this->update('en_chat_friends')->cols(array('friend_name'))->where('group_id= '.$group_id.' AND friend_id= '.$friend_id)->bindValue('friend_name', $friend_name)->query();
             if(!$row_count)return false;
             return $this->select('*')->from('en_chat_friends')->where('group_id= '.$group_id.' AND friend_id= '.$friend_id)->row();
         }else{
@@ -158,7 +158,7 @@ class Group extends Model{
             $same_group=$this->select('*')->from('en_chat_group_members')->where('group_id= '.$group_id.' AND member_id= '.$friend_id)->query();
             if(empty($same_group)) return false;
             //更改组名
-            $row_count = $this->update('en_chat_group_members')->cols(array('member_name'))->where('id='.$group_id)->bindValue('member_name', $friend_name)->query();
+            $row_count = $this->update('en_chat_group_members')->cols(array('member_name'))->where('group_id= '.$group_id.' AND member_id= '.$friend_id)->bindValue('member_name', $friend_name)->query();
             if(!$row_count)return false;
             return $this->select('*')->from('en_chat_group_members')->where('group_id= '.$group_id.' AND member_id= '.$friend_id)->row();
         }
