@@ -78,6 +78,9 @@ class MsgHandler
             case MsgIds::MESSAGE_MODIFY_GROUP:
                 GroupHandle::handleModify($client_id,$json);
                 break;
+            case MsgIds::MESSAGE_MODIFY_FRIEND_NAME:
+                GroupHandle::handleModifyFriendName($client_id,$json);
+                break;
             case MsgIds::MESSAGE_DELETE_GROUP_FRIEND:
                 GroupHandle::handleDeleteFriend($client_id,$json);
                 break;

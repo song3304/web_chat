@@ -103,6 +103,9 @@ class MessageHandler
             case MsgIds::EVENT_HALL_MEMBER:
                 GlobalOnline::onlineMemberResponse($chat_server, $json);
                 break;
+            case MsgIds::EVENT_MODIFY_FRIEND_NAME :
+                GroupRequest::response($chat_server, $json, 'change_group_friend_name');
+                break;
             default :
                 //未定义的消息，不做处理
                 break;

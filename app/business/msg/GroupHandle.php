@@ -163,6 +163,54 @@ class GroupHandle extends MsgHandleBase {
     /**
      * @param $client_id
      * @param $json
+     * @method 修改自定义分组/群聊组 好友名字
+     */
+    static public function handleModifyFriendName($client_id, $json) {
+        if (!empty($json->uid) && !empty($json->friend_id) && !empty($json->friend_name) && !empty($json->group_id)&& !empty($json->group_type)) {
+            $group_model = new Group();
+            $return_data['uid'] = $json->uid;
+            $return_data['group_id'] = $json->group_id;
+            $return_data['sock_id'] = $json->sock_id;
+            $group_mdf = $group_model->modifyFriendName($json->uid,$json->friend_id,$json->friend_name,$json->group_id,$json->group_type);
+            if($group_mdf != false){
+                $data = [
+                    'result'=>true,
+                    'params'=>['groupId'=>$json->group_id,'groupType'=>$json->group_type,'friendId'=>$json->friend_id,'friendName'=>$json->friend_name],
+                    'msg'=>'修改好友名成功!',
+                    'data'=>$group_mdf
+                ];
+                $return_data['data']=$data;
+                //个人逻辑：新建分组成功后，应返回给客户端EVENT_COMPANY_FRIENDS
+                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_MODIFY_FRIEND_NAME, 1, $return_data)));
+            }else{
+                $data = [
+                    'result'=>false,
+                    'params'=>['groupId'=>$json->group_id,'groupType'=>$json->group_type,'friendId'=>$json->friend_id,'friendName'=>$json->friend_name],
+                    'msg'=>'修改好友的名字不能重复，请重新输入!',
+                    'data'=>null
+                ];
+                $return_data['data']=$data;
+                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_MODIFY_FRIEND_NAME, 0, $return_data)));
+            }
+    
+        } else {
+            //错误了
+            $return_data['uid'] = $json->uid;
+            $data = [
+                'result'=>false,
+                'params'=>$json,
+                'msg'=>'参数错误!',
+                'data'=>null
+            ];
+            $return_data['data']=$data;
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_MODIFY_FRIEND_NAME, 0, $return_data)));
+        }
+    
+    }    
+    
+    /**
+     * @param $client_id
+     * @param $json
      * @method 删除自定义分组中的好友
      */
     static public function handleDeleteFriend($client_id, $json)

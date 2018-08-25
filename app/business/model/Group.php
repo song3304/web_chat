@@ -137,7 +137,33 @@ class Group extends Model{
             return $this->select('*')->from('en_chat_groups')->where('id= :gid')->bindValues(array('gid'=>$group_id))->row();
         }
     }
-
+    //修改好友名
+    public function modifyFriendName($uid,$friend_id,$friend_name,$group_id,$group_type) {
+        if(empty($group_type) || $group_type!= 'qun'){
+            //是否存在此组
+            $group=$this->select('*')->from('en_chat_friend_groups')->where('id=:group_id AND uid= :uid')->bindValues(array('group_id'=>$group_id,'uid'=>$uid))->row();
+            if(!$group)return false;
+            //此好友是否已存在
+            $same_group=$this->select('*')->from('en_chat_friends')->where('group_id= '.$group_id.' AND friend_id= '.$friend_id)->query();
+            if(empty($same_group)) return false;
+            //更改组名
+            $row_count = $this->update('en_chat_friends')->cols(array('friend_name'))->where('id='.$group_id)->bindValue('friend_name', $friend_name)->query();
+            if(!$row_count)return false;
+            return $this->select('*')->from('en_chat_friends')->where('group_id= '.$group_id.' AND friend_id= '.$friend_id)->row();
+        }else{
+            //是否存在此群
+            $group=$this->select('*')->from('en_chat_groups')->where('id=:group_id AND uid= :uid')->bindValues(array('group_id'=>$group_id,'uid'=>$uid))->row();
+            if(!$group)return false;
+            //此好友是否已存在
+            $same_group=$this->select('*')->from('en_chat_group_members')->where('group_id= '.$group_id.' AND member_id= '.$friend_id)->query();
+            if(empty($same_group)) return false;
+            //更改组名
+            $row_count = $this->update('en_chat_group_members')->cols(array('member_name'))->where('id='.$group_id)->bindValue('member_name', $friend_name)->query();
+            if(!$row_count)return false;
+            return $this->select('*')->from('en_chat_group_members')->where('group_id= '.$group_id.' AND member_id= '.$friend_id)->row();
+        }
+    }
+    
     /**
      * @param $uid
      * @param $to_uid

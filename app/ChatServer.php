@@ -169,6 +169,13 @@ class ChatServer {
                 }
                 GroupRequest::request($this, ['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id , 'group_type'=>$group_type, 'group_name' => $new_name],MsgIds::MESSAGE_MODIFY_GROUP);
             });
+            //修改好友的名字
+            $socket->on("change_group_friend_name",function($uid,$friend_id,$friend_name,$group_id,$group_type)use($socket){
+                if(!$this->authCheck($socket,$uid)){
+                    $socket->emit('logout');return;
+                }
+                GroupRequest::request($this, ['sock_id' => $socket->id, 'uid' => $uid, 'friend_id' => $friend_id, 'friend_name' => $friend_name, 'group_id'=>$group_id, 'group_type'=>$group_type, ],MsgIds::MESSAGE_MODIFY_FRIEND_NAME);
+            });
             //删除自定义分组中的好友/群聊成员
             $socket->on('delete_group_friend',function ($uid,$group_id,$group_type,$userIds)use($socket){
                 if(!$this->authCheck($socket,$uid)){

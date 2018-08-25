@@ -69,6 +69,8 @@ class MsgIds
     const MESSAGE_HALL_MEMBER = 10022;
     //发送群消息
     const MESSAGE_SEND_QUN_MESSAGE = 10023;
+    //修改好友的名字
+    const MESSAGE_MODIFY_FRIEND_NAME = 10024;
     /*
      * 这里定义business逻辑生成的消息回复时候用的消息编码
      */
@@ -118,5 +120,7 @@ class MsgIds
     const EVENT_HALL_MEMBER = 50022;
     //返回群消息
     const EVENT_SEND_QUN_MESSAGE = 50023;
+    //修改好友的名字
+    const EVENT_MODIFY_FRIEND_NAME = 50024;
     //------------------------------------
 }
