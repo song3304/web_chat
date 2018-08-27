@@ -85,7 +85,7 @@ class FriendVerifyHandle extends MsgHandleBase {
                 $data = [
                     'result'=>false,
                     'params'=>['userId'=>$json->uid,'msgId'=>$json->msg_id,'is_agree'=>$json->is_agree],
-                    'msg'=>'处理验证消息失败，请重新输入!',
+                    'msg'=>'对方已是你好友,请不要重复添加!',
                     'data'=>null
                 ];
                 $return_data['data']=$data;

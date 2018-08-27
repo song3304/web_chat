@@ -37,7 +37,8 @@ class VerifyMessage extends Model{
             $is_handle = intval($is_agree)>0?1:2;
             $this->update('en_chat_validate_messages')->cols(['is_handle'=>$is_handle,'handle_time'=>date("Y-m-d H:i:s")])->where('id='.$msg_id)->query();
             if($is_handle == 1){//同意添加好友关系
-                //添加 我与他的好友关系
+                
+                // 添加 我与他的好友关系
                 $group_id = $this->select("id")->from('en_chat_friend_groups')->where('uid= :uid AND group_name=:group_name')
                                  ->bindValues(array('uid'=>$uid,'group_name'=>'我的好友'))->single();
                 if(empty($group_id)){
@@ -49,14 +50,20 @@ class VerifyMessage extends Model{
                         'create_time'=>date("Y-m-d H:i:s")
                     ])->query();
                 }
-                if($this->select('count(*)')->from('en_chat_friends')->where('group_id='.$group_id.' and friend_id='.$msg['uid'])->single()<1){
-                    $friend = $this->select('nickname,realname')->from('en_users')->where('id='.$msg['uid'])->row();
-                    $this->insert('en_chat_friends')->cols([
-                        'group_id'=>$group_id,
-                        'friend_id'=>$msg['uid'],
-                        'friend_name'=>!empty($friend['nickname'])?$friend['nickname']:$friend['realname'],
-                    ])->query();
-                }
+                // 查找所有分组id
+                $group_ids = $this->select('id')->from('en_chat_friend_groups')->where('uid ='.$uid)->column();
+                if(!empty($group_ids)){
+                    if($this->select('count(*)')->from('en_chat_friends')->where('group_id in('.join(',', $group_ids).') and friend_id='.$msg['uid'])->single()<1){
+                        $friend = $this->select('nickname,realname')->from('en_users')->where('id='.$msg['uid'])->row();
+                        $this->insert('en_chat_friends')->cols([
+                            'group_id'=>$group_id,
+                            'friend_id'=>$msg['uid'],
+                            'friend_name'=>!empty($friend['nickname'])?$friend['nickname']:$friend['realname'],
+                        ])->query();
+                    }else{
+                        return false;
+                    }
+                }                
                 //添加他与我的好友关系
                 $group_id = $this->select("id")->from('en_chat_friend_groups')->where('uid= :uid AND group_name=:group_name')
                 ->bindValues(array('uid'=>$msg['uid'],'group_name'=>'我的好友'))->single();
@@ -69,13 +76,18 @@ class VerifyMessage extends Model{
                         'create_time'=>date("Y-m-d H:i:s")
                     ])->query();
                 }
-                if($this->select('count(*)')->from('en_chat_friends')->where('group_id='.$group_id.' and friend_id='.$uid)->single()<1){
-                    $myself = $this->select('nickname,realname')->from('en_users')->where('id='.$uid)->row();
-                    $this->insert('en_chat_friends')->cols([
-                        'group_id'=>$group_id,
-                        'friend_id'=>$uid,
-                        'friend_name'=>!empty($myself['nickname'])?$myself['nickname']:$myself['realname'],
-                    ])->query();
+                $group_ids = $this->select('id')->from('en_chat_friend_groups')->where('uid ='.$msg['uid'])->column();
+                if(!empty($group_ids)){
+                    if($this->select('count(*)')->from('en_chat_friends')->where('group_id in('.join(',', $group_ids).') and friend_id='.$uid)->single()<1){
+                        $myself = $this->select('nickname,realname')->from('en_users')->where('id='.$uid)->row();
+                        $this->insert('en_chat_friends')->cols([
+                            'group_id'=>$group_id,
+                            'friend_id'=>$uid,
+                            'friend_name'=>!empty($myself['nickname'])?$myself['nickname']:$myself['realname'],
+                        ])->query();
+                    }else{
+                        return false;
+                    }
                 }
             }
         }

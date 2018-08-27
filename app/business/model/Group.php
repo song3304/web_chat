@@ -180,9 +180,9 @@ class Group extends Model{
             }
             //删除对方的好友关系 -- 互删好友
             if(!empty($userIds)){
-                $group_ids = $this->select('id')->from('en_chat_friend_groups')->where('uid in('.join($userIds, ',').')')->column();
+                $group_ids = $this->select('id')->from('en_chat_friend_groups')->where('uid in('.join(',',$userIds).')')->column();
                 if(!empty($group_ids)){
-                    $del_cnt = $this->delete('en_chat_friends')->where('group_id in('.join($group_ids, ',').') AND friend_id='.$uid)->query();
+                    $del_cnt = $this->delete('en_chat_friends')->where('group_id in('.join(',',$group_ids).') AND friend_id='.$uid)->query();
                 }
             }
             //如果删除好友后该组为空，则同时删除此组
