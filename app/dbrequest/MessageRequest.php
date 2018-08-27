@@ -34,6 +34,9 @@ class MessageRequest extends DbRequestBase {
             //成功,返回给发信人
             $chat_server->sendMessage($json->uid, 'send_message', $json->data);
             //推送给收信人
+            if(!empty($json->data->sender)){//判断是否在线
+                $json->data->sender->isOnline = $chat_server->isOnline($json->data->sender->id)?1:0;
+            }
             $chat_server->sendMessage($json->to_uid, 'pick_message', $json->data);
         } else {
             //失败
