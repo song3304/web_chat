@@ -14,6 +14,7 @@ namespace App\business\msg;
  * @author Xp
  */
 use App\business\model\Message;
+use App\business\model\LoginModel;
 use \GatewayWorker\Lib\Gateway;
 use App\business\msg\MsgHandleBase;
 use App\business\MsgIds;
@@ -36,24 +37,27 @@ class MessageHandle extends MsgHandleBase {
             $return_data['uid'] = $json->uid;
             $return_data['to_uid'] = $json->to_uid;
             $return_data['sock_id'] = $json->sock_id;
-            $new_row = $message_model->send($json->uid,$json->to_uid,$json->message);
+            $is_temp = !empty($json->is_temp)?1:0;
+            $new_row = $message_model->send($json->uid,$json->to_uid,$json->message,$is_temp);
             if($new_row != false){
                 $data=[
                     'result'=>true,
-                    'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'message'=>$json->message],
+                    'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'message'=>$json->message,'is_temp'=>$is_temp],
                     'msg'=>'发送消息成功！',
                     'data'=>$new_row,
                     'to_uid'=>$json->to_uid,
+                    'sender'=> (new LoginModel)->getUser($json->uid)
                 ];
                 $return_data['data']=$data;
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_SEND_MESSAGE, 1, $return_data)));
             }else{
                 $data=[
                     'result'=>false,
-                    'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'message'=>$json->message],
+                    'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'message'=>$json->message,'is_temp'=>$is_temp],
                     'msg'=>'发送消息失败！',
                     'data'=>[],
                     'to_uid'=>$json->to_uid,
+                    'sender'=>null
                 ];
                 $return_data['data']=$data;
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_SEND_MESSAGE, 0, $return_data)));

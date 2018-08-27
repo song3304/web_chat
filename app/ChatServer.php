@@ -135,11 +135,11 @@ class ChatServer {
                 HistoryMessageRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid ,'pageSize'=>!empty($pageSize)?$pageSize:50,'indexPage'=>!empty($indexPage)?$indexPage:1,'type'=>$type],MsgIds::MESSAGE_HISTORY_MESSAGE);
             });
             //发送单人消息
-            $socket->on('send_message',function ($uid,$to_uid,$message)use($socket){
+            $socket->on('send_message',function ($uid,$to_uid,$message,$is_temp=false)use($socket){
                 if(!$this->authCheck($socket,$uid)){
                     $socket->emit('logout');return;
                 }
-                MessageRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid ,'message'=>$message],MsgIds::MESSAGE_SEND_MESSAGE);
+                MessageRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'to_uid' => $to_uid ,'message'=>$message,'is_temp'=>$is_temp],MsgIds::MESSAGE_SEND_MESSAGE);
             });
             //群发消息
             $socket->on('send_group_message',function ($uid,$to_user_ids,$message)use($socket){

@@ -13,6 +13,7 @@
  */
 namespace App\business\model;
 use App\business\model\Model;
+use App\business\model\LoginModel;
 
 class Message extends Model{
 
@@ -23,12 +24,13 @@ class Message extends Model{
      * @return bool
      * @method 发送单条信息
      */
-    public function send($uid,$to_uid,$message) {
+    public function send($uid,$to_uid,$message,$is_temp=0) {
         $insert_id = $this
             ->insert('en_chat_messages')
             ->cols([
                 'uid'=>$uid,
                 'to_uid'=>$to_uid,
+                'is_temp'=>$is_temp,
                 'message'=>htmlspecialchars($message)
                 ])
             ->query();
@@ -147,6 +149,13 @@ class Message extends Model{
     public function getUnreadMessages($uid)
     {
         $messages=$this->select('*')->from('en_chat_messages')->where('to_uid= :to_uid AND is_read=0')->bindValues(array('to_uid'=>$uid))->orderByDesc(array(0=>'create_time'))->query();
+        foreach ($messages as &$message){
+            if($messages['is_temp']){
+                $messages['sender'] = (new LoginModel)->getUser($messages['uid']);
+            }else{
+                $messages['sender'] = null;
+            }
+        }
         return $messages;
     }
     //获取验证消息
