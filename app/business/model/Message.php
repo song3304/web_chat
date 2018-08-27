@@ -150,11 +150,11 @@ class Message extends Model{
     {
         $messages=$this->select('*')->from('en_chat_messages')->where('to_uid= :to_uid AND is_read=0')->bindValues(array('to_uid'=>$uid))->orderByDesc(array(0=>'create_time'))->query();
         foreach ($messages as &$message){
-            if($messages['is_temp']){
+            //if($messages['is_temp']){
                 $messages['sender'] = (new LoginModel)->getUser($messages['uid']);
-            }else{
-                $messages['sender'] = null;
-            }
+            //}else{
+            //    $messages['sender'] = null;
+            //}
         }
         return $messages;
     }
