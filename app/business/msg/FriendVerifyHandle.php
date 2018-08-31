@@ -23,10 +23,10 @@ class FriendVerifyHandle extends MsgHandleBase {
     static public function addFriendVerify($client_id, $json) {
         $return_data['uid'] = $json->uid;
         $return_data['sock_id'] = $json->sock_id;
-        if (!empty($json->uid) && !empty($json->to_uid) && !empty($json->msg)) {
+        if (!empty($json->uid) && !empty($json->to_uid)) {
             $verify_model = new VerifyMessage();
             $user_model = new LoginModel();
-            $verify_new = $verify_model->createVerifyMsg($json->uid,$json->to_uid,$json->msg);
+            $verify_new = $verify_model->createVerifyMsg($json->uid,$json->to_uid,!empty($json->msg)?$json->msg:'');
             if($verify_new != false){
                 $data = [
                     'result'=>true,
