@@ -188,7 +188,7 @@ class Message extends Model{
      */
     public function getHistoryMessage($uid,$to_uid,$pageSize,$indexPage,$messageType) {
         $history_messages = [];
-        if(empty($messageType) || $messageType=="single_chat"){//单聊
+        if(empty($messageType) || $messageType=="single_chat" || $messageType=="user"){//单聊
             $history_messages=$this->select('*')->from('en_chat_messages')
                                     ->where('uid='.$uid.' AND to_uid='.$to_uid)
                                     ->orWhere('uid='.$to_uid.' AND to_uid='.$uid)
@@ -196,7 +196,7 @@ class Message extends Model{
                                     ->offset(($indexPage-1)*$pageSize)
                                     ->orderByDesc(['create_time'])
                                     ->query();
-        }elseif($messageType=="group_chat"){//群聊
+        }elseif($messageType=="group_chat" || $messageType=="qun"){//群聊
             $qun_id = $to_uid;
             $history_messages=$this->select('*')->from('en_chat_group_messages')
                                    ->where('group_id='.$qun_id)

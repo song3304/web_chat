@@ -176,7 +176,7 @@ class MessageHandle extends MsgHandleBase {
         $history_msg=$message_model->getHistoryMessage($json->uid,$json->to_uid,$json->pageSize,$json->indexPage,$json->type);
         $data=[
             'result'=>true,
-            'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'pageSize'=>$json->pageSize,'indexPage'=>$json->indexPage],
+            'params'=>['uid'=>$json->uid,'to_uid'=>$json->to_uid,'pageSize'=>$json->pageSize,'indexPage'=>$json->indexPage,'type'=>$json->type],
             'msg'=>!empty($history_msg)?'获取历史记录成功！':'无数据',
             'data'=>!empty($history_msg)?$history_msg:[],
         ];
