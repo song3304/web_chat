@@ -65,9 +65,10 @@ class ClientFriends extends Model{
             $default_group_friends[$k]['group_name']=$v['org_name'];
             $default_group_friends[$k]['group_id']=$v['org_id'];
             $default_group_friends[$k]['friends']=$this
-                ->select('c.user_id AS friend_id,u.nickname,u.realname,u.pic_url AS img')
+                ->select('c.user_id AS friend_id,u.nickname,u.realname,u.pic_url AS img,u.system_type,u.phone,u.org_id,o.name as company_name,o.shortName as company_short_name')
                 ->from('en_collection AS c')
                 ->leftjoin('en_users AS u','c.user_id=u.id')
+                ->leftjoin('en_orgs AS o','u.org_id=o.id')
                 ->where('c.match_id= :id AND c.user_org_id= :user_org_id')
                 ->bindValues(array('id'=>$uid,'user_org_id'=>$v['org_id']))
                 ->query();
@@ -99,9 +100,10 @@ class ClientFriends extends Model{
             $default_group_friends[$k]['group_name']=$v['org_name'];
             $default_group_friends[$k]['group_id']=$v['org_id'];
             $default_group_friends[$k]['friends'] = $this
-                ->select('c.match_id AS friend_id,u.nickname,u.realname,u.pic_url AS img')
+                ->select('c.match_id AS friend_id,u.nickname,u.realname,u.pic_url AS img,u.system_type,u.phone,u.org_id,o.name as company_name,o.shortName as company_short_name')
                 ->from('en_collection AS c')
                 ->leftjoin('en_users AS u','c.match_id=u.id')
+                ->leftjoin('en_orgs AS o','u.org_id=o.id')
                 ->where('c.user_id= :id AND c.match_org_id= :match_org_id')
                 ->bindValues(array('id'=>$uid,'match_org_id'=>$v['org_id']))
                 ->query();
