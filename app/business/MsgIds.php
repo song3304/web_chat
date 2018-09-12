@@ -71,6 +71,10 @@ class MsgIds
     const MESSAGE_SEND_QUN_MESSAGE = 10023;
     //修改好友的名字
     const MESSAGE_MODIFY_FRIEND_NAME = 10024;
+    //发送热点资讯
+    const MESSAGE_SEND_HOT_CMS = 10025;
+    //获取热点资讯详情
+    const MESSAGE_GET_HOT_CMS_DETAIL = 10026;
     /*
      * 这里定义business逻辑生成的消息回复时候用的消息编码
      */
@@ -122,5 +126,9 @@ class MsgIds
     const EVENT_SEND_QUN_MESSAGE = 50023;
     //修改好友的名字
     const EVENT_MODIFY_FRIEND_NAME = 50024;
+    //发送热点资讯
+    const EVENT_SEND_HOT_CMS = 50025;
+    //获取热点资讯详情
+    const EVENT_GET_HOT_CMS_DETAIL = 50026;
     //------------------------------------
 }

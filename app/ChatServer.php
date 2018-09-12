@@ -25,8 +25,10 @@ use App\business\MsgIds;
 use App\MessageHandler;
 use App\dbrequest\LoginRequest;
 use App\dbrequest\CompanyFriendsRequest;
+use App\dbrequest\CmsRequest;
 use App\XObject;
 use App\message\GlobalOnline;
+use Workerman\Worker;
 
 class ChatServer {
 
@@ -71,6 +73,41 @@ class ChatServer {
         $this->tcpClient->onMessage = $this->onMessage;
     }
 
+    // 初始化http推送
+    private function initHttpPush() {
+        // 监听一个http端口
+        $inner_http_worker = new Worker('http://0.0.0.0:3131');
+        // 当http客户端发来数据时触发
+        $inner_http_worker->onMessage = function($http_connection, $data){
+            $_POST = $_POST ? $_POST : $_GET;
+            // 推送数据的url格式 type=publish&to=uid&content=xxxx
+            switch(@$_POST['type']){
+                case 'publish':
+                    $to = @$_POST['to'];
+                    $_POST['content'] = htmlspecialchars(@$_POST['content']);
+                    // 有指定uid则向uid所在socket组发送数据
+                    if($to){
+                        $this->sendMessage($to, 'send_message', $_POST['content']);
+                        // 否则向所有uid推送数据
+                    }else{
+                        //推送给所有资讯
+                        foreach ($this->uidConnectionMap as $online_uid => $sockets){
+                            $this->sendMessage($online_uid, 'pick_hot_cms', $_POST['content']);//通知所有人下线大厅
+                        }
+                    }
+                    // http接口返回，如果用户离线socket返回fail
+                    if($to && !isset($this->uidConnectionMap[$to])){
+                        return $http_connection->send('offline');
+                    }else{
+                        return $http_connection->send('ok');
+                    }
+            }
+            return $http_connection->send('fail');
+        };
+        // 执行监听
+        $inner_http_worker->listen();
+    }
+    
     //初始化
     private function initSocketIO() {
         $tcp_ip = $this->config['socket']['tcp_ip'];
@@ -78,6 +115,8 @@ class ChatServer {
         $this->socketIO = new SocketIO($tcp_ip, $tcp_port);
         $this->socketIO->on('workerStart', function($socket) {
             $this->initTcpClient();
+            //初始化 http 推送 线下可以用
+            if($this->config['env'] == 'offline') $this->initHttpPush();
         });
         $this->socketIO->on('connection', function($socket) {
 
@@ -218,7 +257,21 @@ class ChatServer {
                     $socket->emit('logout');return;
                 }
                 MessageRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'qid'=>$qid, 'to_uid' => $to_uid ,'message'=>$message],MsgIds::MESSAGE_SEND_QUN_MESSAGE);
-            });      
+            });
+            //发送热点资讯消息
+             $socket->on('send_hot_cms',function($uid,$cms_ids) use($socket){
+                 if(!$this->authCheck($socket,$uid)){
+                     $socket->emit('logout');return;
+                 }
+                 CmsRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'cms_ids'=>$cms_ids],MsgIds::MESSAGE_SEND_HOT_CMS);
+             });
+             // 资讯详情信息
+             $socket->on('get_hot_cms_detail',function($uid,$cms_id) use($socket){
+                if(!$this->authCheck($socket,$uid)){
+                    $socket->emit('logout');return;
+                 }
+                 CmsRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'cms_id'=>$cms_id],MsgIds::MESSAGE_GET_HOT_CMS_DETAIL);
+             });
         });
     }
 
@@ -234,7 +287,8 @@ class ChatServer {
     }
 
     //检测登录信息
-    public function authCheck($socket, $uid) {return true;
+    public function authCheck($socket, $uid) {
+        if($this->config['env'] == 'offline') return true;//线下直接返回true
         if (!$this->isLogin($socket)){
             return false;
         } else if ($socket->uid != $uid) {

@@ -38,4 +38,5 @@ return [
         //跟web服务器session前缀一致
         'session_prefix' => 'en_',
     ],
+    'env' => 'offline'
 ];

@@ -26,11 +26,12 @@ use App\business\model\LoginModel;
 class LoginHandle extends MsgHandleBase {
 
     static public function handle($client_id, $json) {
+        $config = include(__DIR__ . '/../../conf/config.php');
         //登录
-        if (!empty($json->sock_id) ) {//&& !empty($json->session_id)
+        if (!empty($json->sock_id) && ($config['env'] == 'offline' || !empty($json->session_id)) ) {//
             //查找用户id并返回
             $login_model = new LoginModel();
-            $session_user_id = $json->uid;//$login_model->uid($json->session_id);
+            $session_user_id = $config['env'] == 'offline' ? $json->uid : $login_model->uid($json->session_id);
             $msg['sock_id'] = $json->sock_id;
             if (empty($session_user_id)) {
                 //没有登录信息

@@ -15,6 +15,7 @@ use App\dbrequest\IndexMessageRequest;
 use App\dbrequest\LogoutRequest;
 use App\dbrequest\MessageRequest;
 use App\dbrequest\SendGroupMessageRequest;
+use App\dbrequest\CmsRequest;
 use App\message\JoinGroup;
 use App\ChatServer;
 use App\dbrequest\LoginRequest;
@@ -105,6 +106,12 @@ class MessageHandler
                 break;
             case MsgIds::EVENT_MODIFY_FRIEND_NAME :
                 GroupRequest::response($chat_server, $json, 'change_group_friend_name');
+                break;
+            case MsgIds::EVENT_SEND_HOT_CMS:
+                CmsRequest::pick_response($chat_server, $json);
+                break;
+            case MsgIds::EVENT_GET_HOT_CMS_DETAIL:
+                CmsRequest::get_detail_response($chat_server, $json);
                 break;
             default :
                 //未定义的消息，不做处理

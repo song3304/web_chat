@@ -17,7 +17,7 @@ use App\business\msg\ErrorMsg;
 use App\business\msg\LoginHandle;
 use App\business\msg\FriendVerifyHandle;
 use App\business\msg\GlobalOnlineHandle;
-
+use App\business\msg\CmsHandle;
 /**
  * Description of MsgHandler
  *
@@ -99,6 +99,13 @@ class MsgHandler
                 break;
             case MsgIds::MESSAGE_SEND_QUN_MESSAGE:
                 MessageHandle::sendQunMessage($client_id,$json);
+                break;
+            //发送热点资讯
+            case MsgIds::MESSAGE_SEND_HOT_CMS:
+                CmsHandle::pushCmsList($client_id,$json);
+                break;
+            case MsgIds::MESSAGE_GET_HOT_CMS_DETAIL:
+                CmsHandle::getCmsDetail($client_id,$json);
                 break;
             default :
                 //未定义的消息，不做处理
