@@ -87,7 +87,7 @@ class ChatServer {
                     $_POST['content'] = htmlspecialchars(@$_POST['content']);
                     // 有指定uid则向uid所在socket组发送数据
                     if($to){
-                        $this->sendMessage($to, 'send_message', $_POST['content']);
+                        $this->sendMessage($to, 'pick_hot_cms', $_POST['content']);
                         // 否则向所有uid推送数据
                     }else{
                         //推送给所有资讯

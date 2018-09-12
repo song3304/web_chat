@@ -22,7 +22,12 @@ class Cms extends Model{
         if(!is_array($cms_ids)){
             $cms_ids = explode(',', $cms_ids);
         }
-        $cms_list = $this->select('id,title,create_time')->from('en_cms')->where('id in('.join(',', $cms_ids).')')->query();
+        $cms_list = $this->select('id,title,contents,create_time')->from('en_cms')->where('id in('.join(',', $cms_ids).')')->query();
+        if(!empty($cms_list)){
+            foreach ($cms_list as &$item){
+                $item['contents'] = strip_tags($item['contents']);
+            }
+        }
         return !empty($cms_list)?$cms_list:false;
     }
     //获取资讯详情信息
