@@ -92,7 +92,7 @@ class ChatServer {
                     }else{
                         //推送给所有资讯
                         foreach ($this->uidConnectionMap as $online_uid => $sockets){
-                            $this->sendMessage($online_uid, 'pick_hot_cms', $_POST['content']);//通知所有人下线大厅
+                            $this->sendMessage($online_uid, 'pick_hot_cms', $_POST['content']);//通知所有人消息推送
                         }
                     }
                     // http接口返回，如果用户离线socket返回fail
