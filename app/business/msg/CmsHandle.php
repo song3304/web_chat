@@ -82,7 +82,7 @@ class CmsHandle extends MsgHandleBase {
                     'data'=>$new_row,
                 ];
                 $return_data['data']=$data;
-                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_GET_HOT_CMS_DETAIL, 1, $return_data)));
+                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_GET_CMS_DETAIL, 1, $return_data)));
             }else{
                 $data=[
                     'result'=>false,
@@ -91,7 +91,7 @@ class CmsHandle extends MsgHandleBase {
                     'data'=>[],
                 ];
                 $return_data['data']=$data;
-                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_GET_HOT_CMS_DETAIL, 0, $return_data)));
+                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_GET_CMS_DETAIL, 0, $return_data)));
             }
         } else {
             //错误了
@@ -101,7 +101,7 @@ class CmsHandle extends MsgHandleBase {
                 'msg'=>'参数错误，发送消息失败！',
             ];
             $return_data['data']=$data;
-            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_GET_HOT_CMS_DETAIL, 0, $return_data)));
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_GET_CMS_DETAIL, 0, $return_data)));
         }
     }
 }

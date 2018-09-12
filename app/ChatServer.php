@@ -266,11 +266,11 @@ class ChatServer {
                  CmsRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'cms_ids'=>$cms_ids],MsgIds::MESSAGE_SEND_HOT_CMS);
              });
              // 资讯详情信息
-             $socket->on('get_hot_cms_detail',function($uid,$cms_id) use($socket){
+             $socket->on('get_cms_detail',function($uid,$cms_id) use($socket){
                 if(!$this->authCheck($socket,$uid)){
                     $socket->emit('logout');return;
                  }
-                 CmsRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'cms_id'=>$cms_id],MsgIds::MESSAGE_GET_HOT_CMS_DETAIL);
+                 CmsRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'cms_id'=>$cms_id],MsgIds::MESSAGE_GET_CMS_DETAIL);
              });
         });
     }

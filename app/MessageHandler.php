@@ -110,7 +110,7 @@ class MessageHandler
             case MsgIds::EVENT_SEND_HOT_CMS:
                 CmsRequest::pick_response($chat_server, $json);
                 break;
-            case MsgIds::EVENT_GET_HOT_CMS_DETAIL:
+            case MsgIds::EVENT_GET_CMS_DETAIL:
                 CmsRequest::get_detail_response($chat_server, $json);
                 break;
             default :

@@ -39,10 +39,10 @@ class CmsRequest extends DbRequestBase {
         //判断是否成功
         if ( $json->code == 1) {
             //成功,返回给发信人
-            $chat_server->sendMessage($json->uid, 'get_hot_cms_detail', $json->data);
+            $chat_server->sendMessage($json->uid, 'get_cms_detail', $json->data);
         } else {
             //失败
-            $chat_server->sendMessage($json->uid, 'get_hot_cms_detail', $json->data);
+            $chat_server->sendMessage($json->uid, 'get_cms_detail', $json->data);
         }
     }
 

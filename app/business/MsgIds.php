@@ -74,7 +74,7 @@ class MsgIds
     //发送热点资讯
     const MESSAGE_SEND_HOT_CMS = 10025;
     //获取热点资讯详情
-    const MESSAGE_GET_HOT_CMS_DETAIL = 10026;
+    const MESSAGE_GET_CMS_DETAIL = 10026;
     /*
      * 这里定义business逻辑生成的消息回复时候用的消息编码
      */
@@ -129,6 +129,6 @@ class MsgIds
     //发送热点资讯
     const EVENT_SEND_HOT_CMS = 50025;
     //获取热点资讯详情
-    const EVENT_GET_HOT_CMS_DETAIL = 50026;
+    const EVENT_GET_CMS_DETAIL = 50026;
     //------------------------------------
 }

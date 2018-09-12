@@ -104,7 +104,7 @@ class MsgHandler
             case MsgIds::MESSAGE_SEND_HOT_CMS:
                 CmsHandle::pushCmsList($client_id,$json);
                 break;
-            case MsgIds::MESSAGE_GET_HOT_CMS_DETAIL:
+            case MsgIds::MESSAGE_GET_CMS_DETAIL:
                 CmsHandle::getCmsDetail($client_id,$json);
                 break;
             default :
