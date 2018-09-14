@@ -40,7 +40,7 @@ class LogoutRequest extends DbRequestBase {
             }
             //大厅踢出
             foreach ($chat_server->uidConnectionMap as $online_uid => $sockets){
-                if($to_uid == $uid) continue;
+                if($online_uid == $uid) continue;
                 $chat_server->sendMessage($online_uid, 'offline_hall_notice', $json->userData);//通知所有人下线大厅
             }
         } else {
