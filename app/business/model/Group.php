@@ -200,6 +200,41 @@ class Group extends Model{
         }
         return true;
     }
+
+    /**
+     * @param $uid
+     * @param $to_uid
+     * @return array
+     * @method 保存好友
+     */
+    public function saveGroupFriend($uid,$group_id,$userIds,$group_type) {
+        if(empty($group_type) || $group_type!= 'qun'){
+            //判断此组是否为当前用户所有
+            $group=$this->select('*')->from('en_chat_friend_groups')->where('id='.$group_id)->row();
+            if($group['uid']!=$uid)return false;
+            
+            $old_uids = $this->select('friend_id')->from('en_chat_friends')->where('group_id='.$group_id)->column();
+            $add_uids = array_diff($userIds,$old_uids);
+            foreach($add_uids as $friend_id){
+                $this->insert('en_chat_friends')->cols(['group_id'=>$group_id, 'friend_id'=>$friend_id])->query();
+            }
+            $del_uids = array_diff($old_uids,$userIds);
+            foreach($del_uids as $friend_id){
+                $this->delete('en_chat_friends')->where('group_id='.$group_id.' AND friend_id='.$friend_id)->query();
+            }
+        }else{
+            $old_uids = $this->select('member_id')->from('en_chat_group_members')->where('group_id='.$group_id)->column();
+            $add_uids = array_diff($userIds,$old_uids);
+            foreach($add_uids as $member_id){
+               $this->insert('en_chat_group_members')->cols(['group_id'=>$group_id, 'member_id'=>$member_id])->query();
+            }
+            $del_uids = array_diff($old_uids,$userIds);
+            foreach($del_uids as $member_id){
+                $this->delete('en_chat_group_members')->where('group_id='.$group_id.' AND member_id='.$member_id)->query();
+            }
+        }
+        return true;
+    }
     
     public function transferGroupFriend($uid,$friend_id,$group_id,$to_group_id){
         //判断此组是否为当前用户所有

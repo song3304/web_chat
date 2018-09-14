@@ -84,6 +84,9 @@ class MsgHandler
             case MsgIds::MESSAGE_DELETE_GROUP_FRIEND:
                 GroupHandle::handleDeleteFriend($client_id,$json);
                 break;
+            case MsgIds::MESSAGE_SAVE_GROUP_FRIEND:
+                GroupHandle::handleSaveFriend($client_id,$json);
+                break;
             /***新加***/
             case MsgIds::MESSAGE_TRANSFER_GROUP:
                 GroupHandle::handleTransferGroup($client_id,$json);

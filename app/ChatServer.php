@@ -222,6 +222,13 @@ class ChatServer {
                 }
                 GroupRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id, 'group_type' => $group_type , 'userIds' => $userIds],MsgIds::MESSAGE_DELETE_GROUP_FRIEND);
             });
+            //保存分组人员信息
+            $socket->on('save_group_friend',function ($uid,$group_id,$group_type,$userIds)use($socket){
+                if(!$this->authCheck($socket,$uid)){
+                    $socket->emit('logout');return;
+                }
+                GroupRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid, 'group_id' => $group_id, 'group_type' => $group_type , 'userIds' => $userIds],MsgIds::MESSAGE_SAVE_GROUP_FRIEND);
+            });
             /****** 新加 ************/
             //转移好友到其他分组
             $socket->on('transfer_group',function ($uid,$friend_id,$group_id,$to_group_id)use($socket){

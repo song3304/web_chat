@@ -257,6 +257,52 @@ class GroupHandle extends MsgHandleBase {
     /**
      * @param $client_id
      * @param $json
+     * @method 保存 分组中的好友
+     */
+    static public function handleSaveFriend($client_id, $json)
+    {
+        if (!empty($json->uid) && !empty($json->group_id) && !empty($json->userIds) && is_array($json->userIds)) {
+            $model=new Group();
+            $return_data['uid'] = $json->uid;
+            $return_data['sock_id'] = $json->sock_id;
+            $return_data['group_id'] = $json->group_id;
+            $return_data['userIds'] = $json->userIds;
+            if($model->saveGroupFriend($json->uid,$json->group_id,$json->userIds,$json->group_type)){
+                $data = [
+                    'result'=>true,
+                    'params'=>['userId'=>$json->uid,'groupId'=>$json->group_id,'groupType'=>$json->group_type,'userIds'=>$json->userIds],
+                    'msg'=>'保存好友成功!',
+                    'data'=>$json->userIds
+                ];
+                $return_data['data']=$data;
+                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_SAVE_GROUP_FRIEND, 1, $return_data)));
+            }else{
+                $data = [
+                    'result'=>false,
+                    'params'=>['userId'=>$json->uid,'groupId'=>$json->group_id,'groupType'=>$json->group_type,'userIds'=>$json->userIds],
+                    'msg'=>'保存好友失败!',
+                    'data'=>null
+                ];
+                $return_data['data']=$data;
+                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_SAVE_GROUP_FRIEND, 0, $return_data)));
+            }
+    
+        }else{
+            $return_data['uid'] = $json->uid;
+            $data = [
+                'result'=>false,
+                'params'=>$json,
+                'msg'=>'参数错误!',
+                'data'=>null
+            ];
+            $return_data['data']=$data;
+            Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_SAVE_GROUP_FRIEND, 0, $return_data)));
+        }
+    
+    }
+    /**
+     * @param $client_id
+     * @param $json
      * @method 转移好友到其他分组
      */
     static public function handleTransferGroup($client_id, $json){

@@ -113,6 +113,9 @@ class MessageHandler
             case MsgIds::EVENT_GET_CMS_DETAIL:
                 CmsRequest::get_detail_response($chat_server, $json);
                 break;
+            case MsgIds::EVENT_SAVE_GROUP_FRIEND:
+                GroupRequest::response($chat_server, $json, 'save_group_friend');
+                break;
             default :
                 //未定义的消息，不做处理
                 break;
