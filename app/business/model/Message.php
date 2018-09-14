@@ -90,6 +90,14 @@ class Message extends Model{
                 ])
                 ->query();
         }
+        //保存默认群发群信息     catalog_id:11为乙二醇
+        $group_set_id=$this->select('id')->from('en_chat_bind_users')->where('uid= '.$uid.' AND catalog_id=11')->single();
+        if(empty($group_set_id)){
+            $this->insert('en_chat_bind_users')->cols(['uid'=>$uid,'catalog_id'=>11,'to_uids'=>join(',',$to_user_ids),'status'=>1])->query();
+        }else{
+            $this->update('en_chat_bind_users')->cols(array('to_uids'=>join(',',$to_user_ids),'status'=>1,'update_time'=>date("Y-m-d H:i:s")))->where('id='.en_chat_bind_users)->query();
+        }
+        
         if(empty($msgIds)){
             return false;
         }else{

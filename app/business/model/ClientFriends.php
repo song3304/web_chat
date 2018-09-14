@@ -154,6 +154,12 @@ class ClientFriends extends Model{
         
         return $define_quns;
     }
+    // 获取默认群发人员
+    public function getGroupHairDefaultUsers($uid)
+    {
+        $group_hair_default_users = $this->select('to_uids')->from('en_chat_bind_users')->where('uid= '.$uid.' AND catalog_id=11')->single();
+        return !empty($group_hair_default_users)?explode(',', $group_hair_default_users):[];
+    }
     //查询自定义分组及好友
     public function _getGroupFriendsList($uid){
         $define_groups=$this->select('id AS group_id,group_name,is_group_hair')
