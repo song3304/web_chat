@@ -95,7 +95,7 @@ class Message extends Model{
         if(empty($group_set_id)){
             $this->insert('en_chat_bind_users')->cols(['user_id'=>$uid,'catalog_id'=>11,'to_uids'=>join(',',$to_user_ids),'status'=>1])->query();
         }else{
-            $this->update('en_chat_bind_users')->cols(array('to_uids'=>join(',',$to_user_ids),'status'=>1,'update_time'=>date("Y-m-d H:i:s")))->where('id='.en_chat_bind_users)->query();
+            $this->update('en_chat_bind_users')->cols(array('to_uids'=>join(',',$to_user_ids),'status'=>1,'update_time'=>date("Y-m-d H:i:s")))->where('id='.$group_set_id)->query();
         }
         
         if(empty($msgIds)){
