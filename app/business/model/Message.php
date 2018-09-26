@@ -97,6 +97,7 @@ class Message extends Model{
                     }else{ //去掉回传消息内容，再发送
                         if($message_before_length != $message_after_length){
                             $message = preg_replace("/(\s*?\r?\n\s*?)+/","\n",$message);
+                            $message = preg_replace('/($\s*$)|(^\s*^)/m', '',$message);
                         }
                         $msgIds[$v]= $this->_insert_chat_message($uid, $v, $message);
                     }
