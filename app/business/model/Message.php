@@ -95,6 +95,9 @@ class Message extends Model{
                     if($message_before_length>6 && $message_after_length<5){ //去掉 发送信息中 回调信息长度<5,认为原文转发
                         continue;
                     }else{ //去掉回传消息内容，再发送
+                        if($message_before_length != $message_after_length){
+                            $message = preg_replace("/(\r\n|\n|\r|\t)/i", '', $message);
+                        }
                         $msgIds[$v]= $this->_insert_chat_message($uid, $v, $message);
                     }
                 }else{
