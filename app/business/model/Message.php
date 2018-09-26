@@ -81,14 +81,28 @@ class Message extends Model{
      */
     public function sendGroup($uid,$to_user_ids,$message) {
         $msgIds=[];
+        $user = (new LoginModel)->getUser($uid);
         foreach($to_user_ids as $k=> $v){
-            $msgIds[$v]=$this->insert('en_chat_messages')
-                ->cols([
-                    'uid'=>$uid,
-                    'to_uid'=>$v,
-                    'message'=>htmlspecialchars($message)
-                ])
-                ->query();
+            //判断是否需要给这个人发，过滤发送信息
+            if($user['system_type'] == 2){ //撮合群发要过滤
+                $group_messages = $this->select('message')->from('en_chat_messages')->where("uid=".$v." and to_uid=".$uid." and is_group=1 and create_time>='".date("Y-m-d H:i:s",strtotime('-5 minutes'))."'")->column();
+                $message_before_length = mb_strlen($message);
+                if(!empty($group_messages)){
+                    foreach ($group_messages as $item_msg){
+                        $message = str_replace($item_msg, '', $message);
+                    }
+                    $message_after_length = mb_strlen($message);
+                    if($message_before_length>6 && $message_after_length<5){ //去掉 发送信息中 回调信息长度<5,认为原文转发
+                        continue;
+                    }else{ //去掉回传消息内容，再发送
+                        $msgIds[$v]= $this->_insert_chat_message($uid, $v, $message);
+                    }
+                }else{
+                    $msgIds[$v]=$this->_insert_chat_message($uid, $v, $message);
+                }
+            }else{
+                $msgIds[$v]=$this->_insert_chat_message($uid, $v, $message);
+            }
         }
         //保存默认群发群信息     catalog_id:11为乙二醇
         $group_set_id=$this->select('id')->from('en_chat_bind_users')->where('user_id= '.$uid.' AND catalog_id=11')->single();
@@ -114,6 +128,17 @@ class Message extends Model{
         }
     }
 
+    // 插入一条群发信息
+    private function _insert_chat_message($uid,$to_uid,$message){
+        return $this->insert('en_chat_messages')
+            ->cols([
+                'uid'=>$uid,
+                'to_uid'=>$to_uid,
+                'is_group'=>1,
+                'message'=>htmlspecialchars($message)
+            ])
+            ->query();
+    }
     /**
      * @param $uid
      * @param $message_id
