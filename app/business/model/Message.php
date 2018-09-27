@@ -88,18 +88,19 @@ class Message extends Model{
                 $group_messages = $this->select('message')->from('en_chat_messages')->where("uid=".$v." and to_uid=".$uid." and is_group=1 and create_time>='".date("Y-m-d H:i:s",strtotime('-5 minutes'))."'")->column();
                 $message_before_length = mb_strlen($message);
                 if(!empty($group_messages)){
+                    $temp_message = $message;
                     foreach ($group_messages as $item_msg){
-                        $message = str_replace($item_msg, '', $message);
+                        $temp_message = str_replace($item_msg, '', $temp_message);
                     }
-                    $message_after_length = mb_strlen($message);
-                    if($message_before_length>6 && $message_after_length<5){ //去掉 发送信息中 回调信息长度<5,认为原文转发
+                    $message_after_length = mb_strlen($temp_message);
+                    if($message_after_length<5){ //去掉 发送信息中 回调信息长度<5,认为原文转发
                         continue;
                     }else{ //去掉回传消息内容，再发送
                         if($message_before_length != $message_after_length){
-                            $message = preg_replace("/(\s*?\r?\n\s*?)+/","\n",$message);
-                            $message = preg_replace('/($\s*$)|(^\s*^)/m', '',$message);
+                            $temp_message = preg_replace("/(\s*?\r?\n\s*?)+/","\n",$temp_message);
+                            $temp_message = preg_replace('/($\s*$)|(^\s*^)/m', '',$temp_message);
                         }
-                        $msgIds[$v]= $this->_insert_chat_message($uid, $v, $message);
+                        $msgIds[$v]= $this->_insert_chat_message($uid, $v, $temp_message);
                     }
                 }else{
                     $msgIds[$v]=$this->_insert_chat_message($uid, $v, $message);
