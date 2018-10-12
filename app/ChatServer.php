@@ -304,7 +304,7 @@ class ChatServer {
             return false;
         } else {
             //检测是否失效
-            AuthCheckRequest::request($this, new XObject(['sock_id' => $socket->id, 'session_id' => $socket->session_id, 'uid' => $socket->uid]));
+            AuthCheckRequest::request($this, ['sock_id' => $socket->id, 'session_id' => $socket->session_id, 'uid' => $socket->uid]);
             return true;
         }
     }
