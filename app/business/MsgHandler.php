@@ -18,6 +18,7 @@ use App\business\msg\LoginHandle;
 use App\business\msg\FriendVerifyHandle;
 use App\business\msg\GlobalOnlineHandle;
 use App\business\msg\CmsHandle;
+use App\business\msg\RecentChatListHandle;
 /**
  * Description of MsgHandler
  *
@@ -50,6 +51,9 @@ class MsgHandler
                 break;
             case MsgIds::MESSAGE_COMPANY_FRIENDS:
                 CompanyFriendsHandle::handle($client_id,$json);
+                break;
+            case MsgIds::MESSAGE_RECENT_LIST:
+                RecentChatListHandle::handle($client_id,$json);
                 break;
             case MsgIds::MESSAGE_UNREAD_MESSAGES:
                 MessageHandle::unreadMessages($client_id,$json);

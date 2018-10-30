@@ -156,7 +156,9 @@ class Message extends Model{
      */
     public function getUnreadMessages($uid)
     {
-        $messages=$this->select('*')->from('en_chat_messages')->where('to_uid= :to_uid AND is_read=0')->bindValues(array('to_uid'=>$uid))->orderByDesc(array(0=>'create_time'))->query();
+        //获取未读消息,还有3小时之内的最新消息
+        $last_three_hours_time = date("Y-m-d H:i:s",strtotime('-3 hours'));
+        $messages=$this->select('*')->from('en_chat_messages')->where("to_uid= :to_uid AND (is_read=0 or read_time >= '".$last_three_hours_time."'")->bindValues(array('to_uid'=>$uid))->orderByDesc(array(0=>'create_time'))->query();
         foreach ($messages as &$message){
             //if($messages['is_temp']){
                 $message['sender'] = (new LoginModel)->getUser($message['uid']);
@@ -180,9 +182,10 @@ class Message extends Model{
     public function getUnreadQunMessage($uid)
     {
         //查询群的未读消息
-        $messages = $this->select('m.*')->from('en_chat_group_user_messages as um')
+        $last_three_hours_time = date("Y-m-d H:i:s",strtotime('-3 hours'));
+        $messages = $this->select('m.*,um.is_read')->from('en_chat_group_user_messages as um')
                          ->leftjoin('en_chat_group_messages AS m','um.msg_id=m.id')
-                         ->where('um.to_uid='.$uid.' and um.is_read=0')
+                         ->where('um.to_uid='.$uid." and (um.is_read=0 or um.read_time >= '".$last_three_hours_time."'")
                          ->query();
        return $messages;
     }
@@ -234,5 +237,42 @@ class Message extends Model{
             }
         }
         return true;
+    }
+    //获取最近聊天用户列表
+    public function getRecentUsers($uid)
+    {
+        //获取未读消息,还有3天最新聊天的消息
+        $last_three_day_time = date("Y-m-d H:i:s",strtotime('-3 days'));
+        $messages=$this->select('*')->from('en_chat_messages')->where("(to_uid= :to_uid or uid= :to_uid) AND (is_read=0 or read_time >= '".$last_three_day_time."'")->bindValues(array('to_uid'=>$uid))->orderByDesc(array(0=>'create_time'))->query();
+        $user_list = [];
+        foreach ($messages as $message){
+            if($message['uid']!=$uid && isset($user_list[$message['uid']])) continue;
+            if($message['to_uid']!=$uid && isset($user_list[$message['to_uid']])) continue;
+            $user_ids = array_filter([$message['uid'],$message['to_uid']],function($val) use($uid){return $val!=$uid;});
+            if(empty($user_ids)) continue;
+            $user_id = $user_ids[0];
+            $user_list[$user_id] = (new LoginModel)->getUser($user_id);
+        }
+        return array_values($user_list);//去掉键值
+    }
+    
+    //获取最近聊天群列表
+    public function getRecentQuns($uid)
+    {
+        //查询群的未读消息
+        $last_three_day_time = date("Y-m-d H:i:s",strtotime('-3 days'));
+        $messages = $this->select('m.*,um.is_read')->from('en_chat_group_user_messages as um')
+            ->leftjoin('en_chat_group_messages AS m','um.msg_id=m.id')
+            ->where('um.to_uid='.$uid." and (um.is_read=0 or um.read_time >= '".$last_three_day_time."'")
+            ->query();
+        $group_list = [];
+        foreach ($messages as $message){
+            if(isset($group_list[$message['group_id']])) continue;
+            $group=$this->select('*')->from('en_chat_groups')->where("id=".$message['group_id'])->row();
+            if(empty($group)) continue;
+            
+            $group_list[$message['group_id']] = $group;
+        }
+        return array_values($group_list);//去掉键值
     }
 }

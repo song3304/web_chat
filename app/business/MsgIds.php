@@ -77,6 +77,8 @@ class MsgIds
     const MESSAGE_GET_CMS_DETAIL = 10026;
     //保存分组中的好友
     const MESSAGE_SAVE_GROUP_FRIEND = 10027;
+    //获取最近聊天列表 recent_chat_list
+    const MESSAGE_RECENT_LIST = 10028;
     /*
      * 这里定义business逻辑生成的消息回复时候用的消息编码
      */
@@ -134,5 +136,7 @@ class MsgIds
     const EVENT_GET_CMS_DETAIL = 50026;
     //保存分组中的好友
     const EVENT_SAVE_GROUP_FRIEND = 50027;
+    //获取最近聊天列表
+    const EVENT_RECENT_LIST = 10028;
     //------------------------------------
 }

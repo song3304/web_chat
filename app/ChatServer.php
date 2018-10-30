@@ -18,6 +18,7 @@ use App\dbrequest\LogoutRequest;
 use App\dbrequest\MessageRequest;
 use App\dbrequest\SendGroupMessageRequest;
 use App\dbrequest\FriendVerifyRequest;
+use App\dbrequest\RecentListRequest;
 use PHPSocketIO\SocketIO;
 use Workerman\MySQL\Connection;
 use App\TcpClient;
@@ -151,6 +152,13 @@ class ChatServer {
                     $socket->emit('logout');return;
                 }
                 IndexMessageRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid],MsgIds::MESSAGE_UNREAD_MESSAGES);
+            });
+            //获取最近聊天列表
+            $socket->on('recent_chat_list', function ($uid)use($socket) {
+                if(!$this->authCheck($socket,$uid)){
+                    $socket->emit('logout');return;
+                }
+                RecentListRequest::request($this,['sock_id' => $socket->id, 'uid' => $uid],MsgIds::MESSAGE_RECENT_LIST);
             });
             //未读变已读
             $socket->on('unread_to_read', function ($uid, $toUid, $messageIds, $type="")use($socket) {

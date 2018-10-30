@@ -16,6 +16,7 @@ use App\dbrequest\LogoutRequest;
 use App\dbrequest\MessageRequest;
 use App\dbrequest\SendGroupMessageRequest;
 use App\dbrequest\CmsRequest;
+use App\dbrequest\RecentListRequest;
 use App\message\JoinGroup;
 use App\ChatServer;
 use App\dbrequest\LoginRequest;
@@ -115,6 +116,9 @@ class MessageHandler
                 break;
             case MsgIds::EVENT_SAVE_GROUP_FRIEND:
                 GroupRequest::response($chat_server, $json, 'save_group_friend');
+                break;
+            case MsgIds::EVENT_RECENT_LIST:
+                RecentListRequest::response($chat_server, $json, 'recent_chat_list');
                 break;
             default :
                 //未定义的消息，不做处理
