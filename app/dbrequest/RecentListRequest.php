@@ -22,7 +22,7 @@ class RecentListRequest extends DbRequestBase {
     static public function response(ChatServer $chat_server, \stdClass $json, $event_name){
         if ( $json->code == 1) {
             foreach ($json->data->data->recent_users as &$user){
-                $user->isOnline = $chat_server->isOnline($user->id)?1:0;
+                $user->user->isOnline = $chat_server->isOnline($user->user->id)?1:0;
             }
             $chat_server->sendMessage($json->uid, $event_name, $json->data);
         }else{
