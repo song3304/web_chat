@@ -158,7 +158,7 @@ class Message extends Model{
     {
         //获取未读消息,还有3小时之内的最新消息
         $last_three_hours_time = date("Y-m-d H:i:s",strtotime('-3 hours'));
-        $messages=$this->select('*')->from('en_chat_messages')->where("to_uid= :to_uid AND (is_read=0 or read_time >= '".$last_three_hours_time."'")->bindValues(array('to_uid'=>$uid))->orderByDesc(array(0=>'create_time'))->query();
+        $messages=$this->select('*')->from('en_chat_messages')->where("to_uid= :to_uid AND (is_read=0 or read_time >= '".$last_three_hours_time."')")->bindValues(array('to_uid'=>$uid))->orderByDesc(array(0=>'create_time'))->query();
         foreach ($messages as &$message){
             //if($messages['is_temp']){
                 $message['sender'] = (new LoginModel)->getUser($message['uid']);
@@ -185,7 +185,7 @@ class Message extends Model{
         $last_three_hours_time = date("Y-m-d H:i:s",strtotime('-3 hours'));
         $messages = $this->select('m.*,um.is_read')->from('en_chat_group_user_messages as um')
                          ->leftjoin('en_chat_group_messages AS m','um.msg_id=m.id')
-                         ->where('um.to_uid='.$uid." and (um.is_read=0 or um.read_time >= '".$last_three_hours_time."'")
+                         ->where('um.to_uid='.$uid." and (um.is_read=0 or um.read_time >= '".$last_three_hours_time."')")
                          ->query();
        return $messages;
     }
