@@ -243,12 +243,12 @@ class Message extends Model{
     {
         //获取未读消息,还有3天最新聊天的消息
         $last_three_day_time = date("Y-m-d H:i:s",strtotime('-3 days'));
-        $messages=$this->select('*')->from('en_chat_messages')->where("to_uid= :to_uid AND read_time >= '".$last_three_day_time."'")->bindValues(array('to_uid'=>$uid))->orderByDesc(array(0=>'read_time'))->query();
+        $messages=$this->select('*')->from('en_chat_messages')->where("(to_uid= :to_uid AND read_time >= '".$last_three_day_time."') or(uid= :to_uid and create_time >='".$last_three_day_time."')")->bindValues(array('to_uid'=>$uid))->orderByDesc(array(0=>'read_time'))->query();
         $user_list = [];
         foreach ($messages as $message){
             if($message['uid']!=$uid && isset($user_list[$message['uid']])) continue;
             $user_id = $message['uid'];
-            $user_list[$user_id] = ['user'=>(new LoginModel)->getUser($user_id),'last_time'=>$message['read_time']];
+            $user_list[$user_id] = ['user'=>(new LoginModel)->getUser($user_id),'last_time'=>!empty($message['read_time'])?$message['read_time']:$message['create_time']];
         }
         return array_values($user_list);//去掉键值
     }
@@ -260,14 +260,14 @@ class Message extends Model{
         $last_three_day_time = date("Y-m-d H:i:s",strtotime('-3 days'));
         $messages = $this->select('m.*,um.read_time')->from('en_chat_group_user_messages as um')
             ->leftjoin('en_chat_group_messages AS m','um.msg_id=m.id')
-            ->where('um.to_uid='.$uid." and um.read_time >= '".$last_three_day_time."'")
+            ->where('(um.to_uid='.$uid." and um.read_time >= '".$last_three_day_time."') or(m.uid=".$uid." and m.create_time >= '".$last_three_day_time."')")
             ->query();
         $group_list = [];
         foreach ($messages as $message){
             if(isset($group_list[$message['group_id']])) continue;
             $group=$this->select('*')->from('en_chat_groups')->where("id=".$message['group_id'])->row();
             if(empty($group)) continue;
-            $group_list[$message['group_id']] = ['group'=>$group,'last_time'=>$message['read_time']];
+            $group_list[$message['group_id']] = ['group'=>$group,'last_time'=>!empty($message['read_time'])?$message['read_time']:$message['create_time']];
         }
         return array_values($group_list);//去掉键值
     }
