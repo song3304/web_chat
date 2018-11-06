@@ -121,7 +121,7 @@ class Message extends Model{
      * @method 接收信息
      */
     public function pick($uid,$message_id) {
-        return $this->select('id,uid,message,is_read')->from('en_chat_messages')->where('id='.$message_id.' AND to_uid='.$uid)->query();
+        return $this->select('id,uid,message,is_read,is_group')->from('en_chat_messages')->where('id='.$message_id.' AND to_uid='.$uid)->query();
     }
 
     /**
