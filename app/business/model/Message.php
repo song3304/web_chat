@@ -86,6 +86,7 @@ class Message extends Model{
                 ->cols([
                     'uid'=>$uid,
                     'to_uid'=>$v,
+                    'is_group'=>1,
                     'message'=>htmlspecialchars($message)
                 ])
                 ->query();
