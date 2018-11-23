@@ -244,12 +244,21 @@ class Message extends Model{
     {
         //获取未读消息,还有3天最新聊天的消息
         $last_three_day_time = date("Y-m-d H:i:s",strtotime('-3 days'));
-        $messages=$this->select('*')->from('en_chat_messages')->where("(to_uid= ".$uid." AND read_time >= '".$last_three_day_time."') or(uid= ".$uid." and create_time >='".$last_three_day_time."')")->orderByDesc(array(0=>'read_time'))->query();
+        $messages=$this->select('*')->from('en_chat_messages')->where("(to_uid= ".$uid." or uid= ".$uid.") and create_time >='".$last_three_day_time."'")->orderByDesc(array(0=>'create_time'))->query();
         $user_list = [];
         foreach ($messages as $message){
-            if($message['uid']!=$uid && isset($user_list[$message['uid']])) continue;
-            $user_id = $message['uid'] != $uid?$message['uid']:$message['to_uid'];
-            $user_list[$user_id] = ['user'=>(new LoginModel)->getUser($user_id),'last_time'=>!empty($message['read_time'])?$message['read_time']:$message['create_time'],'message'=>$message];
+            if($message['uid']!=$uid){ 
+                $other_id = $message['uid'];
+            }elseif($message['to_uid']!=$uid){
+                $other_id = $message['to_uid'];
+            }else{
+                continue;
+            }
+            if(isset($user_list[$other_id])) continue;
+
+            //messageId:item.id,text:item.message,date:item.create_time,userId:item.uid,is_read:item.is_read
+            $temp_message = ['messageId'=>$message['id'],'text'=>$message['message'],'date'=>$message['create_time']];
+            $user_list[$other_id] = ['user'=>(new LoginModel)->getUser($other_id),'last_time'=>!empty($message['read_time'])?$message['read_time']:$message['create_time'],'message'=>$temp_message];
         }
         return array_values($user_list);//去掉键值
     }
@@ -268,7 +277,8 @@ class Message extends Model{
             if(isset($group_list[$message['group_id']])) continue;
             $group=$this->select('*')->from('en_chat_groups')->where("id=".$message['group_id'])->row();
             if(empty($group)) continue;
-            $group_list[$message['group_id']] = ['group'=>$group,'last_time'=>!empty($message['read_time'])?$message['read_time']:$message['create_time'],'message'=>$message];
+            $temp_message = ['messageId'=>$message['id'],'text'=>$message['message'],'date'=>$message['create_time']];
+            $group_list[$message['group_id']] = ['group'=>$group,'last_time'=>!empty($message['read_time'])?$message['read_time']:$message['create_time'],'message'=>$temp_message];
         }
         return array_values($group_list);//去掉键值
     }
