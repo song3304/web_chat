@@ -44,7 +44,7 @@ class XRedis
                     if (!empty($session_prefix)) {
                         $session_prefix .= '|';
                     }
-                    if (!strpos($session, ($session_prefix))) {
+                    if (FALSE === strpos($session, ($session_prefix))) {
                         return false;
                     } else {
                         $str = strstr($session, $session_prefix);
