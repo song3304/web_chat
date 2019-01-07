@@ -41,7 +41,16 @@ class XRedis
                 if ($session) {
                     //去掉前缀进行反序列化
                     $session_prefix = $this->config['session_prefix'];
-                    $session = unserialize(substr($session, strlen($session_prefix.'|')));
+                    if (!empty($session_prefix)) {
+                        $session_prefix .= '|';
+                    }
+                    if (!strpos($session, ($session_prefix))) {
+                        return false;
+                    } else {
+                        $str = strstr($session, $session_prefix);
+                        return unserialize(substr($str, strlen($session_prefix)));
+                    }
+                    $session = unserialize(strstr($session, ($session_prefix.'|')));
                 }
                 return $session;
             } catch(\Exception $e) {
