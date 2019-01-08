@@ -36,7 +36,7 @@ class AuthCheckHandle extends MsgHandleBase {
                 //登陆信息失效了
                 Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_AUTH_CHECK, 0, json_encode($json))));
             } else {
-                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_AUTH_CHECK, 1, '')));
+                Gateway::sendToClient($client_id, self::output(self::business(MsgIds::EVENT_AUTH_CHECK, 1, json_encode($json))));
             }
             
         } else {

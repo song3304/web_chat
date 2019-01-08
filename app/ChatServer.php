@@ -327,6 +327,7 @@ class ChatServer {
         if (isset($this->uidConnectionMap[$uid][$sock_id])) {
             $this->disconnect($this->uidConnectionMap[$uid][$sock_id]);
         }
+        $this->sendMessage($uid, 'logout');
     }
 
 
