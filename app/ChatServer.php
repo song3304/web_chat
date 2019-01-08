@@ -327,7 +327,6 @@ class ChatServer {
         if (isset($this->uidConnectionMap[$uid][$sock_id])) {
             $this->disconnect($this->uidConnectionMap[$uid][$sock_id]);
         }
-        $this->sendMessage($uid, 'logout');
     }
 
 
@@ -336,6 +335,7 @@ class ChatServer {
         if (!$this->isLogin($socket)) {
             return;
         }
+        $socket->emit('logout');
         if (isset($this->uidConnectionMap[$socket->uid][$socket->id])) {
             //释放客户端连接
             unset($this->uidConnectionMap[$socket->uid][$socket->id]);
